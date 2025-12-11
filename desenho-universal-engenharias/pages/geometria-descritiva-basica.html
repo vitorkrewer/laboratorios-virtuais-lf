@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometria Descritiva Interativa para Engenharias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #3B82F6;
+            border-bottom-color: #3B82F6;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .btn {
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+            background-color: #2563EB;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        canvas {
+            border: 1px solid #D1D5DB;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="mr-4 text-gray-600 hover:text-blue-600 transition-colors"
+                    title="Voltar ao Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5" />
+                        <path d="M12 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Geometria Descritiva Interativa</h1>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#fundamentos" class="nav-link border-b-2 border-transparent pb-1">Fundamentos</a>
+                <a href="#elementos" class="nav-link border-b-2 border-transparent pb-1">Elementos</a>
+                <a href="#metodos" class="nav-link border-b-2 border-transparent pb-1">Métodos</a>
+                <a href="#aplicacoes" class="nav-link border-b-2 border-transparent pb-1">Aplicações</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="fundamentos" class="mb-20 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800">1. Fundamentos da Projeção</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8">
+                A representação de um objeto 3D em uma superfície 2D é um ato de projeção. O método de projeção define
+                como a profundidade e as dimensões são representadas. Interaja abaixo para visualizar as diferenças
+                fundamentais entre os sistemas de projeção.
+            </p>
+            <div class="card p-6 md:p-8">
+                <canvas id="projectionCanvas" class="mx-auto w-full max-w-lg h-80"></canvas>
+                <div id="projection-buttons" class="mt-6 flex justify-center space-x-2 md:space-x-4">
+                    <button data-type="conic"
+                        class="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">Projeção
+                        Cônica</button>
+                    <button data-type="cylindrical"
+                        class="btn bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">Projeção
+                        Cilíndrica (Oblíqua)</button>
+                    <button data-type="orthogonal"
+                        class="btn bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">Projeção
+                        Ortogonal</button>
+                </div>
+                <p id="projectionInfo" class="mt-6 text-gray-700 min-h-[4rem]">Selecione um tipo de projeção para ver
+                    sua descrição e visualização.</p>
+            </div>
+        </section>
+
+        <section id="elementos" class="mb-20">
+            <h2 class="text-3xl font-bold mb-4 text-center text-gray-800">2. Explorador de Elementos Fundamentais</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8 text-center">
+                Ponto, reta e plano são os blocos de construção da geometria. O Sistema Mongeano os representa em 2D
+                através da Épura. Use os controles para manipular estes elementos e entender a relação entre o espaço 3D
+                e sua representação plana.
+            </p>
+            <div class="card p-6 md:p-8">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-center">Controles Interativos</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="cotaSlider" class="block font-medium text-gray-700">Cota (z): <span
+                                        id="cotaValue">0</span></label>
+                                <input id="cotaSlider" type="range" min="-100" max="100" value="50"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div>
+                                <label for="afastamentoSlider" class="block font-medium text-gray-700">Afastamento (y):
+                                    <span id="afastamentoValue">0</span></label>
+                                <input id="afastamentoSlider" type="range" min="-100" max="100" value="60"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div id="diedroInfo"
+                                class="text-center font-semibold text-blue-600 bg-blue-50 p-3 rounded-lg"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-center">Representação em Épura (2D)</h3>
+                        <canvas id="epuraCanvas" class="w-full h-64"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="metodos" class="mb-20">
+            <h2 class="text-3xl font-bold mb-4 text-center text-gray-800">3. Métodos Descritivos</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8 text-center">
+                Para determinar as dimensões reais (Verdadeira Grandeza) de objetos oblíquos, utilizamos métodos
+                descritivos. Cada método oferece uma abordagem diferente para resolver problemas métricos. O gráfico
+                abaixo compara a eficiência e complexidade de cada um.
+            </p>
+            <div class="card p-6 md:p-8">
+                <div class="chart-container">
+                    <canvas id="methodsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="aplicacoes" class="mb-20">
+            <h2 class="text-3xl font-bold mb-4 text-center text-gray-800">4. Aplicações na Engenharia</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-8 text-center">
+                A Geometria Descritiva é fundamental para resolver problemas práticos. Da análise de uma cobertura de
+                telhado à planificação de uma peça mecânica, os princípios garantem precisão no projeto e na fabricação.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Engenharia Civil: Análise de Coberturas</h3>
+                    <p class="text-gray-600 mb-4">
+                        A área projetada de um telhado inclinado é sempre menor que sua área real (Verdadeira Grandeza).
+                        Calcular a VG é crucial para a compra correta de materiais. O gráfico ilustra essa diferença
+                        para um plano de telhado com inclinação de 45°.
+                    </p>
+                    <div class="chart-container h-64 max-h-64">
+                        <canvas id="civilChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Engenharia Mecânica: Planificação</h3>
+                    <p class="text-gray-600 mb-4">
+                        Para fabricar peças 3D a partir de chapas planas, como um cone de transição, é preciso
+                        "desdobrar" sua superfície. Este processo, a planificação, depende da determinação da VG das
+                        geratrizes da peça.
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg h-64 flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="text-5xl mb-2">◰ → ⏢</div>
+                            <p class="font-semibold text-gray-700">De 3D para 2D</p>
+                            <p class="text-sm text-gray-500">O método da triangulação encontra a VG de cada segmento
+                                para criar o molde 2D exato.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer style="background-color: #1E2957; color: white; padding: 1.5rem 0; text-align: center;">
+        <div class="container mx-auto">
+            <p class="mb-0">© 2025 Learning Fly - Desenho Universal para Engenharias</p>
+            <small style="opacity: 0.5;">Desenvolvido por Vitor Krewer</small>
+        </div>
+    </footer>
+
+    <script>
+        const projectionDescriptions = {
+            conic: 'Projeção Cônica: As linhas projetantes partem de um ponto finito, criando um efeito de perspectiva. Objetos mais distantes parecem menores. Usada em artes e arquitetura para realismo visual.',
+            cylindrical: 'Cilíndrica Oblíqua: As projetantes são paralelas, mas atingem o plano de forma oblíqua. Preserva o paralelismo, mas distorce as formas.',
+            orthogonal: 'Projeção Ortogonal: As projetantes são paralelas e perpendiculares ao plano. Preserva formas, ângulos e dimensões de faces paralelas ao plano. É a base do desenho técnico e da engenharia.'
+        };
+
+        function resizeCanvas(canvas) {
+            const { width, height } = canvas.getBoundingClientRect();
+            if (canvas.width !== width || canvas.height !== height) {
+                canvas.width = width;
+                canvas.height = height;
+                return true;
+            }
+            return false;
+        }
+
+        function drawCube(ctx, vertices) {
+            const edges = [
+                [0, 1], [1, 2], [2, 3], [3, 0],
+                [4, 5], [5, 6], [6, 7], [7, 4],
+                [0, 4], [1, 5], [2, 6], [3, 7]
+            ];
+            ctx.beginPath();
+            edges.forEach(edge => {
+                ctx.moveTo(vertices[edge[0]].x, vertices[edge[0]].y);
+                ctx.lineTo(vertices[edge[1]].x, vertices[edge[1]].y);
+            });
+            ctx.strokeStyle = '#4A4A4A';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        function drawProjection(type) {
+            const canvas = document.getElementById('projectionCanvas');
+            resizeCanvas(canvas);
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            document.getElementById('projectionInfo').textContent = projectionDescriptions[type];
+
+            const buttons = document.querySelectorAll('#projection-buttons .btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.type === type) {
+                    button.classList.add('active');
+                }
+            });
+
+            const center = { x: w / 2, y: h / 2 };
+            const size = 50;
+            const baseVertices = [
+                { x: -size, y: -size, z: -size }, { x: size, y: -size, z: -size },
+                { x: size, y: size, z: -size }, { x: -size, y: size, z: -size },
+                { x: -size, y: -size, z: size }, { x: size, y: -size, z: size },
+                { x: size, y: size, z: size }, { x: -size, y: size, z: size }
+            ];
+
+            let projectedVertices = [];
+
+            if (type === 'orthogonal') {
+                projectedVertices = baseVertices.map(v => ({
+                    x: center.x + v.x,
+                    y: center.y + v.y
+                }));
+            } else if (type === 'cylindrical') {
+                projectedVertices = baseVertices.map(v => ({
+                    x: center.x + v.x + v.z * 0.5,
+                    y: center.y + v.y - v.z * 0.5
+                }));
+            } else if (type === 'conic') {
+                const perspective = 300;
+                projectedVertices = baseVertices.map(v => {
+                    const scale = perspective / (perspective + v.z + 100);
+                    return {
+                        x: center.x + v.x * scale,
+                        y: center.y + v.y * scale
+                    };
+                });
+            }
+
+            drawCube(ctx, projectedVertices);
+        }
+
+        document.getElementById('projection-buttons').addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn')) {
+                const type = e.target.dataset.type;
+                if (type) {
+                    drawProjection(type);
+                }
+            }
+        });
+
+        const cotaSlider = document.getElementById('cotaSlider');
+        const afastamentoSlider = document.getElementById('afastamentoSlider');
+        const cotaValue = document.getElementById('cotaValue');
+        const afastamentoValue = document.getElementById('afastamentoValue');
+        const diedroInfo = document.getElementById('diedroInfo');
+        const epuraCanvas = document.getElementById('epuraCanvas');
+
+        function drawEpura() {
+            resizeCanvas(epuraCanvas);
+            const ctx = epuraCanvas.getContext('2d');
+            const w = epuraCanvas.width;
+            const h = epuraCanvas.height;
+            const cota = -parseInt(cotaSlider.value);
+            const afastamento = parseInt(afastamentoSlider.value);
+
+            cotaValue.textContent = -cota;
+            afastamentoValue.textContent = afastamento;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const centerY = h / 2;
+            const centerX = w / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(w, centerY);
+            ctx.strokeStyle = '#9CA3AF';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.font = '12px Inter';
+            ctx.fillStyle = '#6B7280';
+            ctx.fillText('LT (Linha de Terra)', 10, centerY - 5);
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY + cota);
+            ctx.lineTo(centerX, centerY + afastamento);
+            ctx.setLineDash([2, 2]);
+            ctx.strokeStyle = '#6B7280';
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + cota, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#3B82F6';
+            ctx.fill();
+            ctx.fillStyle = '#374151';
+            ctx.fillText(`P2 (cota=${-cota})`, centerX + 10, centerY + cota + 5);
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + afastamento, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#10B981';
+            ctx.fill();
+            ctx.fillStyle = '#374151';
+            ctx.fillText(`P1 (afastamento=${afastamento})`, centerX + 10, centerY + afastamento + 5);
+
+            let diedro;
+            if (-cota > 0 && afastamento > 0) diedro = '1º Diedro';
+            else if (-cota > 0 && afastamento < 0) diedro = '2º Diedro';
+            else if (-cota < 0 && afastamento < 0) diedro = '3º Diedro';
+            else if (-cota < 0 && afastamento > 0) diedro = '4º Diedro';
+            else diedro = 'Nos Planos';
+            diedroInfo.textContent = `Localização: ${diedro}`;
+        }
+
+        cotaSlider.addEventListener('input', drawEpura);
+        afastamentoSlider.addEventListener('input', drawEpura);
+
+        const methodsCtx = document.getElementById('methodsChart').getContext('2d');
+        new Chart(methodsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Rotação', 'Mudança de Planos', 'Rebatimento'],
+                datasets: [{
+                    label: 'Complexidade Gráfica',
+                    data: [8, 6, 4],
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Eficiência para VG de Planos',
+                    data: [6, 7, 9],
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, max: 10, title: { display: true, text: 'Pontuação Relativa (0-10)' } }
+                },
+                plugins: {
+                    title: { display: true, text: 'Análise Comparativa dos Métodos Descritivos', font: { size: 16 } },
+                    tooltip: { mode: 'index', intersect: false }
+                }
+            }
+        });
+
+        const civilCtx = document.getElementById('civilChart').getContext('2d');
+        const areaProjetada = 100;
+        const areaReal = areaProjetada / Math.cos(45 * Math.PI / 180);
+        new Chart(civilCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Área Projetada (m²)', 'Área Adicional para VG (m²)'],
+                datasets: [{
+                    data: [areaProjetada, areaReal - areaProjetada],
+                    backgroundColor: ['rgba(239, 68, 68, 0.7)', 'rgba(139, 92, 246, 0.7)'],
+                    borderColor: ['rgba(239, 68, 68, 1)', 'rgba(139, 92, 246, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Verdadeira Grandeza vs. Área Projetada', font: { size: 14 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) {
+                                    label += context.parsed.toFixed(2) + ' m²';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        window.onload = () => {
+            drawProjection('orthogonal');
+            drawEpura();
+        };
+    </script>
+</body>
+
+</html>

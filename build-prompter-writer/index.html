@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>Gerador de Prompt - Material Didático</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="hero-section">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-file-text"></i> Gerador de Prompt para Material Didático
+            </h1>
+            <p class="lead">Escolha um template e preencha os campos para gerar seu prompt personalizado</p>
+        </div>
+
+        <div class="template-selector">
+            <h3 class="text-primary mb-3">
+                <i class="bi bi-collection"></i> Selecione o Template
+            </h3>
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <select class="form-select form-select-lg" id="templateSelector" onchange="changeTemplate()">
+                        <option value="template1">Material Didático Geral - Versátil</option>
+                        <option value="template2">Fichamento Acadêmico - Para textos</option>
+                        <option value="template3">Concursos Públicos - Foco em apostilas</option>
+                        <option value="template4">Livro Didático - Nível Superior</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-info w-100" onclick="showTemplateInfo()">
+                        <i class="bi bi-info-circle"></i> Sobre o Template
+                    </button>
+                </div>
+            </div>
+            <div id="templateDescription" class="alert alert-info mt-3" style="display: none;"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8" id="formContainer">
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-bookmark"></i> 1. Título/Identificação do Projeto
+                        </h4>
+                        <div class="mb-3">
+                            <label for="nomeDisciplina" class="form-label">Nome da Disciplina</label>
+                            <input type="text" class="form-control" id="nomeDisciplina" placeholder="Ex: Métodos Numéricos Aplicados à Física">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-target"></i> 2. Objetivo Principal
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="tipoMaterial" class="form-label">Tipo de Material</label>
+                                <select class="form-select" id="tipoMaterial">
+                                    <option value="">Selecione...</option>
+                                    <option value="apostila">Apostila</option>
+                                    <option value="livro didático">Livro Didático</option>
+                                    <option value="artigo científico">Artigo Científico</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="nomeUnidade" class="form-label">Nome da Unidade/Capítulo</label>
+                                <input type="text" class="form-control" id="nomeUnidade" placeholder="Ex: Equações Diferenciais">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="focoMaterial" class="form-label">Foco do Material</label>
+                                <input type="text" class="form-control" id="focoMaterial" placeholder="Ex: aplicações práticas">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-people"></i> 3. Público-Alvo
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="tipoPublico" class="form-label">Tipo do Público</label>
+                                <input type="text" class="form-control" id="tipoPublico" placeholder="Ex: Estudantes de graduação em Física">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nivelInstrucao" class="form-label">Nível de Instrução</label>
+                                <input type="text" class="form-control" id="nivelInstrucao" placeholder="Ex: Conhecimento básico de cálculo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h4 class="card-title text-primary mb-3">
+                      <i class="bi bi-translate"></i> 9. Linguagem e Tom
+                    </h4>
+                    <div class="mb-3">
+                      <label for="linguagemTom" class="form-label">Selecione o estilo</label>
+                      <select class="form-select" id="linguagemTom">
+                        <option value="academica">Acadêmica</option>
+                        <option value="conversar">Converse com o Aluno</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-bullseye"></i> 4. Objetivos de Aprendizagem
+                        </h4>
+                        <div class="mb-3">
+                            <label for="objetivosAprendizagem" class="form-label">Objetivos Gerais de Aprendizagem</label>
+                            <textarea class="form-control" id="objetivosAprendizagem" rows="4" placeholder="Descreva os objetivos que o estudante deve alcançar..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-list-ul"></i> 5. Conteúdo Programático
+                        </h4>
+                        <div class="mb-3">
+                            <label for="conteudoProgramatico" class="form-label">Estrutura Detalhada e Conteúdo Programático</label>
+                            <textarea class="form-control" id="conteudoProgramatico" rows="6" placeholder="Descreva a estrutura e conteúdo do material..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4 livro-superior-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-lightbulb"></i> Abordagem Pedagógica (Andragogia)
+                        </h4>
+                        <div class="mb-3">
+                            <label for="relevanciaImediata" class="form-label">Relevância Imediata</label>
+                            <input type="text" class="form-control" id="relevanciaImediata" placeholder="Ex: Conectar conceitos com análises de fenômenos contemporâneos.">
+                        </div>
+                        <div class="mb-3">
+                            <label for="conexaoExperiencias" class="form-label">Conexão com Experiências Prévias</label>
+                            <input type="text" class="form-control" id="conexaoExperiencias" placeholder="Ex: Relacionar conceitos com a base de conhecimento do aluno em...">
+                        </div>
+                        <div class="mb-3">
+                            <label for="orientacaoProblemas" class="form-label">Orientação para Problemas</label>
+                            <input type="text" class="form-control" id="orientacaoProblemas" placeholder="Ex: Foco na resolução de questões de concursos da área.">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mb-4 didatico-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-gear"></i> 6. Elementos Didáticos a Incluir
+                        </h4>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="objetivosCapitulo" checked>
+                                    <label class="form-check-label" for="objetivosCapitulo">
+                                        Objetivos de aprendizagem específicos no início de cada capítulo
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="recursosVisuais" checked>
+                                    <label class="form-check-label" for="recursosVisuais">
+                                        Indicação clara de onde recursos visuais devem ser inseridos
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="quadrosAtencao" checked>
+                                    <label class="form-check-label" for="quadrosAtencao">
+                                        Quadros de "Atenção" ou "Nota" para destacar pontos críticos
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 fichamento-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-file-earmark-text"></i> Tipo de Material para Fichamento
+                        </h4>
+                        <div class="mb-3">
+                            <label for="tipoMaterialFichamento" class="form-label">Tipo de Material</label>
+                            <select class="form-select" id="tipoMaterialFichamento" onchange="updateFichamentoFields()">
+                                <option value="">Selecione...</option>
+                                <option value="livro">Livro</option>
+                                <option value="artigo">Artigo Científico</option>
+                                <option value="apostila">Apostila</option>
+                                <option value="tese">Tese</option>
+                                <option value="dissertacao">Dissertação</option>
+                            </select>
+                        </div>
+                        
+                        <div id="livroSection" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="autorLivro" class="form-label">Autor(es)</label>
+                                    <input type="text" class="form-control" id="autorLivro" placeholder="Nome do(s) autor(es)">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="editoraLivro" class="form-label">Editora</label>
+                                    <input type="text" class="form-control" id="editoraLivro" placeholder="Nome da editora">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="artigoSection" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="autorArtigo" class="form-label">Autor(es)</label>
+                                    <input type="text" class="form-control" id="autorArtigo" placeholder="Nome do(s) autor(es)">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="revistaArtigo" class="form-label">Revista</label>
+                                    <input type="text" class="form-control" id="revistaArtigo" placeholder="Nome da revista">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="apostilaSection" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="autorApostila" class="form-label">Autor(es)</label>
+                                    <input type="text" class="form-control" id="autorApostila" placeholder="Nome do(s) autor(es)">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="instituicaoApostila" class="form-label">Instituição</label>
+                                    <input type="text" class="form-control" id="instituicaoApostila" placeholder="Nome da instituição">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="tipoFichamento" class="form-label">Tipo de Fichamento</label>
+                            <select class="form-select" id="tipoFichamento">
+                                <option value="citacao">Fichamento de Citação</option>
+                                <option value="resumo">Fichamento de Resumo</option>
+                                <option value="critico">Fichamento Crítico-Analítico</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 concurso-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-award"></i> 1. Identificação do Material
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="disciplinaConcurso" class="form-label">Disciplina</label>
+                                <input type="text" class="form-control" id="disciplinaConcurso" placeholder="Ex: Direito Administrativo">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="concursoAreaFoco" class="form-label">Concurso/Área de Foco</label>
+                                <input type="text" class="form-control" id="concursoAreaFoco" placeholder="Ex: Carreiras Policiais">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 concurso-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-person-check"></i> 2. Público-Alvo
+                        </h4>
+                        <div class="mb-3">
+                            <label for="nivelCandidato" class="form-label">Nível do Candidato</label>
+                            <select class="form-select" id="nivelCandidato">
+                                <option value="">Selecione...</option>
+                                <option value="iniciante">Iniciante</option>
+                                <option value="intermediario">Intermediário</option>
+                                <option value="avancado">Avançado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 concurso-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-chat-text"></i> 3. Estilo de Ensino e Linguagem
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="tomVoz" class="form-label">Tom de Voz</label>
+                                <select class="form-select" id="tomVoz">
+                                    <option value="">Selecione...</option>
+                                    <option value="direto">Direto e Objetivo</option>
+                                    <option value="didatico">Didático e Explicativo</option>
+                                    <option value="motivacional">Motivacional</option>
+                                    <option value="tecnico">Técnico e Formal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tipoLinguagem" class="form-label">Tipo de Linguagem</label>
+                                <select class="form-select" id="tipoLinguagem">
+                                    <option value="">Selecione...</option>
+                                    <option value="clara">Clara e Simples</option>
+                                    <option value="formal">Formal e Técnica</option>
+                                    <option value="mista">Mista (Clara + Técnica)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 concurso-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-tools"></i> 4. Recursos Didáticos a Incluir
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="bizusDicas" checked>
+                                    <label class="form-check-label" for="bizusDicas">
+                                        "Bizus" e Dicas Rápidas
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="questoesComentadas" checked>
+                                    <label class="form-check-label" for="questoesComentadas">
+                                        Questões Comentadas
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="quadrosComparativos" checked>
+                                    <label class="form-check-label" for="quadrosComparativos">
+                                        Quadros Comparativos
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="mapasMentais" checked>
+                                    <label class="form-check-label" for="mapasMentais">
+                                        Mapas Mentais
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="jurisprudenciaDoutrina" checked>
+                                    <label class="form-check-label" for="jurisprudenciaDoutrina">
+                                        Jurisprudência e Doutrina
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 concurso-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-book"></i> 5. Glossário
+                        </h4>
+                        <div class="mb-3">
+                            <label for="glossario" class="form-label">Termos para Glossário (opcional)</label>
+                            <textarea class="form-control" id="glossario" rows="3" placeholder="Liste os termos técnicos que devem ser incluídos no glossário..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-info btn-lg me-3" onclick="previewPrompt()">
+                        <i class="bi bi-eye"></i> Visualizar Prompt
+                    </button>
+                    <button class="btn btn-success btn-lg" onclick="copyPrompt()">
+                        <i class="bi bi-clipboard"></i> Copiar Prompt
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card position-sticky" style="top: 2rem;">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-eye"></i> Preview do Prompt
+                        </h4>
+                        <div id="promptPreview">
+                            Selecione um template e preencha os campos para ver o preview do prompt...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="successToast" class="toast" role="alert">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle me-2"></i>
+                <strong class="me-auto">Sucesso!</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Prompt copiado para a área de transferência!
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+<footer class="bg-light text-dark mt-5 py-4 border-top shadow-sm">
+    <div class="container">
+        <p class="mb-2">
+            Este projeto foi idealizado, projetado e desenvolvido por <strong>Vitor Krewer</strong>. Uma ferramenta para auxiliar a elaboração metódica de materiais didáticos guiados por Inteligência Artificial.
+        </p>
+        <hr>
+        <p class="text-center mb-0">
+            Conecte-se com o desenvolvedor:<br>
+            <a href="https://www.linkedin.com/in/vitorkrewer/" target="_blank" class="text-decoration-none text-primary fw-semibold" rel="noopener noreferrer">
+                <i class="bi bi-linkedin me-1"></i>Vitor Krewer no LinkedIn
+            </a>
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

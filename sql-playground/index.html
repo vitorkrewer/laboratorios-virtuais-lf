@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>SQL Playground - Laboratório Virtual</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- Tela de Boas-Vindas -->
+    <div id="welcome-overlay">
+        <div id="welcome-modal">
+            <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly">
+            <h2>Bem-vindo ao SQL Playground!</h2>
+            <p>Seu laboratório virtual para praticar e dominar a linguagem SQL. Crie tabelas, insira dados e faça consultas em um ambiente seguro e interativo.</p>
+            <button id="start-btn">Começar a Praticar</button>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Carregando o motor SQL...</p>
+    </div>
+
+    <!-- Container Principal da Aplicação -->
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-title">
+                <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly" class="logo">
+                <h1>SQL Playground: Laboratório Virtual de Banco de Dados</h1>
+            </div>
+            <div class="header-controls">
+                <div class="db-selector">
+                    <label for="db-type">Dialeto SQL:</label>
+                    <select id="db-type" name="db-type">
+                        <option value="sqlite">SQLite</option>
+                        <option value="mysql">MySQL</option>
+                    </select>
+                </div>
+                 <div class="theme-switcher">
+                    <i class="fa-solid fa-sun theme-icon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fa-solid fa-moon theme-icon"></i>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Barra Lateral Esquerda: Esquema do Banco -->
+            <aside class="sidebar">
+                <h2><i class="fa-solid fa-database"></i> Esquema do Banco</h2>
+                <div id="schema-tree">
+                    <p class="empty-state">Nenhuma tabela criada ainda.</p>
+                </div>
+            </aside>
+
+            <!-- Painel Central: Editor e Resultados -->
+            <div class="editor-panel">
+                <div class="editor-controls">
+                    <button id="execute-btn"><i class="fa-solid fa-play"></i> Executar (Ctrl+Enter)</button>
+                    <button id="clear-btn"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                </div>
+                <textarea id="sql-editor" spellcheck="false" placeholder="Digite seu comando SQL aqui..."></textarea>
+                <div class="output-panel">
+                    <div class="tabs">
+                        <button class="tab-link active" data-tab="results-tab">Resultados</button>
+                        <button class="tab-link" data-tab="messages-tab">Mensagens</button>
+                    </div>
+                    <div id="results-tab" class="tab-content active">
+                        <div id="results-output" class="output-area">
+                            <p class="empty-state">Os resultados de suas consultas <code>SELECT</code> aparecerão aqui.</p>
+                        </div>
+                    </div>
+                    <div id="messages-tab" class="tab-content">
+                        <div id="messages-output" class="output-area">
+                             <p class="empty-state">Mensagens de sucesso e erros serão exibidas aqui.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra Lateral Direita: Ajuda de Sintaxe -->
+            <aside class="sidebar sidebar-right">
+                <h2><i class="fa-solid fa-book"></i> Ajuda de Sintaxe</h2>
+                <input type="search" id="syntax-search" placeholder="Buscar comando...">
+                <div id="syntax-list"></div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+    <script src="script.js" type="module"></script>
+</body>
+</html>
+

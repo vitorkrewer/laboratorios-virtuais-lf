@@ -1,0 +1,50 @@
+[
+    {
+        "command": "SELECT",
+        "description": "Recupera dados de uma ou mais tabelas.",
+        "syntax": "SELECT coluna1, coluna2, ...\nFROM nome_da_tabela\n[WHERE condicao]\n[ORDER BY coluna]\n[LIMIT numero];",
+        "example": "SELECT nome, salario FROM funcionarios WHERE salario > 5000 ORDER BY nome;"
+    },
+    {
+        "command": "CREATE TABLE",
+        "description": "Cria uma nova tabela no banco de dados.",
+        "syntax": "CREATE TABLE nome_da_tabela (\n  coluna1 tipo_dado [restricoes],\n  coluna2 tipo_dado [restricoes],\n  ...\n);",
+        "example": "CREATE TABLE produtos (\n  id INTEGER PRIMARY KEY,\n  nome TEXT NOT NULL,\n  preco REAL\n);"
+    },
+    {
+        "command": "INSERT INTO",
+        "description": "Adiciona novos registros a uma tabela.",
+        "syntax": "INSERT INTO nome_da_tabela (coluna1, coluna2, ...)\nVALUES (valor1, valor2, ...);",
+        "example": "INSERT INTO produtos (nome, preco) VALUES ('Laptop', 3500.50);"
+    },
+    {
+        "command": "UPDATE",
+        "description": "Modifica registros existentes em uma tabela.",
+        "syntax": "UPDATE nome_da_tabela\nSET coluna1 = valor1, ...\n[WHERE condicao];",
+        "example": "UPDATE produtos SET preco = 3200.00 WHERE nome = 'Laptop';"
+    },
+    {
+        "command": "DELETE",
+        "description": "Remove registros de uma tabela.",
+        "syntax": "DELETE FROM nome_da_tabela [WHERE condicao];",
+        "example": "DELETE FROM produtos WHERE id = 1;"
+    },
+    {
+        "command": "JOIN",
+        "description": "Combina registros de duas ou mais tabelas com base em uma coluna relacionada.",
+        "syntax": "SELECT colunas\nFROM tabela1\n[INNER | LEFT | RIGHT] JOIN tabela2\nON tabela1.coluna = tabela2.coluna;",
+        "example": "SELECT f.nome, d.nome\nFROM funcionarios f\nINNER JOIN departamentos d ON f.id_depto = d.id;"
+    },
+    {
+        "command": "ALTER TABLE",
+        "description": "Modifica a estrutura de uma tabela existente (adicionar, remover ou alterar colunas).",
+        "syntax": "ALTER TABLE nome_da_tabela\n[ADD COLUMN nome tipo] | \n[DROP COLUMN nome] | \n[RENAME TO novo_nome];",
+        "example": "ALTER TABLE funcionarios ADD COLUMN data_admissao DATE;"
+    },
+    {
+        "command": "CREATE VIEW",
+        "description": "Cria uma tabela virtual baseada no resultado de uma consulta SELECT.",
+        "syntax": "CREATE VIEW nome_da_view AS\nSELECT colunas\nFROM tabelas\n[WHERE condicao];",
+        "example": "CREATE VIEW v_funcionarios_ti AS\nSELECT nome, cargo FROM funcionarios WHERE id_depto = 1;"
+    }
+]

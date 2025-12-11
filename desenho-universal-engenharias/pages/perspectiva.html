@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desenho Universal para Engenharias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF5;
+            color: #3D405B;
+        }
+
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #81B29A;
+            border-bottom-color: #81B29A;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .btn-primary {
+            background-color: #3D405B;
+            color: #FFFFFF;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #555a82;
+        }
+
+        .btn-secondary {
+            background-color: #F2CC8F;
+            color: #3D405B;
+            transition: background-color 0.3s;
+        }
+
+        .btn-secondary.active {
+            background-color: #E07A5F;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="mr-4 text-[#3D405B] hover:text-[#81B29A] transition-colors"
+                    title="Voltar ao Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5" />
+                        <path d="M12 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="text-xl md:text-2xl font-bold text-[#3D405B]">Desenho Universal & Perspectivas</h1>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#introducao" class="nav-link">Introdução</a>
+                <a href="#sistemas" class="nav-link">Sistemas</a>
+                <a href="#comparativo" class="nav-link">Comparativo</a>
+                <a href="#projeto" class="nav-link">Projeto</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="introducao" class="text-center mb-20">
+            <h2 class="text-4xl font-bold mb-4">A Linguagem Visual da Engenharia Inclusiva</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-700">
+                A representação em perspectiva é mais que uma técnica de desenho; é uma ferramenta essencial para a
+                empatia e a inovação no Desenho Universal. Ela nos permite traduzir os princípios de acessibilidade em
+                soluções tangíveis, comunicando ideias complexas de forma clara e simulando a experiência do usuário
+                final. Esta aplicação interativa explora os fundamentos dessa linguagem visual.
+            </p>
+        </section>
+
+        <section id="sistemas" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">O Universo dos Sistemas de Projeção</h2>
+                <p class="text-md text-gray-600 mt-2">Clique nos elementos do diagrama para explorar como objetos 3D são
+                    representados em 2D.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4 text-center">
+                    <div class="p-3 bg-gray-200 rounded-lg inline-block">Sistemas de Projeção</div>
+                    <div class="flex justify-center items-center">
+                        <div class="w-px h-8 bg-gray-400"></div>
+                    </div>
+                    <div class="flex justify-around">
+                        <div class="flex flex-col items-center">
+                            <button id="btn-conica" class="diagram-node p-3 bg-blue-100 rounded-lg">Projeção
+                                Cônica</button>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <button id="btn-cilindrica" class="diagram-node p-3 bg-green-100 rounded-lg">Projeção
+                                Cilíndrica</button>
+                            <div class="w-px h-8 bg-gray-400"></div>
+                            <div class="flex justify-around w-full">
+                                <div class="flex flex-col items-center">
+                                    <button id="btn-obliqua"
+                                        class="diagram-node p-2 bg-yellow-100 rounded-lg">Oblíqua</button>
+                                    <div class="w-px h-4 bg-gray-400"></div>
+                                    <button id="btn-cavaleira-diag"
+                                        class="diagram-node p-2 bg-yellow-200 rounded-lg text-sm">Persp.
+                                        Cavaleira</button>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <button id="btn-ortogonal"
+                                        class="diagram-node p-2 bg-purple-100 rounded-lg">Ortogonal</button>
+                                    <div class="w-px h-4 bg-gray-400"></div>
+                                    <button id="btn-axonometrica"
+                                        class="diagram-node p-2 bg-purple-200 rounded-lg text-sm">Axonométrica</button>
+                                    <div class="w-px h-4 bg-gray-400"></div>
+                                    <div class="flex space-x-2">
+                                        <button id="btn-isometrica-diag"
+                                            class="diagram-node p-1 bg-red-200 rounded-lg text-xs">Isométrica</button>
+                                        <button id="btn-dimetrica-diag"
+                                            class="diagram-node p-1 bg-red-200 rounded-lg text-xs">Dimétrica</button>
+                                        <button id="btn-trimetrica-diag"
+                                            class="diagram-node p-1 bg-red-200 rounded-lg text-xs">Trimétrica</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="info-panel" class="card p-6 min-h-[300px]">
+                    <h3 id="info-title" class="text-2xl font-bold mb-2 text-[#E07A5F]">Selecione um item</h3>
+                    <p id="info-text" class="text-gray-700">As informações sobre o sistema de projeção selecionado
+                        aparecerão aqui.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparativo" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Comparando as Perspectivas Axonométricas</h2>
+                <p class="text-md text-gray-600 mt-2">Selecione uma perspectiva para visualizar suas características e a
+                    configuração dos eixos.</p>
+            </div>
+            <div class="flex justify-center space-x-4 mb-8">
+                <button class="perspective-btn btn-secondary active px-4 py-2 rounded-lg"
+                    data-perspective="isometrica">Isométrica</button>
+                <button class="perspective-btn btn-secondary px-4 py-2 rounded-lg"
+                    data-perspective="dimetrica">Dimétrica</button>
+                <button class="perspective-btn btn-secondary px-4 py-2 rounded-lg"
+                    data-perspective="cavaleira">Cavaleira</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="card p-6">
+                    <h3 id="perspective-title" class="text-2xl font-bold mb-4">Perspectiva Isométrica</h3>
+                    <p id="perspective-description" class="text-gray-700 mb-4">Os três eixos formam ângulos de 120°
+                        entre si. As medidas nos três eixos sofrem a mesma redução, resultando em proporções
+                        equilibradas. É a mais comum na engenharia.</p>
+                    <div class="chart-container">
+                        <canvas id="perspectiveChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <h3 class="text-xl font-bold mb-4">Configuração dos Eixos</h3>
+                    <canvas id="axesCanvas" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="projeto" class="bg-white rounded-2xl p-8 md:p-12 shadow-lg">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Projeto Aplicado: Posto de Trabalho Acessível</h2>
+                <p class="text-md text-gray-600 mt-2">O Desenho Universal vai além da norma, buscando soluções
+                    equitativas e flexíveis. A norma ABNT NBR 9050 fornece os parâmetros técnicos mínimos para garantir
+                    a acessibilidade. Explore abaixo os requisitos essenciais para projetar um posto de trabalho
+                    inclusivo.</p>
+            </div>
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4 text-center">Requisitos da Norma ABNT NBR 9050</h3>
+                <p class="text-center text-gray-600 mb-6">Passe o mouse sobre as barras para ver detalhes e a
+                    justificativa baseada nos princípios do Desenho Universal.</p>
+                <div class="chart-container h-[400px] md:h-[500px]">
+                    <canvas id="nbrChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer style="background-color: #1E2957; color: white; padding: 1.5rem 0; text-align: center;">
+        <div class="container mx-auto">
+            <p class="mb-0">© 2025 Learning Fly - Desenho Universal para Engenharias</p>
+            <small style="opacity: 0.5;">Desenvolvido por Vitor Krewer</small>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const diagramData = {
+                'btn-conica': {
+                    title: 'Projeção Cônica',
+                    text: 'As linhas projetantes partem de um único ponto (observador). O resultado é realista, similar à visão humana, mas distorce as dimensões reais, sendo inadequada para desenhos técnicos precisos.'
+                },
+                'btn-cilindrica': {
+                    title: 'Projeção Cilíndrica',
+                    text: 'As linhas projetantes são paralelas entre si. Este sistema elimina a distorção da distância, sendo a base para todo o desenho técnico de engenharia.'
+                },
+                'btn-obliqua': {
+                    title: 'Cilíndrica Oblíqua',
+                    text: 'As projetantes atingem o plano de projeção em um ângulo diferente de 90°. É usada para criar a Perspectiva Cavaleira, que mantém uma face em verdadeira grandeza.'
+                },
+                'btn-ortogonal': {
+                    title: 'Cilíndrica Ortogonal',
+                    text: 'As projetantes são perpendiculares (90°) ao plano de projeção. É o sistema mais importante, base para as vistas ortográficas e as projeções axonométricas.'
+                },
+                'btn-axonometrica': {
+                    title: 'Projeção Axonométrica',
+                    text: 'Uma única vista que mostra três faces do objeto simultaneamente. A classificação (isométrica, dimétrica, trimétrica) depende dos ângulos dos eixos com o plano.'
+                },
+                'btn-cavaleira-diag': {
+                    title: 'Perspectiva Cavaleira',
+                    text: 'Uma face do objeto é paralela ao plano de projeção e desenhada em verdadeira grandeza. A profundidade é projetada em um eixo inclinado com redução.'
+                },
+                'btn-isometrica-diag': {
+                    title: 'Perspectiva Isométrica',
+                    text: 'Os três eixos têm a mesma redução, criando uma visão equilibrada. Os eixos de recuo são desenhados a 30° da horizontal.'
+                },
+                'btn-dimetrica-diag': {
+                    title: 'Perspectiva Dimétrica',
+                    text: 'Dois eixos têm a mesma redução, e o terceiro tem uma redução diferente. Permite dar ênfase a uma face específica do objeto.'
+                },
+                'btn-trimetrica-diag': {
+                    title: 'Perspectiva Trimétrica',
+                    text: 'Cada um dos três eixos possui um coeficiente de redução diferente, oferecendo maior flexibilidade visual, mas com maior complexidade de construção.'
+                }
+            };
+            const infoTitle = document.getElementById('info-title');
+            const infoText = document.getElementById('info-text');
+            document.querySelectorAll('.diagram-node').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.id;
+                    if (diagramData[id]) {
+                        infoTitle.textContent = diagramData[id].title;
+                        infoText.textContent = diagramData[id].text;
+                    }
+                });
+            });
+
+            const perspectiveData = {
+                isometrica: {
+                    title: 'Perspectiva Isométrica',
+                    description: 'Os três eixos formam ângulos de 120° entre si. As medidas nos três eixos sofrem a mesma redução (ou nenhuma, no desenho isométrico), resultando em proporções equilibradas. É a mais comum na engenharia.',
+                    chartData: [1, 1, 1],
+                    axes: [{ x: 150, y: 30 }, { x: 260, y: 95 }, { x: 40, y: 95 }]
+                },
+                dimetrica: {
+                    title: 'Perspectiva Dimétrica',
+                    description: 'Dois eixos sofrem a mesma redução, enquanto o terceiro tem uma redução diferente. Permite dar ênfase a uma face específica, alterando os ângulos dos eixos de recuo.',
+                    chartData: [1, 1, 0.5],
+                    axes: [{ x: 150, y: 30 }, { x: 280, y: 120 }, { x: 20, y: 120 }]
+                },
+                cavaleira: {
+                    title: 'Perspectiva Cavaleira',
+                    description: 'Uma face é representada em verdadeira grandeza (sem redução). A profundidade é projetada em um eixo de fuga (ex: 45°) com um coeficiente de redução (ex: 1/2) para evitar distorções.',
+                    chartData: [1, 1, 0.5],
+                    axes: [{ x: 150, y: 30 }, { x: 250, y: 30 }, { x: 215, y: 100 }]
+                }
+            };
+
+            const pTitle = document.getElementById('perspective-title');
+            const pDesc = document.getElementById('perspective-description');
+            const pBtns = document.querySelectorAll('.perspective-btn');
+            const axesCanvas = document.getElementById('axesCanvas');
+            const axesCtx = axesCanvas.getContext('2d');
+            let perspectiveChart;
+
+            function drawAxes(config) {
+                axesCtx.clearRect(0, 0, axesCanvas.width, axesCanvas.height);
+                const center = { x: 150, y: 150 };
+                axesCtx.strokeStyle = '#3D405B';
+                axesCtx.lineWidth = 2;
+                axesCtx.font = '12px Inter';
+                axesCtx.fillStyle = '#3D405B';
+
+                axesCtx.beginPath();
+                axesCtx.moveTo(center.x, center.y);
+                axesCtx.lineTo(config[0].x, config[0].y);
+                axesCtx.stroke();
+                axesCtx.fillText('Altura (Z)', config[0].x - 20, config[0].y - 5);
+
+                axesCtx.beginPath();
+                axesCtx.moveTo(center.x, center.y);
+                axesCtx.lineTo(config[1].x, config[1].y);
+                axesCtx.stroke();
+                axesCtx.fillText('Largura (X)', config[1].x + 5, config[1].y + 5);
+
+                axesCtx.beginPath();
+                axesCtx.moveTo(center.x, center.y);
+                axesCtx.lineTo(config[2].x, config[2].y);
+                axesCtx.stroke();
+                axesCtx.fillText('Profundidade (Y)', config[2].x - 80, config[2].y + 5);
+            }
+
+            function updatePerspective(perspective) {
+                const data = perspectiveData[perspective];
+                pTitle.textContent = data.title;
+                pDesc.textContent = data.description;
+                perspectiveChart.data.datasets[0].data = data.chartData;
+                perspectiveChart.update();
+                drawAxes(data.axes);
+
+                pBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.perspective === perspective);
+                });
+            }
+
+            const chartCtx = document.getElementById('perspectiveChart').getContext('2d');
+            perspectiveChart = new Chart(chartCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Eixo Altura', 'Eixo Largura', 'Eixo Profundidade'],
+                    datasets: [{
+                        label: 'Coeficiente de Redução',
+                        data: [1, 1, 1],
+                        backgroundColor: 'rgba(129, 178, 154, 0.2)',
+                        borderColor: 'rgba(129, 178, 154, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(129, 178, 154, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#ddd' },
+                            grid: { color: '#ddd' },
+                            pointLabels: { font: { size: 14 } },
+                            suggestedMin: 0,
+                            suggestedMax: 1.2
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            pBtns.forEach(btn => {
+                btn.addEventListener('click', () => updatePerspective(btn.dataset.perspective));
+            });
+
+            updatePerspective('isometrica');
+
+            const nbrChartCtx = document.getElementById('nbrChart').getContext('2d');
+            const nbrData = {
+                labels: ['Altura Livre Inferior (Mesa)', 'Altura do Tampo (Mesa)', 'Alcance Manual Confortável', 'Área de Aproximação (Largura)', 'Área de Aproximação (Prof.)'],
+                datasets: [{
+                    label: 'Dimensão Mínima (m)',
+                    data: [0.73, 0.75, 0.40, 0.80, 1.20],
+                    backgroundColor: 'rgba(242, 204, 143, 0.7)',
+                    borderColor: 'rgba(242, 204, 143, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Dimensão Máxima (m)',
+                    data: [null, 0.85, 1.20, null, null],
+                    backgroundColor: 'rgba(224, 122, 95, 0.7)',
+                    borderColor: 'rgba(224, 122, 95, 1)',
+                    borderWidth: 1
+                }]
+            };
+            const nbrTooltips = [
+                'Mínimo de 0,73m do piso. Princípio DU: Espaço para Aproximação e Uso.',
+                'Entre 0,75m e 0,85m (ajustável é ideal). Princípio DU: Uso Flexível.',
+                'Controles devem estar entre 0,40m e 1,20m de altura. Princípio DU: Baixo Esforço Físico.',
+                'Módulo de Referência de 0,80m x 1,20m. Princípio DU: Espaço para Aproximação e Uso.',
+                'Módulo de Referência de 0,80m x 1,20m. Princípio DU: Espaço para Aproximação e Uso.'
+            ];
+
+            new Chart(nbrChartCtx, {
+                type: 'bar',
+                data: nbrData,
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: false,
+                            beginAtZero: true,
+                            title: { display: true, text: 'Dimensão (metros)' }
+                        },
+                        y: { stacked: false }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: function (tooltipItems) {
+                                    return nbrTooltips[tooltipItems[0].dataIndex];
+                                }
+                            }
+                        },
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desenho Projetivo Interativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .interactive-element {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+        }
+
+        .btn {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="mr-4 text-blue-600 hover:text-blue-800 transition-colors"
+                    title="Voltar ao Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5" />
+                        <path d="M12 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="text-2xl font-bold text-blue-600">Desenho Projetivo Interativo</h1>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#fundamentos"
+                    class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Fundamentos</a>
+                <a href="#representacao"
+                    class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Representação</a>
+                <a href="#cad" class="nav-link text-gray-600 font-medium border-b-2 border-transparent">CAD</a>
+                <a href="#cortes" class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Cortes</a>
+                <a href="#acessibilidade"
+                    class="nav-link text-gray-600 font-medium border-b-2 border-transparent">Acessibilidade</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
+                    </path>
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#fundamentos" class="block py-2 text-gray-600">Fundamentos</a>
+            <a href="#representacao" class="block py-2 text-gray-600">Representação</a>
+            <a href="#cad" class="block py-2 text-gray-600">CAD</a>
+            <a href="#cortes" class="block py-2 text-gray-600">Cortes</a>
+            <a href="#acessibilidade" class="block py-2 text-gray-600">Acessibilidade</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="fundamentos" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-gray-900">1. Fundamentos da Projeção Ortogonal</h2>
+            <p class="mb-6">A projeção ortogonal é o método fundamental para representar objetos tridimensionais em
+                superfícies bidimensionais, como o papel ou a tela do computador. O sistema de projeção define como as
+                vistas do objeto são organizadas. No Brasil, o padrão é o 1º diedro, mas é crucial conhecer o 3º diedro,
+                usado em outros países. Interaja com o diagrama abaixo para visualizar a diferença.</p>
+            <div class="interactive-element">
+                <div class="flex justify-center mb-4">
+                    <button id="toggleDiedro"
+                        class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Alternar
+                        para 3º Diedro</button>
+                </div>
+                <div id="diedro-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 id="diedroTitle" class="text-xl font-semibold text-center mb-2">Representação em 1º Diedro
+                            (Padrão ABNT/ISO)</h3>
+                        <div
+                            class="relative w-full h-64 border-2 border-dashed rounded-lg flex items-center justify-center bg-white">
+                            <div class="absolute text-center">
+                                <div id="vista-frontal"
+                                    class="w-24 h-24 bg-blue-300 border-2 border-blue-600 flex items-center justify-center font-bold">
+                                    V. Frontal</div>
+                                <div id="vista-superior"
+                                    class="w-24 h-16 bg-green-300 border-2 border-green-600 mx-auto mt-2 flex items-center justify-center font-bold">
+                                    V. Superior</div>
+                            </div>
+                            <div id="vista-lateral"
+                                class="absolute w-16 h-24 bg-red-300 border-2 border-red-600 ml-2 flex items-center justify-center font-bold"
+                                style="left: calc(50% + 5rem); top: 50%; transform: translateY(-50%);">V. Lat. Esq.
+                            </div>
+                        </div>
+                    </div>
+                    <div id="diedro-explanation" class="text-sm">
+                        <p><strong>No 1º Diedro:</strong></p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>O objeto está <strong>entre o observador e o plano</strong> de projeção.</li>
+                            <li>A Vista Superior fica <strong>abaixo</strong> da Vista Frontal.</li>
+                            <li>A Vista Lateral Esquerda fica à <strong>direita</strong> da Vista Frontal.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="representacao" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-gray-900">2. Determinação das Vistas Ortográficas</h2>
+            <p class="mb-6">A partir de um objeto 3D, geramos suas vistas ortográficas (frontal, superior e lateral). A
+                escolha da vista frontal é crucial, pois deve mostrar a forma mais característica do objeto. A
+                correspondência entre as vistas é mantida pelo alinhamento. Selecione um sólido abaixo para gerar suas
+                vistas automaticamente e observe como as dimensões se correspondem.</p>
+            <div class="interactive-element">
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                    <label for="solid-selector" class="font-semibold">Selecione um Sólido:</label>
+                    <select id="solid-selector" class="p-2 border rounded-lg bg-white">
+                        <option value="prisma">Prisma Retangular</option>
+                        <option value="cilindro">Cilindro</option>
+                        <option value="cone">Cone</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div id="view-generator-display" class="relative w-full h-80 bg-white border rounded-lg p-4">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Análise das Vistas</h3>
+                        <p id="view-analysis-text">As vistas geradas mostram o objeto de diferentes perspectivas. Note o
+                            alinhamento: a largura da vista frontal é a mesma da superior, e a altura da frontal é a
+                            mesma da lateral.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cad" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-gray-900">3. Introdução ao CAD (Computer-Aided Design)</h2>
+            <p class="mb-6">O software CAD é a ferramenta padrão para o desenho técnico na engenharia. Ele oferece
+                precisão e eficiência. Dominar os comandos básicos de desenho e edição é o primeiro passo. Clique nos
+                botões para explorar a função de alguns comandos essenciais.</p>
+            <div class="interactive-element">
+                <div class="flex flex-wrap justify-center gap-3 mb-6">
+                    <button class="cad-command btn bg-gray-200 hover:bg-blue-200 p-2 rounded"
+                        data-command="line">LINE</button>
+                    <button class="cad-command btn bg-gray-200 hover:bg-blue-200 p-2 rounded"
+                        data-command="circle">CIRCLE</button>
+                    <button class="cad-command btn bg-gray-200 hover:bg-blue-200 p-2 rounded"
+                        data-command="trim">TRIM</button>
+                    <button class="cad-command btn bg-gray-200 hover:bg-blue-200 p-2 rounded"
+                        data-command="offset">OFFSET</button>
+                </div>
+                <div class="bg-white p-4 rounded-lg border min-h-[120px]">
+                    <h3 id="cad-command-title" class="text-lg font-bold text-blue-700">Selecione um comando</h3>
+                    <p id="cad-command-desc" class="mt-2">Clique em um dos botões acima para ver sua descrição e uma
+                        representação visual de sua função.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cortes" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-gray-900">4. Cortes e Seções</h2>
+            <p class="mb-6">Para visualizar detalhes internos de uma peça, utilizamos o artifício do corte. Um plano
+                imaginário "corta" a peça, revelando seu interior. As superfícies cortadas são marcadas com hachuras,
+                conforme a norma ABNT NBR 12298. Veja abaixo como um corte pleno clarifica o desenho de um mancal.</p>
+            <div class="interactive-element text-center">
+                <div id="corte-display"
+                    class="w-full h-64 bg-white border rounded-lg mx-auto mb-4 flex items-center justify-center p-4 bg-contain bg-no-repeat"
+                    style="background-image: url('https://placehold.co/400x250/f0f0f0/333?text=Mancal+em+Vista+Externa');">
+                </div>
+                <button id="toggle-corte"
+                    class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Aplicar Corte
+                    Pleno</button>
+                <p id="corte-explanation" class="mt-4 text-sm text-left">O desenho inicial mostra muitos detalhes
+                    internos com linhas tracejadas, o que pode ser confuso. Ao aplicar o corte, esses detalhes se tornam
+                    visíveis (linhas contínuas) e a peça fica muito mais fácil de interpretar.</p>
+            </div>
+        </section>
+
+        <section id="acessibilidade" class="section-card">
+            <h2 class="text-3xl font-bold mb-4 text-gray-900">5. Aplicação: Desenho para Acessibilidade (NBR 9050)</h2>
+            <p class="mb-6">O desenho técnico é uma ferramenta essencial para garantir a acessibilidade, seguindo
+                parâmetros da norma ABNT NBR 9050. A precisão é fundamental. Um pequeno erro pode criar uma barreira
+                intransponível. Use o simulador abaixo para projetar uma rampa, ajustando o desnível e o comprimento
+                para atender à norma.</p>
+            <div class="interactive-element">
+                <h3 class="text-xl font-semibold mb-4 text-center">Calculadora de Rampa Acessível</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="mb-4">
+                            <label for="desnivel" class="block font-medium mb-1">Desnível a Vencer (h): <span
+                                    id="desnivel-value">0.50</span> m</label>
+                            <input type="range" id="desnivel" min="0.1" max="1.5" step="0.01" value="0.5"
+                                class="w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="comprimento" class="block font-medium mb-1">Comprimento da Projeção (c): <span
+                                    id="comprimento-value">6.00</span> m</label>
+                            <input type="range" id="comprimento" min="1" max="20" step="0.1" value="6" class="w-full">
+                        </div>
+                        <div id="resultado-rampa" class="p-4 rounded-lg text-center font-bold text-lg">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="rampaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer style="background-color: #1E2957; color: white; padding: 1.5rem 0; text-align: center;">
+        <div class="container mx-auto">
+            <p class="mb-0">© 2025 Learning Fly - Desenho Universal para Engenharias</p>
+            <small style="opacity: 0.5;">Desenvolvido por Vitor Krewer</small>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const toggleDiedroBtn = document.getElementById('toggleDiedro');
+            const diedroTitle = document.getElementById('diedroTitle');
+            const vistaSuperior = document.getElementById('vista-superior');
+            const vistaLateral = document.getElementById('vista-lateral');
+            const diedroExplanation = document.getElementById('diedro-explanation');
+            let isFirstDiedro = true;
+
+            toggleDiedroBtn.addEventListener('click', () => {
+                isFirstDiedro = !isFirstDiedro;
+                if (isFirstDiedro) {
+                    toggleDiedroBtn.textContent = 'Alternar para 3º Diedro';
+                    diedroTitle.textContent = 'Representação em 1º Diedro (Padrão ABNT/ISO)';
+                    vistaSuperior.style.transform = 'translateY(calc(100% + 0.5rem))';
+                    vistaLateral.style.left = 'calc(50% + 5rem)';
+                    vistaLateral.style.right = 'auto';
+                    diedroExplanation.innerHTML = `
+                        <p><strong>No 1º Diedro:</strong></p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>O objeto está <strong>entre o observador e o plano</strong> de projeção.</li>
+                            <li>A Vista Superior fica <strong>abaixo</strong> da Vista Frontal.</li>
+                            <li>A Vista Lateral Esquerda fica à <strong>direita</strong> da Vista Frontal.</li>
+                        </ul>`;
+                } else {
+                    toggleDiedroBtn.textContent = 'Alternar para 1º Diedro';
+                    diedroTitle.textContent = 'Representação em 3º Diedro (Padrão ANSI)';
+                    vistaSuperior.style.transform = 'translateY(calc(-100% - 0.5rem))';
+                    vistaLateral.style.left = 'auto';
+                    vistaLateral.style.right = 'calc(50% + 5rem)';
+                    diedroExplanation.innerHTML = `
+                        <p><strong>No 3º Diedro:</strong></p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>O plano de projeção está <strong>entre o observador e o objeto</strong>.</li>
+                            <li>A Vista Superior fica <strong>acima</strong> da Vista Frontal.</li>
+                            <li>A Vista Lateral Esquerda fica à <strong>esquerda</strong> da Vista Frontal.</li>
+                        </ul>`;
+                }
+            });
+            vistaSuperior.style.transition = 'transform 0.5s ease';
+            vistaLateral.style.transition = 'left 0.5s ease, right 0.5s ease';
+            vistaSuperior.style.transform = 'translateY(calc(100% + 0.5rem))';
+
+            const solidSelector = document.getElementById('solid-selector');
+            const viewGeneratorDisplay = document.getElementById('view-generator-display');
+            const viewAnalysisText = document.getElementById('view-analysis-text');
+
+            function generateViews(solid) {
+                let viewsHTML = '';
+                let analysisText = '';
+                switch (solid) {
+                    case 'prisma':
+                        viewsHTML = `
+                            <div class="absolute text-center" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                                <div class="w-32 h-20 bg-blue-200 border border-blue-500 flex items-center justify-center font-semibold">V. Frontal</div>
+                                <div class="w-32 h-16 bg-green-200 border border-green-500 mx-auto mt-2 flex items-center justify-center font-semibold">V. Superior</div>
+                            </div>
+                            <div class="absolute w-16 h-20 bg-red-200 border border-red-500 ml-2 flex items-center justify-center font-semibold" style="left: calc(50% + 8rem); top: 50%; transform: translateY(-50%);">V. Lat. Esq.</div>`;
+                        analysisText = 'O prisma retangular é representado por retângulos em todas as vistas. Observe como a largura e a altura se alinham perfeitamente entre as vistas.';
+                        break;
+                    case 'cilindro':
+                        viewsHTML = `
+                            <div class="absolute text-center" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                                <div class="w-24 h-32 bg-blue-200 border border-blue-500 flex items-center justify-center font-semibold relative"><div class="absolute w-px h-full bg-gray-500" style="border-left: 1px dashed;"></div>V. Frontal</div>
+                                <div class="w-24 h-24 bg-green-200 border border-green-500 rounded-full mx-auto mt-2 flex items-center justify-center font-semibold relative"><div class="absolute w-px h-full bg-gray-500" style="border-left: 1px dashed;"></div><div class="absolute w-full h-px bg-gray-500" style="border-top: 1px dashed;"></div>V. Superior</div>
+                            </div>
+                            <div class="absolute w-24 h-32 bg-red-200 border border-red-500 ml-2 flex items-center justify-center font-semibold relative" style="left: calc(50% + 6rem); top: 50%; transform: translateY(-50%);"><div class="absolute w-px h-full bg-gray-500" style="border-left: 1px dashed;"></div>V. Lat. Esq.</div>`;
+                        analysisText = 'Um cilindro é visto como um retângulo nas vistas frontal e lateral, e como um círculo na vista superior. Linhas de centro indicam o eixo de simetria.';
+                        break;
+                    case 'cone':
+                        viewsHTML = `
+                            <div class="absolute text-center" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                                <div class="w-0 h-0 border-l-[48px] border-l-transparent border-b-[96px] border-b-blue-200 border-r-[48px] border-r-transparent relative"><div class="absolute w-32 h-px bg-blue-500 bottom-0 -left-4"></div><div class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-semibold">V. Frontal</div><div class="absolute w-px h-24 bg-gray-500 bottom-0 left-1/2 -translate-x-1/2" style="border-left: 1px dashed;"></div></div>
+                                <div class="w-24 h-24 bg-green-200 border border-green-500 rounded-full mx-auto mt-28 flex items-center justify-center font-semibold relative"><div class="absolute w-px h-full bg-gray-500" style="border-left: 1px dashed;"></div><div class="absolute w-full h-px bg-gray-500" style="border-top: 1px dashed;"></div>V. Superior</div>
+                            </div>
+                             <div class="absolute w-0 h-0 border-l-[48px] border-l-transparent border-b-[96px] border-b-red-200 border-r-[48px] border-r-transparent ml-2 relative" style="left: calc(50% + 7rem); top: 50%; transform: translateY(-50%);"><div class="absolute w-32 h-px bg-red-500 bottom-0 -left-4"></div><div class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-semibold">V. Lat. Esq.</div><div class="absolute w-px h-24 bg-gray-500 bottom-0 left-1/2 -translate-x-1/2" style="border-left: 1px dashed;"></div></div>`;
+                        analysisText = 'Um cone é representado por um triângulo nas vistas frontal e lateral, e um círculo na vista superior. O alinhamento do eixo de simetria é fundamental.';
+                        break;
+                }
+                viewGeneratorDisplay.innerHTML = viewsHTML;
+                viewAnalysisText.textContent = analysisText;
+            }
+            solidSelector.addEventListener('change', (e) => generateViews(e.target.value));
+            generateViews('prisma');
+
+            const cadCommands = document.querySelectorAll('.cad-command');
+            const cmdTitle = document.getElementById('cad-command-title');
+            const cmdDesc = document.getElementById('cad-command-desc');
+            const commandData = {
+                line: { title: 'LINE', desc: 'Cria segmentos de reta. Você especifica o ponto inicial e final.' },
+                circle: { title: 'CIRCLE', desc: 'Cria um círculo a partir de um ponto central e um valor de raio ou diâmetro.' },
+                trim: { title: 'TRIM', desc: 'Apara objetos até que encontrem as arestas de outros objetos. Usado para limpar interseções.' },
+                offset: { title: 'OFFSET', desc: 'Cria objetos concêntricos, linhas paralelas e curvas paralelas. Muito útil para criar paredes ou contornos.' }
+            };
+            cadCommands.forEach(button => {
+                button.addEventListener('click', () => {
+                    const command = button.dataset.command;
+                    cmdTitle.textContent = commandData[command].title;
+                    cmdDesc.textContent = commandData[command].desc;
+                    cadCommands.forEach(btn => btn.classList.replace('bg-blue-200', 'bg-gray-200'));
+                    button.classList.replace('bg-gray-200', 'bg-blue-200');
+                });
+            });
+
+            const toggleCorteBtn = document.getElementById('toggle-corte');
+            const corteDisplay = document.getElementById('corte-display');
+            let isCorte = false;
+            const urlVistaExterna = 'https://placehold.co/400x250/f0f0f0/333?text=Mancal+em+Vista+Externa';
+            const urlVistaCorte = 'https://placehold.co/400x250/e0e7ff/1d4ed8?text=Mancal+em+Corte+(Hachurado)';
+            toggleCorteBtn.addEventListener('click', () => {
+                isCorte = !isCorte;
+                if (isCorte) {
+                    corteDisplay.style.backgroundImage = `url('${urlVistaCorte}')`;
+                    toggleCorteBtn.textContent = 'Remover Corte';
+                } else {
+                    corteDisplay.style.backgroundImage = `url('${urlVistaExterna}')`;
+                    toggleCorteBtn.textContent = 'Aplicar Corte Pleno';
+                }
+            });
+
+            const desnivelSlider = document.getElementById('desnivel');
+            const comprimentoSlider = document.getElementById('comprimento');
+            const desnivelValue = document.getElementById('desnivel-value');
+            const comprimentoValue = document.getElementById('comprimento-value');
+            const resultadoRampa = document.getElementById('resultado-rampa');
+            const ctx = document.getElementById('rampaChart').getContext('2d');
+            let rampaChart;
+
+            function updateRampa() {
+                const h = parseFloat(desnivelSlider.value);
+                const c = parseFloat(comprimentoSlider.value);
+                desnivelValue.textContent = h.toFixed(2);
+                comprimentoValue.textContent = c.toFixed(2);
+
+                const inclinacao = (h / c) * 100;
+                let maxInclinacao = 8.33;
+                if (h > 0.8 && h <= 1.0) maxInclinacao = 6.25;
+                else if (h > 1.0) maxInclinacao = 5.0;
+
+                let status = '';
+                let bgColor = '';
+                if (inclinacao <= maxInclinacao) {
+                    status = `APROVADO (i = ${inclinacao.toFixed(2)}% ≤ ${maxInclinacao}%)`;
+                    bgColor = 'bg-green-100 text-green-800';
+                } else {
+                    status = `REPROVADO (i = ${inclinacao.toFixed(2)}% > ${maxInclinacao}%)`;
+                    bgColor = 'bg-red-100 text-red-800';
+                }
+                resultadoRampa.textContent = status;
+                resultadoRampa.className = `p-4 rounded-lg text-center font-bold text-lg ${bgColor}`;
+
+                updateChart(inclinacao, maxInclinacao);
+            }
+
+            function updateChart(current, max) {
+                rampaChart.data.datasets[0].data[0] = current;
+                rampaChart.data.datasets[0].backgroundColor[0] = current > max ? '#ef4444' : '#22c55e';
+                rampaChart.data.datasets[0].data[1] = max;
+                rampaChart.update();
+            }
+
+            rampaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Inclinação Calculada', 'Inclinação Máxima (NBR 9050)'],
+                    datasets: [{
+                        label: 'Inclinação (%)',
+                        data: [0, 8.33],
+                        backgroundColor: ['#22c55e', '#a5b4fc'],
+                        borderColor: ['#16a34a', '#6366f1'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Porcentagem de Inclinação (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(2)}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            desnivelSlider.addEventListener('input', updateRampa);
+            comprimentoSlider.addEventListener('input', updateRampa);
+            updateRampa();
+        });
+    </script>
+
+</body>
+
+</html>

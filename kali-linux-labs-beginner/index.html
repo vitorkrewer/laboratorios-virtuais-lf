@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>Laboratório Virtual - Kali Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        'dark-bg': '#0d1117',
+                        'dark-card': '#161b22',
+                        'dark-border': '#30363d',
+                        'dark-text': '#c9d1d9',
+                        'dark-text-secondary': '#8b949e',
+                        'accent-green': '#39d353',
+                        'accent-green-hover': '#43f064',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
+    <nav class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
+        <div class="container mx-auto px-4 relative">
+            <div class="flex justify-between items-center h-20">
+                <a href="#" class="flex-shrink-0">
+                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png"
+                        alt="Logo LearningFly" class="h-12">
+                </a>
+                <!-- Botão hamburger visível apenas em mobile -->
+                <button id="mobile-menu-button" class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <!-- Links do menu -->
+                <div id="navbar-links"
+                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
+                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
+                    <a href="#intro" class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
+                    <a href="#install" class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
+                    <a href="#first-steps" class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
+                    <a href="#lab" class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Laboratório</a>
+                    <button id="guide-button" class="hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</button>
+                    <a href="#videoaulas" class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Videoaulas</a>
+                    <button id="theme-toggle" class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
+                        <span id="theme-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+        <header class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Bem-vindo ao
+                Laboratório_</h1>
+            <p class="text-xl text-gray-600 dark:text-dark-text-secondary">Iniciando protocolo de treinamento em Kali
+                Linux...</p>
+        </header>
+
+        <main class="space-y-20">
+            <!-- SEÇÃO 1: INTRODUÇÃO -->
+            <section id="intro">
+                <div
+                    class="content-card bg-white dark:bg-dark-card border border-transparent dark:border-dark-border p-6 md:p-8">
+                    <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                        ./iniciar-missao<span class="blinking-cursor">_</span></h2>
+                    <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-4 typewriter-text">Olá, recruta. Sou
+                        seu guia de campo. Antes de entrarmos no sistema, precisamos estabelecer as regras de
+                        engajamento. O Kali Linux é um arsenal de ferramentas digitais avançadas. Usado por operadores
+                        de elite para fortalecer defesas cibernéticas. Nossa diretriz primária é a ética. Operamos
+                        estritamente dentro de perímetros autorizados. Qualquer desvio resulta em abortar a missão. O
+                        objetivo é construir, não destruir. Entendido?</p>
+                    <div
+                        class="info-box mt-6 p-4 rounded-md bg-blue-50 dark:bg-transparent border-l-4 border-blue-500 dark:border-blue-400 text-blue-800 dark:text-blue-300">
+                        <h3 class="font-bold text-lg mb-2 font-mono">DIRETRIZ 01: AUTORIZAÇÃO</h3>
+                        <p>Toda operação requer autorização explícita. O uso de ferramentas em sistemas não autorizados
+                            é uma violação grave do protocolo e da lei. Mantenha-se na zona segura.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: INSTALAÇÃO -->
+            <section id="install">
+                <div
+                    class="content-card bg-white dark:bg-dark-card border border-transparent dark:border-dark-border p-6 md:p-8">
+                    <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                        ./selecionar-ambiente<span class="blinking-cursor">_</span></h2>
+                    <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-6 typewriter-text">Temos duas opções
+                        para configurar seu ambiente operacional. O Ambiente Virtualizado (WSL) é o procedimento padrão
+                        para iniciantes. É rápido, seguro e isolado do seu sistema principal. A Instalação Bare-Metal é
+                        para operadores avançados que dedicam uma máquina exclusivamente para as missões.</p>
+
+                    <div class="space-y-8">
+                        <div class="border dark:border-dark-border rounded-lg p-6">
+                            <h3 class="text-2xl font-bold font-mono text-gray-800 dark:text-gray-200 mb-3">> Modo
+                                Bare-Metal [AVANÇADO]</h3>
+                            <p class="text-gray-600 dark:text-dark-text-secondary mb-4">Implanta o Kali como sistema
+                                operacional primário.</p>
+                            <div
+                                class="warning-box p-4 rounded-md mb-4 bg-red-50 dark:bg-transparent border-l-4 border-red-500 dark:border-red-400 text-red-800 dark:text-red-300">
+                                <h4 class="font-bold font-mono">> ALERTA: Comprometimento total do disco. Backups são
+                                    mandatórios.</h4>
+                            </div>
+                            <details>
+                                <summary
+                                    class="font-medium text-blue-600 dark:text-accent-green cursor-pointer font-mono">
+                                    Ver procedimento...</summary>
+                                <div class="mt-4 space-y-4 text-gray-700 dark:text-dark-text">
+                                    <p><strong>1. Download:</strong> Baixe a imagem "Installer" do site <a
+                                            href="https://www.kali.org/get-kali/#kali-installer-images" target="_blank"
+                                            class="underline">oficial do Kali</a>.</p>
+                                    <p><strong>2. Pendrive Bootável:</strong> Use o <a href="https://rufus.ie/"
+                                            target="_blank" class="underline">Rufus</a> ou <a
+                                            href="https://www.balena.io/etcher/" target="_blank"
+                                            class="underline">Balena Etcher</a> para gravar a imagem ISO em um pendrive
+                                        (8GB+).</p>
+                                    <p><strong>3. Configuração da BIOS/UEFI:</strong> Reinicie o computador, entre na
+                                        BIOS (teclas F2, F12, Del) e configure o boot para iniciar pelo pendrive.</p>
+                                    <p><strong>4. Instalação Guiada:</strong> Siga o instalador gráfico ("Graphical
+                                        Install"). Na parte de particionamento, a opção mais simples é "Guided - use
+                                        entire disk".</p>
+                                </div>
+                            </details>
+                        </div>
+                        <div
+                            class="border-2 border-blue-500 dark:border-accent-green rounded-lg p-6 bg-blue-50 dark:bg-dark-card shadow-lg">
+                            <h3 class="text-2xl font-bold font-mono text-gray-800 dark:text-gray-200 mb-3">> Modo WSL
+                                [RECOMENDADO]</h3>
+                            <p class="text-gray-600 dark:text-dark-text-secondary mb-4">Executa o Kali como um
+                                subsistema dentro do Windows. Máxima eficiência, risco mínimo.</p>
+                            <details>
+                                <summary
+                                    class="font-medium text-blue-600 dark:text-accent-green cursor-pointer font-mono">
+                                    Ver procedimento...</summary>
+                                <div class="mt-4 space-y-4 text-gray-700 dark:text-dark-text">
+                                    <p><strong>1. Ative o WSL:</strong> Abra o PowerShell como Administrador e rode o
+                                        comando:</p>
+                                    <div class="relative mt-2">
+                                        <div class="code-block font-mono p-4 rounded-md bg-gray-800 dark:bg-black"><code
+                                                class="block text-white">wsl --install</code></div><button
+                                            class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                    </div>
+                                    <p class="mt-2">Reinicie o PC se for solicitado.</p>
+                                    <p><strong>2. Instale pela Microsoft Store:</strong> Abra a loja, procure por "Kali
+                                        Linux" e clique em "Obter".</p>
+                                    <p><strong>3. Primeira Configuração:</strong> Abra o Kali pelo Menu Iniciar. Ele
+                                        pedirá para você criar um nome de usuário e uma senha. Guarde-os bem!</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 3: TERMINAL -->
+            <section id="first-steps">
+                <div
+                    class="content-card bg-white dark:bg-dark-card border border-transparent dark:border-dark-border p-6 md:p-8">
+                    <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                        ./comandos-basicos<span class="blinking-cursor">_</span></h2>
+                    <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-6 typewriter-text">O terminal é sua
+                        interface de comando primária. Aprender a navegar é crucial. Estes são os comandos essenciais
+                        para controle e movimentação no sistema.</p>
+                    <div class="space-y-6">
+                        <div class="font-mono p-3 rounded-md bg-gray-100 dark:bg-dark-bg">
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">> sudo apt update && sudo apt
+                                upgrade -y</p>
+                            <p class="text-sm text-gray-500 dark:text-dark-text-secondary mt-1"># Sincroniza e atualiza
+                                o arsenal de ferramentas.</p>
+                        </div>
+                        <div class="font-mono p-3 rounded-md bg-gray-100 dark:bg-dark-bg">
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">> pwd</p>
+                            <p class="text-sm text-gray-500 dark:text-dark-text-secondary mt-1"># Reporta a localização
+                                (diretório) atual.</p>
+                        </div>
+                        <div class="font-mono p-3 rounded-md bg-gray-100 dark:bg-dark-bg">
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">> ls -la</p>
+                            <p class="text-sm text-gray-500 dark:text-dark-text-secondary mt-1"># Lista todos os
+                                arquivos e pastas no local, com detalhes.</p>
+                        </div>
+                        <div class="font-mono p-3 rounded-md bg-gray-100 dark:bg-dark-bg">
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">> cd [diretorio]</p>
+                            <p class="text-sm text-gray-500 dark:text-dark-text-secondary mt-1"># Move para um novo
+                                diretório. Use 'cd ..' para retornar.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 4: LABORATÓRIO PRÁTICO -->
+            <section id="lab">
+                <div
+                    class="content-card bg-white dark:bg-dark-card border border-transparent dark:border-dark-border p-6 md:p-8">
+                    <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                        ./executar-lab<span class="blinking-cursor">_</span></h2>
+                    <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-6 typewriter-text">Modo de
+                        treinamento ativado. Execute as seguintes simulações em alvos designados. Lembre-se da Diretriz
+                        01.</p>
+
+                    <!-- FASE 1: RECONHECIMENTO -->
+                    <div class="mt-8">
+                        <h3
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b dark:border-dark-border">
+                            > FASE 1: RECONHECIMENTO</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div
+                                class="mission-card border dark:border-dark-border rounded-lg p-4 transition-all duration-300 hover:shadow-lg dark:hover:border-accent-green dark:hover:shadow-[0_0_15px_rgba(57,211,83,0.5)]">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white">Missão 1: Scan de
+                                    Portas</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mt-1 mb-3">Use `nmap` para
+                                    identificar portas abertas em `scanme.nmap.org`.</p>
+                                <div class="relative">
+                                    <div class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black">
+                                        <code class="block text-white">nmap scanme.nmap.org</code>
+                                    </div><button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+                            <div
+                                class="mission-card border dark:border-dark-border rounded-lg p-4 transition-all duration-300 hover:shadow-lg dark:hover:border-accent-green dark:hover:shadow-[0_0_15px_rgba(57,211,83,0.5)]">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white">Missão 2: Coleta
+                                    de Intel</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mt-1 mb-3">Use `whois`
+                                    para obter dados públicos de `google.com`.</p>
+                                <div class="relative">
+                                    <div class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black">
+                                        <code class="block text-white">whois google.com</code>
+                                    </div><button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+                            <div
+                                class="mission-card border dark:border-dark-border rounded-lg p-4 transition-all duration-300 hover:shadow-lg dark:hover:border-accent-green dark:hover:shadow-[0_0_15px_rgba(57,211,83,0.5)]">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white">Missão 3: Enumerar
+                                    DNS</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mt-1 mb-3">Use `dig` para
+                                    extrair registros DNS de `google.com`.</p>
+                                <div class="relative">
+                                    <div class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black">
+                                        <code class="block text-white">dig google.com</code>
+                                    </div><button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FASE 2: ANÁLISE WEB -->
+                    <div class="mt-8">
+                        <h3
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b dark:border-dark-border">
+                            > FASE 2: ANÁLISE WEB</h3>
+                        <div
+                            class="mission-card border dark:border-dark-border rounded-lg p-4 transition-all duration-300 hover:shadow-lg dark:hover:border-accent-green dark:hover:shadow-[0_0_15px_rgba(57,211,83,0.5)]">
+                            <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white">Missão 4: Brute-force
+                                de Diretórios</h4>
+                            <p class="text-sm text-gray-600 dark:text-dark-text-secondary mt-1 mb-3">Use `gobuster` para
+                                encontrar diretórios ocultos em `testphp.vulnweb.com`.</p>
+                            <div class="relative">
+                                <div class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black"><code
+                                        class="block text-white">gobuster dir -u http://testphp.vulnweb.com -w /usr/share/wordlists/dirb/common.txt</code>
+                                </div><button
+                                    class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FASE 3: QUEBRA DE SENHAS -->
+                    <div class="mt-8">
+                        <h3
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b dark:border-dark-border">
+                            > FASE 3: ANÁLISE DE HASHES</h3>
+                        <div
+                            class="mission-card border dark:border-dark-border rounded-lg p-4 transition-all duration-300 hover:shadow-lg dark:hover:border-accent-green dark:hover:shadow-[0_0_15px_rgba(57,211,83,0.5)]">
+                            <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white">Missão 5: Quebra de
+                                Hash MD5</h4>
+                            <p class="text-sm text-gray-600 dark:text-dark-text-secondary mt-1 mb-3">Simule a quebra de
+                                um hash MD5 (`8d7...`) com `hashcat` e uma wordlist.</p>
+                            <div class="relative mt-2">
+                                <div class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black"><code
+                                        class="block text-white">echo "8d788385431273d11e8b43bb78f3aa41" > hash.txt
+echo -e "senha\n123456\npassword" > wordlist.txt
+hashcat -m 0 -a 0 hash.txt wordlist.txt</code></div><button
+                                    class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 5: VIDEOAULAS -->
+            <section id="videoaulas">
+                <div
+                    class="content-card bg-white dark:bg-dark-card border border-transparent dark:border-dark-border p-6 md:p-8">
+                    <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                        ./carregar-videos<span class="blinking-cursor">_</span></h2>
+                    <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-6 typewriter-text">A análise de
+                        missões anteriores é vital. Acesse os briefings em vídeo para visualizar as táticas em ação.</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 1: Tour
+                                pela Interface</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/jOaMOVukyrA?si=r8PhiyTELLaPuxM0"
+                                    class="w-full h-full rounded-md" allowfullscreen webkitallowfullscreen
+                                    mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *"
+                                    frameborder="0" title="tour-kali-linux"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 2:
+                                Dominando o Terminal</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/UGpiUneRo48?si=0aZsUM9SXisDvFho"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"
+                                    title="dominando-kali-linux"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 3: Nmap
+                                na Prática</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/cDd3YprDaMc?si=cetEFoyVFsFOnicj"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"
+                                    title="nmap-na-pratica-guia"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 4:
+                                Gobuster em Ação</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/WmjPb84MzsI?si=N6n9BqEFG_jBtcRL"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"
+                                    title="gobuster-em-acao"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 5:
+                                Entendendo Hashcat</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/HMg8lOuwi4k?si=H2a4zN3yUwv5Sc6p"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"
+                                    title="hashcat-quebrando-senha"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 6: Intro ao
+                                Metasploit</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/fxoAIeTJbhw?si=s_J2u8LMEQAOJnjE"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"
+                                    title="Metasploit-anatomia-cibernetica"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 7: Análise
+                                com Wireshark</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/MIphfTHAXKs?si=eBgNSl3QyxEvoouJ"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *;" frameborder="0"
+                                    title="analise-rede-wireshark"></iframe>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-lg font-mono text-gray-800 dark:text-gray-200">> Vídeo 8: O que é
+                                SQL Map?</h4>
+                            <div
+                                class="video-placeholder rounded-md bg-gray-200 dark:bg-dark-border border-2 border-dashed border-gray-400 dark:border-dark-text-secondary flex justify-center items-center aspect-video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/A_IVseBMK9A?si=rGZL4IeCI89Qogk6"
+                                    class="w-full h-full rounded-md" referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen webkitallowfullscreen mozAllowFullScreen
+                                    allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"
+                                    title="analise-sql-map"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 6: PRÓXIMOS PASSOS -->
+            <section id="next-steps">
+                <div
+                    class="content-card bg-white dark:bg-dark-card border border-transparent dark:border-dark-border p-6 md:p-8">
+                    <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                        ./proximos-alvos<span class="blinking-cursor">_</span></h2>
+                    <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-6 typewriter-text">Treinamento básico
+                        completo. O campo de batalha digital está em constante evolução. Continue seus estudos em
+                        plataformas especializadas para aprimorar suas habilidades.</p>
+                    <div class="space-y-4 font-mono">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">> Plataformas de Treinamento
+                            Recomendadas:</h3>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-dark-text-secondary space-y-2">
+                            <li><a href="https://tryhackme.com/" target="_blank"
+                                    class="text-blue-600 dark:text-accent-green hover:underline">> TryHackMe: Ideal para
+                                    recrutas.</a></li>
+                            <li><a href="https://www.hackthebox.com/" target="_blank"
+                                    class="text-blue-600 dark:text-accent-green hover:underline">> Hack The Box: Para
+                                    operadores intermediários e avançados.</a></li>
+                            <li><a href="https://www.kali.org/docs/" target="_blank"
+                                    class="text-blue-600 dark:text-accent-green hover:underline">> Documentação Oficial:
+                                    A fonte primária de inteligência.</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL DO GUIA DE CAMPO -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content"
+            class="bg-white dark:bg-dark-card w-full max-w-3xl max-h-[90vh] rounded-lg shadow-xl border dark:border-dark-border flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b dark:border-dark-border flex-shrink-0">
+                <h3 class="text-2xl font-bold font-mono text-blue-600 dark:text-accent-green">Guia de Campo</h3>
+                <button id="close-modal-button"
+                    class="text-gray-500 hover:text-gray-900 dark:hover:text-white">&times;</button>
+            </div>
+            <div class="mt-4 text-center">
+                <a href="https://learningfly.b-cdn.net/labs/kali-linux-labs-beginner/ebook-kali-linux-labs.pdf"
+                    target="_blank" class="text-blue-600 dark:text-accent-green underline font-bold">Abrir PDF em nova
+                    aba</a>
+            </div>
+            <div class="p-6 overflow-y-auto font-mono text-gray-800 dark:text-dark-text" style="height:70vh;">
+                <iframe
+                    src="https://learningfly.b-cdn.net/labs/kali-linux-labs-beginner/ebook-kali-linux-labs.pdf"
+                    width="100%" height="100%" style="min-height:60vh; border:none;" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

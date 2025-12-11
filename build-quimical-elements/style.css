@@ -1,0 +1,283 @@
+/* Define uma altura máxima e rolagem para o seletor de elementos */
+#element-selector {
+    max-height: 60vh;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    /* Espaço entre os botões */
+}
+
+/* Estilo para cada botão de elemento no seletor */
+.element-tile {
+    width: 60px;
+    height: 60px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+/* Estilo para a área do laboratório */
+#workspace {
+    min-height: 400px;
+    border-style: dashed !important;
+    /* Destaca a área */
+    position: relative;
+    /* Essencial para o anime.js posicionar os átomos */
+    overflow: hidden;
+    /* Evita que átomos "fujam" durante a animação */
+}
+
+/* Estilo para cada "átomo" que é jogado no laboratório */
+.atom {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* Faz parecer um átomo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    /* Essencial para o anime.js */
+    cursor: grab;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    /* <-- ADICIONE ISSO (para ficar sobre a ligação) */
+}
+
+/* Estilo para a molécula formada */
+#result-display h2 {
+    color: green;
+    text-align: center;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.bond {
+    position: absolute;
+    height: 5px;
+    /* Espessura da ligação */
+    background-color: #6c757d;
+    /* Cinza do Bootstrap */
+
+    /* A mágica acontece aqui:
+       A origem da transformação é o canto esquerdo.
+       Vamos animar a 'largura' e a 'rotação'. */
+    transform-origin: 0 50%;
+    z-index: 1;
+}
+
+/* Fundo geral e estilo do corpo */
+    body {
+        background-color: #f4f7f6;
+    }
+
+    /* --- 1. Header e Logo --- */
+    .app-header {
+        background-color: #343a40;
+        /* Mesmo 'bg-dark' do bootstrap */
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        border-bottom: 4px solid #00aaff;
+        /* Um toque de cor */
+    }
+
+    .app-header img {
+        height: 40px;
+        /* Altura da logo */
+        margin-right: 15px;
+    }
+
+    .app-header .app-title {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    /* --- 2. Layout dos Painéis --- */
+    .panel {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .panel-header {
+        background-color: #007bff;
+        /* Azul primário do Bootstrap */
+        color: white;
+        padding: 12px 15px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        font-weight: bold;
+    }
+
+    /* --- 3. Seletor de Elementos (Painel 1) --- */
+    #element-selector {
+        padding: 10px;
+        /* Painel "Maior": Aumentamos a altura */
+        max-height: 70vh;
+        overflow-y: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        /* Espaço entre os botões */
+        align-content: flex-start;
+    }
+
+    /* Estilo para cada botão de elemento */
+    .element-tile {
+        width: 65px;
+        /* Um pouco maior */
+        height: 65px;
+        font-size: 14px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #333;
+        transition: all 0.2s ease;
+    }
+
+    .element-tile:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- 4. Cores dos Elementos (Baseado na categoria) --- */
+    /* Adicione mais categorias se quiser */
+    .element-nonmetal {
+        background-color: #a0ffa0;
+    }
+
+    .element-alkali-metal {
+        background-color: #ffb3b3;
+    }
+
+    .element-noble-gas {
+        background-color: #c0ffff;
+    }
+
+    .element-alkaline-earth-metal {
+        background-color: #ffffc0;
+    }
+
+    .element-metalloid {
+        background-color: #d1b3ff;
+    }
+
+    .element-halogen {
+        background-color: #e0e0e0;
+    }
+
+    .element-transition-metal {
+        background-color: #ffc0cb;
+    }
+
+    .element-lanthanide {
+        background-color: #ffdab9;
+    }
+
+    .element-actinide {
+        background-color: #e6e6fa;
+    }
+
+    .element-default {
+        background-color: #f1f1f1;
+    }
+
+
+    /* --- 5. Workspace (Painel 2) --- */
+    #workspace {
+        /* Painel "Maior": Aumentamos a altura */
+        min-height: 70vh;
+        border: 2px dashed #007bff;
+        position: relative;
+        overflow: hidden;
+        margin: 15px;
+        border-radius: 5px;
+        background-color: #fdfdfd;
+    }
+
+    /* Estilo do átomo (bola) */
+    .atom {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        color: white;
+        position: absolute;
+        cursor: grab;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilo da ligação (linha) */
+    .bond {
+        position: absolute;
+        height: 5px;
+        background-color: #6c757d;
+        transform-origin: 0 50%;
+        z-index: -1;
+        /* Fica atrás dos átomos */
+    }
+
+    /* --- 6. Painel de Receitas (Painel 3) --- */
+    #recipe-suggester {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+        max-height: 70vh;
+    }
+
+    #recipe-suggester .btn {
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    /* --- 7. Área de Resultado --- */
+    #result-display {
+        padding: 0 15px 15px 15px;
+        /* Adicionado padding */
+    }
+
+    #result-display h2 {
+        animation: fadeIn 1s;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }

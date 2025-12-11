@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico: Desenho Universal para Engenharias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F8FF;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .stat-card {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 101, 200, 0.2);
+        }
+
+        .line-item.active {
+            background-color: #3790E9;
+            color: white;
+        }
+
+        .line-item.active p {
+            color: #F0F8FF;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <div class="mb-6">
+            <a href="../index.html"
+                class="inline-flex items-center text-[#0065C8] hover:underline gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5" />
+                    <path d="M12 19l-7-7 7-7" />
+                </svg>
+                Voltar para o Menu
+            </a>
+        </div>
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-bold text-[#00449E] mb-4">A Linguagem Gráfica da Inclusão</h1>
+            <p class="text-lg md:text-xl text-[#0065C8] max-w-3xl mx-auto">Do rigor do Desenho Técnico à empatia do
+                Desenho Universal: um guia visual para a engenharia que projeta para todos.</p>
+        </header>
+
+        <section id="normas" class="mb-20">
+            <h2 class="text-3xl font-bold text-center text-[#00449E] mb-12">A Gramática do Desenho: Desvendando as
+                Normas ABNT</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Para criar uma linguagem universal, primeiro
+                precisamos de regras claras. As normas ABNT garantem que um projeto seja compreendido da mesma forma em
+                qualquer lugar. Vamos visualizar os fundamentos.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="font-bold text-xl mb-1 text-[#0065C8]">Formatos de Papel (NBR 16752)</h3>
+                    <p class="text-gray-600 mb-4 text-sm">A Série A padroniza os tamanhos das folhas. O formato A0 tem
+                        $1m^2$, e os demais são subdivisões, mantendo a proporção. O gráfico compara as dimensões em
+                        milímetros.</p>
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="paperSizesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="font-bold text-xl mb-1 text-[#0065C8]">O Alfabeto das Linhas (NBR 8403)</h3>
+                    <p class="text-gray-600 mb-4 text-sm">Cada linha em um desenho técnico tem um significado. Elas
+                        formam o "alfabeto" visual do projeto. Clique em um tipo de linha para ver sua principal
+                        aplicação.</p>
+                    <div id="lineTypesContainer" class="space-y-3"></div>
+                    <div id="lineTypeDescription"
+                        class="mt-4 p-3 bg-[#F0F8FF] rounded-md text-center text-[#00449E] font-semibold">
+                        Selecione um tipo de linha acima.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="principios" class="mb-20">
+            <h2 class="text-3xl font-bold text-center text-[#00449E] mb-12">Os 7 Princípios do Desenho Universal</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Projetar para todos não é criar uma solução
+                única, mas sim um design flexível e intuitivo. Estes 7 princípios, criados por Ronald Mace, são o guia
+                para uma engenharia mais inclusiva.</p>
+
+            <div id="principlesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            </div>
+        </section>
+
+        <section id="nbr9050" class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+            <h2 class="text-3xl font-bold text-center text-[#00449E] mb-12">NBR 9050 na Prática: A Engenharia da
+                Acessibilidade</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">A norma ABNT NBR 9050 traduz os princípios do
+                Desenho Universal em parâmetros técnicos mensuráveis, garantindo segurança e autonomia para todos.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+                <div class="lg:col-span-3">
+                    <h3 class="font-bold text-xl mb-1 text-[#0065C8]">Rampas Acessíveis: Inclinação x Desnível</h3>
+                    <p class="text-gray-600 mb-4 text-sm">A norma estabelece uma relação direta entre a altura a ser
+                        vencida (desnível) e a inclinação máxima permitida para a rampa. Isso garante que o esforço
+                        físico seja mínimo, um dos princípios do Desenho Universal.</p>
+                    <div class="chart-container">
+                        <canvas id="rampsChart"></canvas>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="stat-card rounded-lg p-4 text-center">
+                        <p class="text-sm text-[#0065C8] font-semibold">Largura Mínima de Porta</p>
+                        <p class="text-4xl font-bold text-[#00449E]">80 cm</p>
+                    </div>
+                    <div class="stat-card rounded-lg p-4 text-center">
+                        <p class="text-sm text-[#0065C8] font-semibold">Corredor (Uso Comum)</p>
+                        <p class="text-4xl font-bold text-[#00449E]">120 cm</p>
+                    </div>
+                    <div class="stat-card rounded-lg p-4 text-center">
+                        <p class="text-sm text-[#0065C8] font-semibold">Manobra de Cadeira de Rodas (360°)</p>
+                        <p class="text-4xl font-bold text-[#00449E]">Ø 150 cm</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer style="background-color: #1E2957; color: white; padding: 1.5rem 0; text-align: center;">
+        <div class="container mx-auto">
+            <p class="mb-0">© 2025 Learning Fly - Desenho Universal para Engenharias</p>
+            <small style="opacity: 0.5;">Desenvolvido por Vitor Krewer</small>
+        </div>
+    </footer>
+
+    <script>
+        const wrapLabel = (label) => {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).trim().length > 16) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            }
+            if (currentLine) lines.push(currentLine.trim());
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            return Array.isArray(label) ? label.join(' ') : label;
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const lineTypesData = [
+                { name: 'Contínua Larga', use: 'Contornos e arestas visíveis.', style: 'border-t-4 border-[#00449E]' },
+                { name: 'Contínua Estreita', use: 'Linhas de cota, auxiliares e hachuras.', style: 'border-t-2 border-[#0065C8]' },
+                { name: ['Tracejada', 'Estreita'], use: 'Contornos e arestas não visíveis (ocultas).', style: 'border-t-2 border-dashed border-[#3790E9]' },
+                { name: ['Traço e Ponto', 'Estreita'], use: 'Linhas de centro e eixos de simetria.', style: 'border-t-2 border-dotted border-[#3790E9]' },
+                { name: 'Traço e Ponto Larga (Extremidades)', use: 'Indicação de planos de corte.', style: 'border-t-4 border-dotted border-[#00449E]' }
+            ];
+
+            const lineTypesContainer = document.getElementById('lineTypesContainer');
+            const lineDescription = document.getElementById('lineTypeDescription');
+            lineTypesData.forEach((line, index) => {
+                const div = document.createElement('div');
+                div.className = 'line-item flex items-center justify-between p-3 rounded-md cursor-pointer transition-all duration-300 bg-gray-50 hover:bg-gray-100';
+                div.innerHTML = `
+            <p class="text-sm font-semibold text-gray-700">${Array.isArray(line.name) ? line.name.join(' ') : line.name}</p>
+            <div class="w-2/5 h-1 ${line.style}"></div>
+        `;
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.line-item').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                    lineDescription.textContent = line.use;
+                });
+                lineTypesContainer.appendChild(div);
+            });
+
+            const principlesData = [
+                { num: '1', name: 'Uso Equitativo', desc: 'Útil para pessoas com diversas habilidades.' },
+                { num: '2', name: 'Flexibilidade no Uso', desc: 'Acomoda uma ampla gama de preferências e habilidades.' },
+                { num: '3', name: 'Uso Simples e Intuitivo', desc: 'Fácil de entender, independentemente da experiência do usuário.' },
+                { num: '4', name: 'Informação Perceptível', desc: 'Comunica informações de forma eficaz, para diversas capacidades sensoriais.' },
+                { num: '5', name: 'Tolerância ao Erro', desc: 'Minimiza riscos e consequências de ações acidentais.' },
+                { num: '6', name: 'Baixo Esforço Físico', desc: 'Pode ser usado de forma eficiente, com um mínimo de fadiga.' },
+                { num: '7', name: 'Tamanho e Espaço', desc: 'Espaço apropriado para acesso e uso, para todos os corpos e mobilidades.' }
+            ];
+
+            const principlesGrid = document.getElementById('principlesGrid');
+            principlesData.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-lg p-6 text-center transform hover:-translate-y-2 transition-transform duration-300';
+                card.innerHTML = `
+            <div class="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-[#87CEFA] text-[#00449E] text-3xl font-bold">${p.num}</div>
+            <h4 class="font-bold text-lg text-[#00449E] mb-2">${p.name}</h4>
+            <p class="text-sm text-gray-600">${p.desc}</p>
+        `;
+                principlesGrid.appendChild(card);
+            });
+
+            const paperCtx = document.getElementById('paperSizesChart').getContext('2d');
+            new Chart(paperCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['A4', 'A3', 'A2', 'A1', 'A0'],
+                    datasets: [
+                        {
+                            label: 'Largura (mm)',
+                            data: [210, 297, 420, 594, 841],
+                            backgroundColor: 'rgba(55, 144, 233, 0.6)',
+                            borderColor: 'rgba(55, 144, 233, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Altura (mm)',
+                            data: [297, 420, 594, 841, 1189],
+                            backgroundColor: 'rgba(0, 68, 158, 0.6)',
+                            borderColor: 'rgba(0, 68, 158, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: {
+                        tooltip: { callbacks: { title: tooltipTitleCallback } },
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            const rampsCtx = document.getElementById('rampsChart').getContext('2d');
+            new Chart(rampsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0.2m', '0.5m', '0.8m', '1.0m', '1.5m', '> 1.5m'],
+                    datasets: [{
+                        label: 'Inclinação Máxima Permitida (%)',
+                        data: [10, 10, 8.33, 8.33, 6.25, 5],
+                        fill: true,
+                        backgroundColor: 'rgba(55, 144, 233, 0.2)',
+                        borderColor: '#0065C8',
+                        tension: 0.3,
+                        pointBackgroundColor: '#00449E',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Inclinação (%)' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Desnível a Vencer' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: { callbacks: { title: tooltipTitleCallback } },
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
