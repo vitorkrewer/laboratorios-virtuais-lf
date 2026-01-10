@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>Guia de Campo - Laboratório Kali Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        'dark-bg': '#0d1117',
+                        'dark-card': '#161b22',
+                        'dark-border': '#30363d',
+                        'dark-text': '#c9d1d9',
+                        'dark-text-secondary': '#8b949e',
+                        'accent-green': '#39d353',
+                        'accent-green-hover': '#43f064',
+                        'accent-blue': '#58a6ff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .prose h2 {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .prose h3 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .prose p {
+            margin-bottom: 1.25rem;
+            line-height: 1.75;
+        }
+
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .prose li {
+            margin-bottom: 0.5rem;
+        }
+
+        .prose code {
+            color: #ef4444;
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875em;
+        }
+
+        .dark .prose code {
+            background-color: #1f2937;
+            color: #fca5a5;
+        }
+
+        .toc-link.active {
+            color: #2563eb;
+            font-weight: 700;
+            border-left: 2px solid #2563eb;
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .dark .toc-link.active {
+            color: #39d353;
+            border-left: 2px solid #39d353;
+            background-color: rgba(57, 211, 83, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
+    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+
+    <nav
+        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
+        <div class="container mx-auto px-4 relative">
+            <div class="flex justify-between items-center h-20">
+                <a href="../index.html" class="flex-shrink-0">
+                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
+                        class="h-12">
+                </a>
+                <button id="mobile-menu-button"
+                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <div id="navbar-links"
+                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
+                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
+                    <a href="../index.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
+                    <a href="install.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
+                    <a href="terminal.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
+                    <a href="labs.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Laboratório</a>
+                    <a href="guide.html" class="nav-link text-blue-600 dark:text-white font-bold">Guia de Campo</a>
+                    <a href="video.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Videoaulas</a>
+                    <button id="theme-toggle"
+                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
+                        <span id="theme-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl relative z-10">
+        <div class="flex flex-col lg:flex-row gap-12">
+
+            <!-- Sidebar Navigation -->
+            <aside class="lg:w-1/4 hidden lg:block">
+                <div
+                    class="sticky top-24 glass rounded-xl p-6 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border overflow-y-auto max-h-[80vh]">
+                    <h3 class="font-bold text-lg mb-4 text-gray-900 dark:text-white">Índice</h3>
+                    <nav class="space-y-1 text-sm">
+                        <a href="#intro"
+                            class="toc-link block py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-dark-border text-gray-600 dark:text-gray-400">Introdução</a>
+                        <a href="#cap1"
+                            class="toc-link block py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-dark-border text-gray-600 dark:text-gray-400">Cap.
+                            1: Escolhendo o Caminho</a>
+                        <a href="#cap2"
+                            class="toc-link block py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-dark-border text-gray-600 dark:text-gray-400">Cap.
+                            2: Instalação Pura</a>
+                        <a href="#cap3"
+                            class="toc-link block py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-dark-border text-gray-600 dark:text-gray-400">Cap.
+                            3: Instalação WSL</a>
+                        <a href="#cap4"
+                            class="toc-link block py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-dark-border text-gray-600 dark:text-gray-400">Cap.
+                            4: Pós-Instalação</a>
+                        <a href="#cap5"
+                            class="toc-link block py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-dark-border text-gray-600 dark:text-gray-400">Cap.
+                            5: Solução de Problemas</a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:w-3/4">
+                <article
+                    class="prose prose-lg dark:prose-invert max-w-none glass p-8 md:p-12 rounded-2xl bg-white dark:bg-dark-card border border-transparent dark:border-dark-border">
+                    <h1
+                        class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-8 border-b pb-4 dark:border-dark-border">
+                        Kali Linux: Do Zero ao Terminal</h1>
+
+                    <section id="intro">
+                        <h2>Introdução: Olá, Futuro Explorador Digital!</h2>
+                        <p>Olá! Seja muito bem-vindo. Pense em mim como seu tutor pessoal nesta jornada. O que estamos
+                            prestes a fazer pode parecer complexo, mas garanto que, com um passo de cada vez, você vai
+                            dominar o processo. Instalar um novo sistema operacional é como abrir a primeira página de
+                            um livro fascinante. É o seu primeiro passo em um mundo muito maior e mais interessante da
+                            tecnologia e segurança digital. Vamos começar essa aventura juntos.</p>
+                        <h3>O que é o Kali Linux?</h3>
+                        <p>Imagine que um sistema operacional comum, como o Windows ou o macOS, é um carro de passeio:
+                            confiável, bom para as tarefas do dia a dia e fácil de usar. Agora, imagine o Kali Linux
+                            como um carro de Fórmula 1, acompanhado de uma oficina mecânica completa e móvel. Ele não
+                            foi feito para ir ao supermercado; foi construído com um propósito específico e de alto
+                            desempenho: testes de penetração (pentesting), auditorias de segurança e perícia forense
+                            digital.</p>
+                        <p>O Kali Linux é uma distribuição baseada em Debian, sendo o sucessor espiritual do famoso
+                            BackTrack. Ele já vem com centenas de ferramentas especializadas pré-instaladas, como o
+                            Nmap, Wireshark e Metasploit. Essencialmente, é um canivete suíço para profissionais de
+                            segurança cibernética.</p>
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 my-6">
+                            <p class="font-bold text-yellow-800 dark:text-yellow-200 m-0">Uma Pausa Importante</p>
+                            <p class="text-sm text-yellow-700 dark:text-yellow-300 mt-2">O Kali não é recomendado para
+                                usar como sistema principal de dia-a-dia para iniciantes. Ele opera com privilégios
+                                máximos ("root"), o que pode ser perigoso se usado incorretamente.</p>
+                        </div>
+                    </section>
+
+                    <section id="cap1">
+                        <h2>Capítulo 1: A Encruzilhada Digital - Escolhendo o Seu Caminho</h2>
+                        <p>Existem duas maneiras principais de instalar o Kali:</p>
+
+                        <div class="grid md:grid-cols-2 gap-6 my-8 not-prose">
+                            <div
+                                class="border rounded-lg p-6 bg-gray-50 dark:bg-dark-bg border-gray-200 dark:border-dark-border">
+                                <h4 class="font-bold font-mono text-lg mb-2 text-gray-900 dark:text-white">Instalação
+                                    Pura (Bare Metal)</h4>
+                                <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                    <li>Desempenho máximo.</li>
+                                    <li>Acesso direto ao hardware.</li>
+                                    <li><strong>Risco:</strong> Apaga o disco rígido.</li>
+                                </ul>
+                            </div>
+                            <div
+                                class="border rounded-lg p-6 bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800">
+                                <h4 class="font-bold font-mono text-lg mb-2 text-blue-800 dark:text-blue-300">WSL (Porto
+                                    Seguro)</h4>
+                                <ul class="list-disc list-inside text-sm text-blue-700 dark:text-blue-200 space-y-1">
+                                    <li>Roda dentro do Windows.</li>
+                                    <li>Muito seguro e fácil.</li>
+                                    <li>Ideal para iniciantes.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="cap2">
+                        <h2>Capítulo 2: A Jornada Pura (Instalação Completa)</h2>
+                        <p>Se você escolheu o caminho "Bare Metal", siga estes passos:</p>
+                        <h3>1. Pré-requisitos</h3>
+                        <ul>
+                            <li>Pen drive de 8GB+.</li>
+                            <li>Backup de todos os seus dados (o disco será apagado!).</li>
+                            <li>Arquivo ISO "Installer" do site oficial <a href="https://www.kali.org/get-kali/"
+                                    target="_blank" class="text-blue-600 underline">kali.org</a>.</li>
+                        </ul>
+                        <h3>2. Criando o Pendrive Bootável</h3>
+                        <p>Use o software <strong>Rufus</strong>. Selecione seu pendrive, a ISO do Kali e clique em
+                            "Iniciar".</p>
+                        <h3>3. Instalação</h3>
+                        <p>Dê boot pelo pendrive (configurando a BIOS). Escolha "Graphical Install". Siga os passos e,
+                            na hora de particionar, escolha <strong>"Guiado - usar o disco inteiro"</strong>.</p>
+                    </section>
+
+                    <section id="cap3">
+                        <h2>Capítulo 3: Vivendo em Harmonia (WSL no Windows)</h2>
+                        <p>O método mais fácil e recomendado para começar.</p>
+                        <h3>Ativação</h3>
+                        <p>Abra o PowerShell como Administrador e digite:</p>
+                        <pre
+                            class="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto"><code>wsl --install</code></pre>
+                        <p>Reinicie o computador.</p>
+                        <h3>Instalação</h3>
+                        <p>Vá na Microsoft Store, procure por "Kali Linux" e instale. Ao abrir pela primeira vez, crie
+                            seu usuário e senha UNIX.</p>
+                    </section>
+
+                    <section id="cap4">
+                        <h2>Capítulo 4: Passos Essenciais Pós-Instalação</h2>
+                        <p>Independentemente do método, a primeira coisa a fazer é atualizar o sistema:</p>
+                        <pre
+                            class="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto"><code>sudo apt update && sudo apt upgrade</code></pre>
+                        <p>Isso garante que você tenha as últimas correções de segurança e ferramentas.</p>
+                    </section>
+
+                    <section id="cap5">
+                        <h2>Capítulo 5: Guia de Primeiros Socorros</h2>
+                        <h3>Wi-Fi não funciona (Bare Metal)</h3>
+                        <p>Comum em Linux. Tente conectar via cabo Ethernet e atualizar o sistema. Se persistir, você
+                            pode precisar de drivers proprietários ou um adaptador Wi-Fi USB compatível.</p>
+                        <h3>Kali não inicia no WSL</h3>
+                        <p>Verifique se a virtualização está ativada na BIOS (Intel VT-x ou AMD-V). Certifique-se de que
+                            o WSL foi instalado corretamente com o comando admin.</p>
+                    </section>
+
+                    <div class="mt-12 text-center text-gray-500">
+                        <p>Fim do Guia de Campo. <br> Boa sorte, operador.</p>
+                    </div>
+
+                </article>
+            </main>
+        </div>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+    <script>
+        // Simple script to highlight active TOC link
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.toc-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>Terminal - Laboratório Kali Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        'dark-bg': '#0d1117',
+                        'dark-card': '#161b22',
+                        'dark-border': '#30363d',
+                        'dark-text': '#c9d1d9',
+                        'dark-text-secondary': '#8b949e',
+                        'accent-green': '#39d353',
+                        'accent-green-hover': '#43f064',
+                        'accent-blue': '#58a6ff',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
+    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+
+    <nav
+        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
+        <div class="container mx-auto px-4 relative">
+            <div class="flex justify-between items-center h-20">
+                <a href="../index.html" class="flex-shrink-0">
+                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
+                        class="h-12">
+                </a>
+                <button id="mobile-menu-button"
+                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <div id="navbar-links"
+                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
+                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
+                    <a href="../index.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
+                    <a href="install.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
+                    <a href="terminal.html" class="nav-link text-blue-600 dark:text-white font-bold">Terminal</a>
+                    <a href="labs.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Laboratório</a>
+                    <a href="guide.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</a>
+                    <a href="video.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Videoaulas</a>
+                    <button id="theme-toggle"
+                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
+                        <span id="theme-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl relative z-10">
+        <header class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Comando & Controle
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-dark-text-secondary">O terminal é sua arma. Aprenda a manuseá-la.
+            </p>
+        </header>
+
+        <main class="space-y-12">
+
+            <div
+                class="glass p-8 rounded-2xl bg-white dark:bg-dark-card border border-transparent dark:border-dark-border">
+                <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-4">root@kali:~#
+                    ./comandos-basicos<span class="blinking-cursor">_</span></h2>
+                <p class="text-gray-700 dark:text-dark-text leading-relaxed mb-8 typewriter-text">
+                    O terminal é sua interface de comando primária. Aprender a navegar é crucial. Estes são os comandos
+                    essenciais para controle e movimentação no sistema.
+                </p>
+
+                <div class="grid gap-6">
+                    <!-- Command Card 1 -->
+                    <div
+                        class="group bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300">
+                        <div
+                            class="bg-gray-100 dark:bg-gray-800/50 px-4 py-2 border-b border-gray-200 dark:border-dark-border flex items-center justify-between">
+                            <span class="font-mono text-sm font-semibold text-gray-500">Atualização de Sistema</span>
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <code
+                                    class="font-mono text-blue-600 dark:text-accent-green font-bold text-lg">sudo apt update && sudo apt upgrade -y</code>
+                                <button
+                                    class="copy-btn bg-gray-200 dark:bg-dark-border hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs py-1 px-3 rounded transition-colors">Copiar</button>
+                            </div>
+                            <div class="hidden">sudo apt update && sudo apt upgrade -y</div>
+                            <!-- For copy script compatibility if needed -->
+                            <p class="text-gray-600 dark:text-dark-text-secondary text-sm">Sincroniza os repositórios e
+                                atualiza todo o arsenal de ferramentas instaladas. Execute semanalmente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Command Card 2 -->
+                    <div
+                        class="group bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300">
+                        <div
+                            class="bg-gray-100 dark:bg-gray-800/50 px-4 py-2 border-b border-gray-200 dark:border-dark-border flex items-center justify-between">
+                            <span class="font-mono text-sm font-semibold text-gray-500">Localização</span>
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <code
+                                    class="font-mono text-blue-600 dark:text-accent-green font-bold text-lg">pwd</code>
+                                <button
+                                    class="copy-btn bg-gray-200 dark:bg-dark-border hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs py-1 px-3 rounded transition-colors">Copiar</button>
+                            </div>
+                            <div class="hidden">pwd</div>
+                            <p class="text-gray-600 dark:text-dark-text-secondary text-sm">"Print Working Directory".
+                                Mostra o caminho completo do diretório onde você está atualmente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Command Card 3 -->
+                    <div
+                        class="group bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300">
+                        <div
+                            class="bg-gray-100 dark:bg-gray-800/50 px-4 py-2 border-b border-gray-200 dark:border-dark-border flex items-center justify-between">
+                            <span class="font-mono text-sm font-semibold text-gray-500">Listagem</span>
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <code
+                                    class="font-mono text-blue-600 dark:text-accent-green font-bold text-lg">ls -la</code>
+                                <button
+                                    class="copy-btn bg-gray-200 dark:bg-dark-border hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs py-1 px-3 rounded transition-colors">Copiar</button>
+                            </div>
+                            <div class="hidden">ls -la</div>
+                            <p class="text-gray-600 dark:text-dark-text-secondary text-sm">Lista todos os arquivos
+                                (incluindo ocultos, que começam com .) e mostra detalhes como permissões e tamanho.</p>
+                        </div>
+                    </div>
+
+                    <!-- Command Card 4 -->
+                    <div
+                        class="group bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300">
+                        <div
+                            class="bg-gray-100 dark:bg-gray-800/50 px-4 py-2 border-b border-gray-200 dark:border-dark-border flex items-center justify-between">
+                            <span class="font-mono text-sm font-semibold text-gray-500">Navegação</span>
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <code
+                                    class="font-mono text-blue-600 dark:text-accent-green font-bold text-lg">cd [diretorio]</code>
+                                <button
+                                    class="copy-btn bg-gray-200 dark:bg-dark-border hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs py-1 px-3 rounded transition-colors">Copiar</button>
+                            </div>
+                            <div class="hidden">cd /home/kali</div>
+                            <p class="text-gray-600 dark:text-dark-text-secondary text-sm">"Change Directory". Entra em
+                                uma pasta. Use <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">cd ..</code> para
+                                voltar um nível.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>

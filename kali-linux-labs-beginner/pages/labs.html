@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>Laboratórios - Laboratório Kali Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        'dark-bg': '#0d1117',
+                        'dark-card': '#161b22',
+                        'dark-border': '#30363d',
+                        'dark-text': '#c9d1d9',
+                        'dark-text-secondary': '#8b949e',
+                        'accent-green': '#39d353',
+                        'accent-green-hover': '#43f064',
+                        'accent-blue': '#58a6ff',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
+    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+
+    <nav
+        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
+        <div class="container mx-auto px-4 relative">
+            <div class="flex justify-between items-center h-20">
+                <a href="../index.html" class="flex-shrink-0">
+                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
+                        class="h-12">
+                </a>
+                <button id="mobile-menu-button"
+                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <div id="navbar-links"
+                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
+                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
+                    <a href="../index.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
+                    <a href="install.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
+                    <a href="terminal.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
+                    <a href="labs.html" class="nav-link text-blue-600 dark:text-white font-bold">Laboratório</a>
+                    <a href="guide.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</a>
+                    <a href="video.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Videoaulas</a>
+                    <button id="theme-toggle"
+                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
+                        <span id="theme-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl relative z-10">
+        <header class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Simulações de Campo
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-dark-text-secondary">Execute protocolos ofensivos em ambientes
+                controlados. Lembre-se da ética.</p>
+        </header>
+
+        <main class="space-y-12">
+
+            <div
+                class="glass p-8 rounded-2xl bg-white dark:bg-dark-card border border-transparent dark:border-dark-border">
+                <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-8">root@kali:~#
+                    ./executar-lab<span class="blinking-cursor">_</span></h2>
+
+                <div class="space-y-12">
+                    <!-- FASE 1 -->
+                    <div>
+                        <h3
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-dark-border flex items-center">
+                            <span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
+                            FASE 1: RECONHECIMENTO PASSIVO & ATIVO
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Mission 1 -->
+                            <div
+                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 1:
+                                    Scan de Portas</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Mapeie a superfície
+                                    de ataque identificando portas abertas no alvo autorizado.</p>
+                                <div class="relative">
+                                    <div
+                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
+                                        <code class="block text-white">nmap scanme.nmap.org</code>
+                                    </div>
+                                    <button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+
+                            <!-- Mission 2 -->
+                            <div
+                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 2:
+                                    Coleta de Intel</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Consulte bases de
+                                    dados públicas para obter informações de registro de domínio.</p>
+                                <div class="relative">
+                                    <div
+                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
+                                        <code class="block text-white">whois google.com</code>
+                                    </div>
+                                    <button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+
+                            <!-- Mission 3 -->
+                            <div
+                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all col-span-1 md:col-span-2">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 3:
+                                    Enumerar DNS</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Interrogue
+                                    servidores DNS para descobrir a infraestrutura do alvo.</p>
+                                <div class="relative">
+                                    <div
+                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
+                                        <code class="block text-white">dig google.com</code>
+                                    </div>
+                                    <button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FASE 2 -->
+                    <div>
+                        <h3
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-dark-border flex items-center">
+                            <span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                            FASE 2: ANÁLISE DE APLICAÇÃO WEB
+                        </h3>
+                        <div class="grid md:grid-cols-1 gap-6">
+                            <!-- Mission 4 -->
+                            <div
+                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 4:
+                                    Brute-force de Diretórios</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Descubra áreas
+                                    ocultas e não indexadas de um site usando força bruta baseada em dicionário.</p>
+                                <div class="relative">
+                                    <div
+                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
+                                        <code
+                                            class="block text-white">gobuster dir -u http://testphp.vulnweb.com -w /usr/share/wordlists/dirb/common.txt</code>
+                                    </div>
+                                    <button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FASE 3 -->
+                    <div>
+                        <h3
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-dark-border flex items-center">
+                            <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-3"></span>
+                            FASE 3: CRIPTOGRAFIA E SENHAS
+                        </h3>
+                        <div class="grid md:grid-cols-1 gap-6">
+                            <!-- Mission 5 -->
+                            <div
+                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
+                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 5:
+                                    Quebra de Hash MD5</h4>
+                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Recupere a senha
+                                    original a partir de seu hash usando o Hashcat em modo de ataque direto.</p>
+                                <div class="relative">
+                                    <div
+                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
+                                        <code class="block text-white">echo "8d788385431273d11e8b43bb78f3aa41" > hash.txt
+echo -e "senha\n123456\npassword" > wordlist.txt
+hashcat -m 0 -a 0 hash.txt wordlist.txt</code>
+                                    </div>
+                                    <button
+                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>

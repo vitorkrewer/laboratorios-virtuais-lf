@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <title>Videoaulas - Laboratório Kali Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        'dark-bg': '#0d1117',
+                        'dark-card': '#161b22',
+                        'dark-border': '#30363d',
+                        'dark-text': '#c9d1d9',
+                        'dark-text-secondary': '#8b949e',
+                        'accent-green': '#39d353',
+                        'accent-green-hover': '#43f064',
+                        'accent-blue': '#58a6ff',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
+    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+
+    <nav
+        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
+        <div class="container mx-auto px-4 relative">
+            <div class="flex justify-between items-center h-20">
+                <a href="../index.html" class="flex-shrink-0">
+                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
+                        class="h-12">
+                </a>
+                <button id="mobile-menu-button"
+                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <div id="navbar-links"
+                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
+                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
+                    <a href="../index.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
+                    <a href="install.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
+                    <a href="terminal.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
+                    <a href="labs.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Laboratório</a>
+                    <a href="guide.html"
+                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</a>
+                    <a href="video.html" class="nav-link text-blue-600 dark:text-white font-bold">Videoaulas</a>
+                    <button id="theme-toggle"
+                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
+                        <span id="theme-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl relative z-10">
+        <header class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Briefings de Missão
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-dark-text-secondary">Analise táticas e procedimentos em vídeo
+                antes da execução.</p>
+        </header>
+
+        <main class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+
+            <!-- Video 1 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/jOaMOVukyrA?si=r8PhiyTELLaPuxM0" class="w-full h-full"
+                        allowfullscreen title="tour-kali-linux"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Tour pela Interface</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Visão geral do ambiente XFCE e
+                    ferramentas principais.</p>
+            </div>
+
+            <!-- Video 2 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/UGpiUneRo48?si=0aZsUM9SXisDvFho" class="w-full h-full"
+                        allowfullscreen title="dominando-kali-linux"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Dominando o Terminal</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Conceitos fundamentais da linha de
+                    comando Linux.</p>
+            </div>
+
+            <!-- Video 3 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/cDd3YprDaMc?si=cetEFoyVFsFOnicj" class="w-full h-full"
+                        allowfullscreen title="nmap-na-pratica-guia"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Nmap na Prática</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Varredura de redes e detecção de
+                    serviços.</p>
+            </div>
+
+            <!-- Video 4 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/WmjPb84MzsI?si=N6n9BqEFG_jBtcRL" class="w-full h-full"
+                        allowfullscreen title="gobuster-em-acao"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Gobuster em Ação</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Enumerando diretórios e arquivos ocultos.
+                </p>
+            </div>
+
+            <!-- Video 5 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/HMg8lOuwi4k?si=H2a4zN3yUwv5Sc6p" class="w-full h-full"
+                        allowfullscreen title="hashcat-quebrando-senha"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Entendendo Hashcat</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Técnicas de quebra de senhas e hashes.
+                </p>
+            </div>
+
+            <!-- Video 6 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/fxoAIeTJbhw?si=s_J2u8LMEQAOJnjE" class="w-full h-full"
+                        allowfullscreen title="Metasploit-anatomia-cibernetica"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Intro ao Metasploit</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Framework de exploração e
+                    post-exploitation.</p>
+            </div>
+
+            <!-- Video 7 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/MIphfTHAXKs?si=eBgNSl3QyxEvoouJ" class="w-full h-full"
+                        allowfullscreen title="analise-rede-wireshark"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Análise com Wireshark</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Sniffing e análise de pacotes de rede.
+                </p>
+            </div>
+
+            <!-- Video 8 -->
+            <div
+                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div
+                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
+                    <iframe src="https://www.youtube.com/embed/A_IVseBMK9A?si=rGZL4IeCI89Qogk6" class="w-full h-full"
+                        allowfullscreen title="analise-sql-map"></iframe>
+                </div>
+                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">O que é SQL Map?</h4>
+                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Automação de injeção de SQL.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>
