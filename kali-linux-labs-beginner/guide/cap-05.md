@@ -74,4 +74,4 @@ Você aprendeu a escolher o método de instalação certo para suas necessidades
 
 Lembre-se sempre da natureza do Kali Linux. É um conjunto de ferramentas profissionais que exige estudo, prática e, acima de tudo, responsabilidade. O poder que ele oferece deve ser usado de forma ética e legal.
 
-Este é o fim do nosso guia de instalação, mas é apenas o começo da sua aventura. Agora é hora de explorar. Abra o menu de aplicativos, veja as ferramentas disponíveis, pratique comandos básicos do Linux no terminal e visite a documentação oficial em [https://kali.org/docs/](https://kali.org/docs/) para aprofundar seu conhecimento. O caminho à frente é desafiador, mas incrivelmente recompensador. Boa exploração\!
+Este é o fim do nosso guia de instalação, mas é apenas o começo da sua aventura. Agora é hora de explorar. Abra o menu de aplicativos, veja as ferramentas disponíveis, pratique comandos básicos do Linux no terminal e visite a documentação oficial em [https://kali.org/docs/](https://kali.org/docs/) para aprofundar seu conhecimento. O caminho à frente é desafiador, mas incrivelmente recompensador. Boa exploração.

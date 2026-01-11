@@ -4,201 +4,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <link rel="icon" href="assets/img/logo-learning-fly-simple.png">
     <title>Laboratório Virtual - Kali Linux</title>
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Anime.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
                         'mono': ['Fira Code', 'monospace'],
                     },
                     colors: {
-                        'dark-bg': '#0d1117',
-                        'dark-card': '#161b22',
-                        'dark-border': '#30363d',
-                        'dark-text': '#c9d1d9',
-                        'dark-text-secondary': '#8b949e',
-                        'accent-green': '#39d353',
-                        'accent-green-hover': '#43f064',
-                        'accent-blue': '#58a6ff',
+                        'kali-bg': '#0d1117',
+                        'kali-card': '#161b22',
+                        'kali-border': '#30363d',
+                        'kali-blue': '#58a6ff',
+                        'kali-green': '#39d353', // GitHub/Hacker green
+                        'kali-text': '#c9d1d9',
+                        'terminal-black': '#0c0c0c'
+                    },
+                    animation: {
+                        'cursor': 'cursor .75s step-end infinite',
+                    },
+                    keyframes: {
+                        cursor: {
+                            '0%, 100%': { borderRightColor: 'transparent' },
+                            '50%': { borderRightColor: '#39d353' },
+                        }
                     }
                 }
             }
         }
     </script>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(57, 211, 83, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                bottom: 100%;
+            }
+
+            100% {
+                bottom: -100px;
+            }
+        }
+
+        .terminal-window {
+            box-shadow: 0 0 50px rgba(57, 211, 83, 0.1);
+        }
+
+        /* Glitch effect on hover (optional) */
+        .glitch-hover:hover {
+            text-shadow: 2px 0 #58a6ff, -2px 0 #39d353;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
-    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+<body class="overflow-x-hidden min-h-screen flex flex-col">
+    <div
+        class="fixed inset-0 pointer-events-none z-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20">
+    </div>
+    <div class="scanline"></div>
 
-    <nav
-        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
-        <div class="container mx-auto px-4 relative">
-            <div class="flex justify-between items-center h-20">
-                <a href="index.html" class="flex-shrink-0">
-                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
-                        class="h-12">
-                </a>
-                <!-- Botão hamburger visível apenas em mobile -->
-                <button id="mobile-menu-button"
-                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <!-- Links do menu -->
-                <div id="navbar-links"
-                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
-                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
-                    <a href="index.html" class="nav-link text-blue-600 dark:text-white font-bold">Início</a>
-                    <a href="pages/install.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
-                    <a href="pages/terminal.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
-                    <a href="pages/labs.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Laboratório</a>
-                    <a href="pages/guide.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</a>
-                    <a href="pages/video.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Videoaulas</a>
-                    <button id="theme-toggle"
-                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
-                        <span id="theme-icon"></span>
-                    </button>
-                </div>
+    <!-- Navigation -->
+    <nav class="border-b border-kali-border bg-kali-bg/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <img src="assets/img/logo-learning-fly-simple.png" alt="Logo" class="h-10 w-10 animate-bounce-slow">
+                <span class="text-xl font-bold tracking-tighter text-white">
+                    <span class="text-kali-green">root</span>@<span class="text-kali-blue">kali-lab</span>:~$
+                </span>
+            </div>
+
+            <div class="hidden md:flex gap-8 text-sm font-bold">
+                <a href="#" class="text-kali-green hover:text-white transition-colors">[ Início ]</a>
+                <a href="pages/labs.html"
+                    class="text-gray-500 hover:text-kali-blue transition-colors">./Laboratórios</a>
+                <a href="pages/video.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Vídeos</a>
+                <a href="pages/guide.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Guia</a>
+                <a href="pages/wiki.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Wiki</a>
+                <a href="pages/about.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Sobre</a>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 md:p-8 max-w-6xl relative z-10">
-        <header class="text-center my-16">
-            <h1 class="text-5xl md:text-6xl font-bold font-mono text-gray-900 dark:text-white mb-6 tracking-tight">
-                Laboratório Virtual <span class="text-blue-600 dark:text-accent-green">Kali Linux</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-600 dark:text-dark-text-secondary max-w-3xl mx-auto">
-                Sua base de operações para dominar a segurança ofensiva. Escolha seu módulo e inicie a missão.
+    <!-- Hero Section -->
+    <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center gap-12 z-10 flex-grow">
+
+        <!-- Text Content -->
+        <div class="w-full md:w-1/2 space-y-8">
+            <div class="space-y-2">
+                <p class="text-kali-blue text-sm"># Inicializando sistema de aprendizado...</p>
+                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">
+                    Domine a Arte da <br>
+                    <span class="text-kali-green glitch-hover cursor-pointer">Segurança Ofensiva</span>
+                </h1>
+            </div>
+
+            <p class="text-gray-400 text-lg border-l-2 border-kali-border pl-4">
+                Ambiente virtual controlado para aprendizado e treinamento prático em Pentest, Red Team e Ethical Hacking para iniciantes.
+                Sem instalações complexas. Apenas código.
             </p>
-        </header>
 
-        <main class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            <!-- Card 1: Instalação -->
-            <a href="pages/install.html" class="group">
-                <div
-                    class="glass h-full p-8 rounded-2xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-2xl dark:group-hover:shadow-[0_0_20px_rgba(57,211,83,0.3)] bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border">
+            <div class="flex gap-4 pt-4">
+                <a href="pages/labs.html"
+                    class="group relative px-6 py-3 font-bold text-black bg-kali-green rounded overflow-hidden">
+                    <span class="relative z-10 group-hover:text-white transition-colors duration-200">INICIAR
+                        MISSÃO</span>
                     <div
-                        class="w-14 h-14 rounded-full bg-blue-100 dark:bg-dark-border flex items-center justify-center mb-6 group-hover:bg-blue-600 dark:group-hover:bg-accent-green transition-colors">
-                        <svg class="w-8 h-8 text-blue-600 dark:text-accent-green group-hover:text-white transition-colors"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
+                        class="absolute inset-0 h-full w-full scale-0 rounded transition-all duration-300 group-hover:scale-100 group-hover:bg-kali-blue">
                     </div>
-                    <h3 class="text-2xl font-bold font-mono text-gray-900 dark:text-white mb-3">Instalação</h3>
-                    <p class="text-gray-600 dark:text-dark-text-secondary">Configure seu ambiente de combate. Aprenda a
-                        instalar o Kali no WSL ou Bare-Metal.</p>
-                </div>
-            </a>
+                </a>
+                <a href="pages/install.html"
+                    class="px-6 py-3 font-bold text-white border border-kali-border rounded hover:border-kali-green hover:text-kali-green transition-all">
+                    MANUAL DE INSTALAÇÃO
+                </a>
+            </div>
+        </div>
 
-            <!-- Card 2: Terminal -->
-            <a href="pages/terminal.html" class="group">
-                <div
-                    class="glass h-full p-8 rounded-2xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-2xl dark:group-hover:shadow-[0_0_20px_rgba(57,211,83,0.3)] bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border">
-                    <div
-                        class="w-14 h-14 rounded-full bg-blue-100 dark:bg-dark-border flex items-center justify-center mb-6 group-hover:bg-blue-600 dark:group-hover:bg-accent-green transition-colors">
-                        <svg class="w-8 h-8 text-blue-600 dark:text-accent-green group-hover:text-white transition-colors"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
+        <!-- Terminal Animation -->
+        <div class="w-full md:w-1/2">
+            <div class="terminal-window bg-terminal-black rounded-lg border border-kali-border overflow-hidden relative"
+                style="min-height: 400px;">
+                <!-- Terminal Header -->
+                <div class="bg-kali-card px-4 py-2 flex items-center gap-2 border-b border-kali-border">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="ml-4 text-xs text-gray-500">bash — 80x24</span>
+                </div>
+                <!-- Terminal Body -->
+                <div class="p-4 font-mono text-sm space-y-2" id="terminal-content">
+                    <div class="line opacity-0"><span class="text-kali-green">root@kali</span>:<span
+                            class="text-kali-blue">~</span># ./init_training.sh</div>
+                    <div class="line opacity-0 text-gray-300">
+                        [+] Carregando módulos do kernel......... <span class="text-green-500">OK</span><br>
+                        [+] Conectando ao mainframe.............. <span class="text-green-500">CONNECTED</span><br>
+                        [+] Descriptografando desafios ........... <span class="text-green-500">DONE</span><br>
                     </div>
-                    <h3 class="text-2xl font-bold font-mono text-gray-900 dark:text-white mb-3">Terminal</h3>
-                    <p class="text-gray-600 dark:text-dark-text-secondary">Domine a linha de comando. Comandos
-                        essenciais para navegação e controle.</p>
-                </div>
-            </a>
-
-            <!-- Card 3: Laboratórios -->
-            <a href="pages/labs.html" class="group">
-                <div
-                    class="glass h-full p-8 rounded-2xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-2xl dark:group-hover:shadow-[0_0_20px_rgba(57,211,83,0.3)] bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border relative overflow-hidden">
-                    <div
-                        class="absolute top-0 right-0 bg-blue-600 dark:bg-accent-green text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                        PRÁTICO</div>
-                    <div
-                        class="w-14 h-14 rounded-full bg-blue-100 dark:bg-dark-border flex items-center justify-center mb-6 group-hover:bg-blue-600 dark:group-hover:bg-accent-green transition-colors">
-                        <svg class="w-8 h-8 text-blue-600 dark:text-accent-green group-hover:text-white transition-colors"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
-                            </path>
-                        </svg>
+                    <div class="line opacity-0 text-white pt-2">
+                        Bem-vindo ao Laboratório LearningFly v2.0<br>
+                        Selecione um módulo para começar:
                     </div>
-                    <h3 class="text-2xl font-bold font-mono text-gray-900 dark:text-white mb-3">Laboratórios</h3>
-                    <p class="text-gray-600 dark:text-dark-text-secondary">Missões simuladas. Nmap, Hashcat, Gobuster e
-                        mais em cenários controlados.</p>
-                </div>
-            </a>
-
-            <!-- Card 4: Guia de Campo -->
-            <a href="pages/guide.html" class="group">
-                <div
-                    class="glass h-full p-8 rounded-2xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-2xl dark:group-hover:shadow-[0_0_20px_rgba(57,211,83,0.3)] bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border">
-                    <div
-                        class="w-14 h-14 rounded-full bg-blue-100 dark:bg-dark-border flex items-center justify-center mb-6 group-hover:bg-blue-600 dark:group-hover:bg-accent-green transition-colors">
-                        <svg class="w-8 h-8 text-blue-600 dark:text-accent-green group-hover:text-white transition-colors"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
-                            </path>
-                        </svg>
+                    <div class="line opacity-0 pt-2 grid grid-cols-2 gap-2 text-gray-400">
+                        <span>01. Nmap Network Scanning</span>
+                        <span>02. Web Exploitation (SQL/XSS)</span>
+                        <span>03. Password Cracking</span>
+                        <span>04. Metasploit Framework</span>
                     </div>
-                    <h3 class="text-2xl font-bold font-mono text-gray-900 dark:text-white mb-3">Guia de Campo</h3>
-                    <p class="text-gray-600 dark:text-dark-text-secondary">Base de conhecimento Wiki. Documentação
-                        completa e referências teóricas.</p>
-                </div>
-            </a>
-
-            <!-- Card 5: Videoaulas -->
-            <a href="pages/video.html" class="group">
-                <div
-                    class="glass h-full p-8 rounded-2xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-2xl dark:group-hover:shadow-[0_0_20px_rgba(57,211,83,0.3)] bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border">
-                    <div
-                        class="w-14 h-14 rounded-full bg-blue-100 dark:bg-dark-border flex items-center justify-center mb-6 group-hover:bg-blue-600 dark:group-hover:bg-accent-green transition-colors">
-                        <svg class="w-8 h-8 text-blue-600 dark:text-accent-green group-hover:text-white transition-colors"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
-                            </path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                    <div class="line mt-4">
+                        <span class="text-kali-green">root@kali</span>:<span class="text-kali-blue">~</span># <span
+                            class="animate-cursor border-r-2 border-kali-green">&nbsp;</span>
                     </div>
-                    <h3 class="text-2xl font-bold font-mono text-gray-900 dark:text-white mb-3">Videoaulas</h3>
-                    <p class="text-gray-600 dark:text-dark-text-secondary">Aprenda assistindo. Tutoriais e demonstrações
-                        práticas em vídeo.</p>
                 </div>
-            </a>
-        </main>
-
-        <footer class="text-center text-gray-500 dark:text-dark-text-secondary py-8 border-t dark:border-dark-border">
-            <p>&copy; 2026 Laboratório Virtual Kali Linux. LearningFly.</p>
-        </footer>
+            </div>
+        </div>
     </div>
 
-    <script src="assets/js/script.js"></script>
+    <!-- Feature Grid (Cyber Style) -->
+    <div class="bg-kali-card border-t border-kali-border mt-auto">
+        <div class="container mx-auto px-6 py-12 grid md:grid-cols-4 gap-8">
+            <a href="pages/terminal.html"
+                class="block p-6 border border-kali-border rounded hover:border-kali-green transition-colors group">
+                <div class="text-kali-blue mb-4 group-hover:text-kali-green transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">>_ Terminal Web</h3>
+                <p class="text-xs text-gray-500">Emulador XTerm.js integrado para prática segura no navegador.</p>
+            </a>
+
+            <a href="pages/video.html"
+                class="block p-6 border border-kali-border rounded hover:border-purple-500 transition-colors group">
+                <div class="text-purple-500 mb-4 group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">Videointel</h3>
+                <p class="text-xs text-gray-500">Briefings de missão e tutoriais táticos.</p>
+            </a>
+
+            <a href="pages/wiki.html"
+                class="block p-6 border border-kali-border rounded hover:border-yellow-500 transition-colors group">
+                <div class="text-yellow-500 mb-4 group-hover:rotate-12 transition-transform">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">Wiki Database</h3>
+                <p class="text-xs text-gray-500">Documentação completa dos vetores de ataque.</p>
+            </a>
+
+            <a href="pages/about.html"
+                class="block p-6 border border-kali-border rounded hover:border-pink-500 transition-colors group">
+                <div class="text-pink-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">Credits</h3>
+                <p class="text-xs text-gray-500">Desenvolvido por Vitor Krewer. LearningFly Initiative.</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Anime.js Animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate Terminal Lines
+            const timeline = anime.timeline({
+                easing: 'easeOutExpo',
+            });
+
+            timeline
+                .add({
+                    targets: '.line',
+                    opacity: [0, 1],
+                    translateX: [-20, 0],
+                    delay: anime.stagger(600), // delay each line
+                    duration: 800
+                });
+        });
+    </script>
 </body>
 
 </html>

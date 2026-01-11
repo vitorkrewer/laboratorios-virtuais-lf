@@ -4,199 +4,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
     <title>Videoaulas - Laboratório Kali Linux</title>
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Anime.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
                         'mono': ['Fira Code', 'monospace'],
                     },
                     colors: {
+                        'kali-bg': '#0d1117',
+                        'kali-card': '#161b22',
+                        'kali-border': '#30363d',
+                        'kali-blue': '#58a6ff',
+                        'kali-green': '#39d353',
+                        'kali-text': '#c9d1d9',
+                        'terminal-black': '#0c0c0c',
                         'dark-bg': '#0d1117',
                         'dark-card': '#161b22',
                         'dark-border': '#30363d',
                         'dark-text': '#c9d1d9',
                         'dark-text-secondary': '#8b949e',
                         'accent-green': '#39d353',
-                        'accent-green-hover': '#43f064',
-                        'accent-blue': '#58a6ff',
                     }
                 }
             }
         }
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
+    <style>
+        .playlist-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .playlist-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .playlist-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        .dark .playlist-scroll::-webkit-scrollbar-thumb {
+            background-color: #30363d;
+        }
+
+        .theater-mode .sidebar {
+            display: none;
+        }
+
+        .theater-mode .main-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-grow: 1;
+        }
+
+        .main-content,
+        .sidebar {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+            height: 0;
+            background-color: black;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 50;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(57, 211, 83, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                bottom: 100%;
+            }
+
+            100% {
+                bottom: -100px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
-    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+<body
+    class="bg-gray-100 dark:bg-kali-bg text-gray-800 dark:text-kali-text transition-colors duration-300 h-screen flex flex-col overflow-hidden">
+    <div
+        class="fixed inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20 z-0">
+    </div>
+    <div class="scanline"></div>
 
-    <nav
-        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
-        <div class="container mx-auto px-4 relative">
-            <div class="flex justify-between items-center h-20">
-                <a href="../index.html" class="flex-shrink-0">
-                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
-                        class="h-12">
+    <!-- Navigation -->
+    <nav class="border-b border-kali-border bg-kali-bg/90 backdrop-blur-md sticky top-0 z-50 flex-shrink-0">
+        <div class="container mx-auto px-6 h-20 flex justify-between items-center overflow-x-auto">
+            <div class="flex items-center gap-4 flex-shrink-0">
+                <a href="../index.html">
+                    <img src="../assets/img/logo-learning-fly-simple.png" alt="Logo" class="h-10 w-10">
                 </a>
-                <button id="mobile-menu-button"
-                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span class="text-xl font-bold tracking-tighter text-white hidden xl:block">
+                    <span class="text-kali-green">root</span>@<span class="text-kali-blue">kali-lab</span>:<span
+                        class="text-gray-500">/pages</span>$
+                </span>
+            </div>
+
+            <div class="flex items-center gap-6 text-sm font-bold flex-shrink-0 whitespace-nowrap ml-4">
+                <a href="../index.html" class="text-gray-500 hover:text-kali-green transition-colors hidden lg:block">cd
+                    /home</a>
+                <a href="install.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Instalação</a>
+                <a href="labs.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Laboratórios</a>
+                <a href="video.html" class="text-kali-green hover:text-white transition-colors">./Vídeos</a>
+                <a href="wiki.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Wiki</a>
+                <a href="guide.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Guia</a>
+
+                <button onclick="toggleTheme()" class="text-gray-500 hover:text-yellow-400 transition-colors"
+                    title="Alternar Tema">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
                     </svg>
                 </button>
-                <div id="navbar-links"
-                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
-                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
-                    <a href="../index.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
-                    <a href="install.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
-                    <a href="terminal.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
-                    <a href="labs.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Laboratório</a>
-                    <a href="guide.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</a>
-                    <a href="video.html" class="nav-link text-blue-600 dark:text-white font-bold">Videoaulas</a>
-                    <button id="theme-toggle"
-                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
-                        <span id="theme-icon"></span>
-                    </button>
-                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 md:p-8 max-w-6xl relative z-10">
-        <header class="text-center my-12">
-            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Briefings de Missão
-            </h1>
-            <p class="text-xl text-gray-600 dark:text-dark-text-secondary">Analise táticas e procedimentos em vídeo
-                antes da execução.</p>
-        </header>
+    <div id="layout-container"
+        class="flex flex-col lg:flex-row flex-grow overflow-hidden relative z-10 max-w-[1600px] mx-auto w-full">
 
-        <main class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <!-- Main Player Section (Left) -->
+        <main
+            class="main-content flex-grow lg:w-3/4 p-4 lg:p-6 overflow-y-auto lg:overflow-y-hidden flex flex-col items-center">
 
-            <!-- Video 1 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/jOaMOVukyrA?si=r8PhiyTELLaPuxM0" class="w-full h-full"
-                        allowfullscreen title="tour-kali-linux"></iframe>
+            <!-- Toolbar: Guide Link & Theater Toggle -->
+            <div class="w-full flex justify-between items-center mb-4 px-1">
+                <a id="guide-link-top" href="#"
+                    class="hidden group items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                    <span
+                        class="flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                        <span class="truncate max-w-[150px] md:max-w-xs">Ler Capítulo do Guia</span>
+                    </span>
+                    <svg class="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-1 group-hover:translate-x-0"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+
+                <div class="ml-auto">
+                    <button id="toggle-sidebar"
+                        class="text-sm bg-gray-200 dark:bg-kali-border hover:bg-gray-300 dark:hover:bg-gray-700 px-3 py-1.5 rounded transition-colors flex items-center gap-2">
+                        <span id="toggle-text">Expandir Teatro</span>
+                        <svg id="toggle-icon-expand" class="w-4 h-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
+                            </path>
+                        </svg>
+                        <svg id="toggle-icon-collapse" class="w-4 h-4 hidden" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Tour pela Interface</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Visão geral do ambiente XFCE e
-                    ferramentas principais.</p>
             </div>
 
-            <!-- Video 2 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/UGpiUneRo48?si=0aZsUM9SXisDvFho" class="w-full h-full"
-                        allowfullscreen title="dominando-kali-linux"></iframe>
-                </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Dominando o Terminal</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Conceitos fundamentais da linha de
-                    comando Linux.</p>
+            <div class="video-container mb-6 flex-shrink-0">
+                <iframe id="main-player" src="" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
             </div>
 
-            <!-- Video 3 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/cDd3YprDaMc?si=cetEFoyVFsFOnicj" class="w-full h-full"
-                        allowfullscreen title="nmap-na-pratica-guia"></iframe>
+            <div class="w-full flex-grow overflow-y-auto pr-2 custom-scrollbar">
+                <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-3">
+                    <h1 id="video-title" class="text-2xl md:text-3xl font-bold font-mono text-gray-900 dark:text-white">
+                        Selecione um vídeo</h1>
                 </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Nmap na Prática</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Varredura de redes e detecção de
-                    serviços.</p>
-            </div>
 
-            <!-- Video 4 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
+                <div id="video-tags" class="flex flex-wrap gap-2 mb-4"></div>
+
                 <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/WmjPb84MzsI?si=N6n9BqEFG_jBtcRL" class="w-full h-full"
-                        allowfullscreen title="gobuster-em-acao"></iframe>
+                    class="bg-white dark:bg-kali-card p-6 rounded-xl border border-gray-200 dark:border-kali-border shadow-sm">
+                    <h3 class="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">Descrição</h3>
+                    <p id="video-desc" class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Escolha um vídeo da playlist à direita para começar a assistir.
+                    </p>
                 </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Gobuster em Ação</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Enumerando diretórios e arquivos ocultos.
-                </p>
             </div>
-
-            <!-- Video 5 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/HMg8lOuwi4k?si=H2a4zN3yUwv5Sc6p" class="w-full h-full"
-                        allowfullscreen title="hashcat-quebrando-senha"></iframe>
-                </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Entendendo Hashcat</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Técnicas de quebra de senhas e hashes.
-                </p>
-            </div>
-
-            <!-- Video 6 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/fxoAIeTJbhw?si=s_J2u8LMEQAOJnjE" class="w-full h-full"
-                        allowfullscreen title="Metasploit-anatomia-cibernetica"></iframe>
-                </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Intro ao Metasploit</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Framework de exploração e
-                    post-exploitation.</p>
-            </div>
-
-            <!-- Video 7 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/MIphfTHAXKs?si=eBgNSl3QyxEvoouJ" class="w-full h-full"
-                        allowfullscreen title="analise-rede-wireshark"></iframe>
-                </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Análise com Wireshark</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Sniffing e análise de pacotes de rede.
-                </p>
-            </div>
-
-            <!-- Video 8 -->
-            <div
-                class="glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-dark-card p-4">
-                <div
-                    class="video-placeholder rounded-lg overflow-hidden bg-gray-200 dark:bg-dark-border aspect-video mb-4 relative group">
-                    <iframe src="https://www.youtube.com/embed/A_IVseBMK9A?si=rGZL4IeCI89Qogk6" class="w-full h-full"
-                        allowfullscreen title="analise-sql-map"></iframe>
-                </div>
-                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">O que é SQL Map?</h4>
-                <p class="text-sm text-gray-600 dark:text-dark-text-secondary">Automação de injeção de SQL.</p>
-            </div>
-
         </main>
+
+        <!-- Playlist Sidebar (Right) -->
+        <aside
+            class="sidebar flex-shrink-0 lg:w-1/4 bg-white/50 dark:bg-kali-card/50 border-l border-gray-200 dark:border-kali-border flex flex-col h-full">
+            <div class="p-4 border-b border-gray-200 dark:border-kali-border bg-white dark:bg-kali-card">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-gray-800 dark:text-white flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        Playlist
+                    </h2>
+                    <span id="playlist-count"
+                        class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-full font-bold">0</span>
+                </div>
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Pesquisar..."
+                        class="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-kali-bg border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white text-sm">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div id="playlist-container" class="flex-grow overflow-y-auto playlist-scroll p-2 space-y-2"></div>
+        </aside>
+
     </div>
 
-    <script src="../assets/js/script.js"></script>
+    <!-- Footer -->
+    <footer class="border-t border-kali-border bg-kali-card mt-auto py-6 relative z-10 w-full flex-shrink-0">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+                <span>© 2026 LearningFly Labs</span>
+                <span class="text-kali-border">|</span>
+                <span>By Vitor Krewer</span>
+            </div>
+            <a href="about.html"
+                class="flex items-center gap-2 text-kali-blue hover:text-kali-green transition-colors text-sm font-bold">
+                <span>[ Dev Profile ]</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { videos } from '../assets/js/videos.js';
+        document.documentElement.classList.add(localStorage.getItem('theme') || 'dark');
+
+        const mainPlayer = document.getElementById('main-player');
+        const videoTitle = document.getElementById('video-title');
+        const videoDesc = document.getElementById('video-desc');
+        const videoTags = document.getElementById('video-tags');
+        const playlistContainer = document.getElementById('playlist-container');
+        const searchInput = document.getElementById('search-input');
+        const playlistCount = document.getElementById('playlist-count');
+        const layoutContainer = document.getElementById('layout-container');
+        const toggleBtn = document.getElementById('toggle-sidebar');
+        const toggleText = document.getElementById('toggle-text');
+        const guideLinkTop = document.getElementById('guide-link-top');
+
+        let currentVideoId = null;
+
+        toggleBtn.onclick = () => {
+            layoutContainer.classList.toggle('theater-mode');
+            const isTheater = layoutContainer.classList.contains('theater-mode');
+            toggleText.innerText = isTheater ? "Mostrar Playlist" : "Expandir Teatro";
+            document.getElementById('toggle-icon-expand').classList.toggle('hidden');
+            document.getElementById('toggle-icon-collapse').classList.toggle('hidden');
+        };
+
+        function loadVideo(video) {
+            currentVideoId = video.id;
+            mainPlayer.src = `https://www.youtube.com/embed/${video.id}?autoplay=1`;
+            videoTitle.innerText = video.title;
+            videoDesc.innerText = video.description;
+
+            if (video.guideId) {
+                guideLinkTop.href = `guide.html?guide=${video.guideId}`;
+                guideLinkTop.classList.remove('hidden');
+                guideLinkTop.classList.add('flex');
+            } else {
+                guideLinkTop.classList.add('hidden');
+            }
+
+            videoTags.innerHTML = video.tags.map(tag =>
+                `<span class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-semibold px-2.5 py-0.5 rounded border border-blue-200 dark:border-blue-800">#${tag}</span>`
+            ).join('');
+
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                if (item.dataset.id === video.id) {
+                    item.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'border-l-4', 'border-blue-500');
+                    item.classList.remove('border-transparent');
+                } else {
+                    item.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'border-l-4', 'border-blue-500');
+                    item.classList.add('border-transparent');
+                }
+            });
+        }
+
+        function renderPlaylist(filter = "") {
+            playlistContainer.innerHTML = '';
+            const filtered = videos.filter(v =>
+                v.title.toLowerCase().includes(filter.toLowerCase()) ||
+                v.tags.some(t => t.toLowerCase().includes(filter.toLowerCase()))
+            );
+            playlistCount.innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                playlistContainer.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 py-4 text-sm">Nenhum vídeo encontrado.</p>';
+                return;
+            }
+
+            filtered.forEach(video => {
+                const item = document.createElement('div');
+                item.className = `playlist-item cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-bg transition-all flex gap-3 border-l-4 border-transparent group`;
+                item.dataset.id = video.id;
+
+                item.innerHTML = `
+                    <div class="relative w-32 flex-shrink-0 aspect-video rounded overflow-hidden">
+                        <img src="https://img.youtube.com/vi/${video.id}/mqdefault.jpg" alt="${video.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1 rounded font-mono">${video.duration}</span>
+                    </div>
+                    <div class="flex flex-col justify-center min-w-0">
+                        <h4 class="font-bold text-sm text-gray-900 dark:text-white truncate group-hover:text-blue-500 transition-colors">${video.title}</h4>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                             ${video.tags.slice(0, 2).map(t => `<span class="text-[10px] text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-dark-border px-1 rounded">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                item.onclick = () => loadVideo(video);
+                playlistContainer.appendChild(item);
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialVideoId = urlParams.get('v');
+        const initialVideo = videos.find(v => v.id === initialVideoId) || videos[0];
+
+        if (videos.length > 0) {
+            loadVideo(initialVideo);
+            renderPlaylist();
+        }
+
+        searchInput.addEventListener('input', (e) => renderPlaylist(e.target.value));
+    </script>
 </body>
 
 </html>

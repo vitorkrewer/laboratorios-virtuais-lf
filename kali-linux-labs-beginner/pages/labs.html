@@ -4,221 +4,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://learningfly.b-cdn.net/images/logo-learning-fly-simple.png">
+    <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
     <title>Laboratórios - Laboratório Kali Linux</title>
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Anime.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
                         'mono': ['Fira Code', 'monospace'],
                     },
                     colors: {
-                        'dark-bg': '#0d1117',
-                        'dark-card': '#161b22',
-                        'dark-border': '#30363d',
-                        'dark-text': '#c9d1d9',
-                        'dark-text-secondary': '#8b949e',
+                        'kali-bg': '#0d1117',
+                        'kali-card': '#161b22',
+                        'kali-border': '#30363d',
+                        'kali-blue': '#58a6ff',
+                        'kali-green': '#39d353',
+                        'kali-text': '#c9d1d9',
+                        'terminal-black': '#0c0c0c',
                         'accent-green': '#39d353',
-                        'accent-green-hover': '#43f064',
-                        'accent-blue': '#58a6ff',
                     }
                 }
             }
         }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
+    <style>
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 50;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(57, 211, 83, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                bottom: 100%;
+            }
+
+            100% {
+                bottom: -100px;
+            }
+        }
+
+        .blinking-cursor {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-dark-text font-sans transition-colors duration-300">
-    <div class="fixed inset-0 pointer-events-none bg-gradient-premium z-0"></div>
+<body
+    class="bg-gray-100 dark:bg-kali-bg text-gray-800 dark:text-kali-text transition-colors duration-300 min-h-screen flex flex-col">
+    <div
+        class="fixed inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20 z-0">
+    </div>
+    <div class="scanline"></div>
 
-    <nav
-        class="bg-white/80 dark:bg-dark-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-dark-border">
-        <div class="container mx-auto px-4 relative">
-            <div class="flex justify-between items-center h-20">
-                <a href="../index.html" class="flex-shrink-0">
-                    <img src="https://learningfly.b-cdn.net/images/logo-learning-fly-full.png" alt="Logo LearningFly"
-                        class="h-12">
+    <!-- Navigation -->
+    <nav class="border-b border-kali-border bg-kali-bg/90 backdrop-blur-md sticky top-0 z-50 flex-shrink-0">
+        <div class="container mx-auto px-6 h-20 flex justify-between items-center overflow-x-auto">
+            <div class="flex items-center gap-4 flex-shrink-0">
+                <a href="../index.html">
+                    <img src="../assets/img/logo-learning-fly-simple.png" alt="Logo" class="h-10 w-10">
                 </a>
-                <button id="mobile-menu-button"
-                    class="md:hidden flex items-center px-3 py-2 border rounded text-gray-600 dark:text-dark-text-secondary border-gray-400 dark:border-dark-border hover:text-blue-600 dark:hover:text-white">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span class="text-xl font-bold tracking-tighter text-white hidden xl:block">
+                    <span class="text-kali-green">root</span>@<span class="text-kali-blue">kali-lab</span>:<span
+                        class="text-gray-500">/pages</span>$
+                </span>
+            </div>
+
+            <div class="flex items-center gap-6 text-sm font-bold flex-shrink-0 whitespace-nowrap ml-4">
+                <a href="../index.html" class="text-gray-500 hover:text-kali-green transition-colors hidden lg:block">cd
+                    /home</a>
+                <a href="install.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Instalação</a>
+                <a href="labs.html" class="text-kali-green hover:text-white transition-colors">./Laboratórios</a>
+                <a href="terminal.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Terminal</a>            
+                <a href="video.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Vídeos</a>
+                <a href="wiki.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Wiki</a>
+                <a href="guide.html" class="text-gray-500 hover:text-kali-blue transition-colors">./Guia</a>
+                <button onclick="toggleTheme()" class="text-gray-500 hover:text-yellow-400 transition-colors"
+                    title="Alternar Tema">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
                     </svg>
                 </button>
-                <div id="navbar-links"
-                    class="hidden md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 font-medium text-gray-600 dark:text-dark-text-secondary mt-4 md:mt-0
-                    absolute md:static left-0 top-20 w-full md:w-auto bg-white dark:bg-dark-card md:bg-transparent shadow-lg md:shadow-none z-40 px-4 py-4 md:px-0 md:py-0">
-                    <a href="../index.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Início</a>
-                    <a href="install.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Instalação</a>
-                    <a href="terminal.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Terminal</a>
-                    <a href="labs.html" class="nav-link text-blue-600 dark:text-white font-bold">Laboratório</a>
-                    <a href="guide.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Guia de Campo</a>
-                    <a href="video.html"
-                        class="nav-link hover:text-blue-600 dark:hover:text-white transition-colors">Videoaulas</a>
-                    <button id="theme-toggle"
-                        class="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-dark-border transition-colors">
-                        <span id="theme-icon"></span>
-                    </button>
-                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl relative z-10">
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl relative z-10 flex-grow">
         <header class="text-center my-12">
             <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Simulações de Campo
             </h1>
-            <p class="text-xl text-gray-600 dark:text-dark-text-secondary">Execute protocolos ofensivos em ambientes
-                controlados. Lembre-se da ética.</p>
+            <p class="text-xl text-gray-600 dark:text-gray-400">Execute protocolos ofensivos em ambientes controlados.
+                Lembre-se da ética.</p>
         </header>
 
-        <main class="space-y-12">
-
-            <div
-                class="glass p-8 rounded-2xl bg-white dark:bg-dark-card border border-transparent dark:border-dark-border">
-                <h2 class="text-3xl font-bold font-mono text-blue-600 dark:text-accent-green mb-8">root@kali:~#
+        <main class="space-y-12 mb-16">
+            <div class="p-8 rounded-2xl bg-white dark:bg-kali-card border border-gray-200 dark:border-kali-border">
+                <h2 class="text-3xl font-bold font-mono text-kali-blue dark:text-kali-green mb-8">root@kali:~#
                     ./executar-lab<span class="blinking-cursor">_</span></h2>
 
                 <div class="space-y-12">
-                    <!-- FASE 1 -->
+                    <!-- TOOLS SECTION -->
                     <div>
                         <h3
-                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-dark-border flex items-center">
-                            <span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
-                            FASE 1: RECONHECIMENTO PASSIVO & ATIVO
+                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-kali-border flex items-center">
+                            <span class="inline-block w-3 h-3 bg-purple-500 rounded-full mr-3"></span>
+                            FERRAMENTAS DISPONÍVEIS
                         </h3>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <!-- Mission 1 -->
-                            <div
-                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
-                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 1:
-                                    Scan de Portas</h4>
-                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Mapeie a superfície
-                                    de ataque identificando portas abertas no alvo autorizado.</p>
-                                <div class="relative">
-                                    <div
-                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
-                                        <code class="block text-white">nmap scanme.nmap.org</code>
-                                    </div>
-                                    <button
-                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
-                                </div>
-                            </div>
 
-                            <!-- Mission 2 -->
-                            <div
-                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
-                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 2:
-                                    Coleta de Intel</h4>
-                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Consulte bases de
-                                    dados públicas para obter informações de registro de domínio.</p>
-                                <div class="relative">
-                                    <div
-                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
-                                        <code class="block text-white">whois google.com</code>
-                                    </div>
-                                    <button
-                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
-                                </div>
-                            </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                            <!-- Mission 3 -->
-                            <div
-                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all col-span-1 md:col-span-2">
-                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 3:
-                                    Enumerar DNS</h4>
-                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Interrogue
-                                    servidores DNS para descobrir a infraestrutura do alvo.</p>
-                                <div class="relative">
-                                    <div
-                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
-                                        <code class="block text-white">dig google.com</code>
+                            <!-- Wiki Card -->
+                            <a href="wiki.html" class="group block md:col-span-2 lg:col-span-3">
+                                <div
+                                    class="h-full border-2 border-dashed border-blue-400 dark:border-blue-800 rounded-xl p-8 bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100 dark:hover:bg-blue-900/20 transition-all shadow-sm group-hover:shadow-md flex items-center justify-between relative overflow-hidden">
+                                    <div class="relative z-10 flex-1">
+                                        <div class="flex items-center gap-4 mb-3">
+                                            <span class="p-3 rounded-lg bg-blue-500 text-white">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                            <div>
+                                                <h4
+                                                    class="font-bold font-mono text-2xl text-blue-700 dark:text-blue-400 group-hover:translate-x-1 transition-transform">
+                                                    Command Wiki</h4>
+                                            </div>
+                                        </div>
+                                        <p class="text-gray-700 dark:text-gray-300 text-lg max-w-2xl">
+                                            Acesse nossa base de conhecimento Wiki. Documentação de comandos e manuais.
+                                        </p>
                                     </div>
-                                    <button
-                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
+                                    <div class="absolute right-6 bottom-6">
+                                        <span
+                                            class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white font-bold text-sm shadow-lg group-hover:bg-blue-500 transition-colors">Acessar
+                                            Wiki &rarr;</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+
+                            <!-- Nmap Card -->
+                            <a href="terminal.html?tool=nmap" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-blue-600 dark:text-kali-green mb-2 group-hover:translate-x-1 transition-transform">
+                                        Nmap</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Network Mapper para
+                                        auditoria de rede e descoberta de portas.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- SQLMap Card -->
+                            <a href="terminal.html?tool=sqlmap" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-yellow-600 dark:text-yellow-500 mb-2 group-hover:translate-x-1 transition-transform">
+                                        SQLMap</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Ferramenta automática para
+                                        injeção SQL e takeover.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Metasploit Card -->
+                            <a href="terminal.html?tool=msfconsole" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-blue-800 dark:text-blue-400 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Metasploit</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">O framework de exploração
+                                        mais utilizado no mundo.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Hydra Card -->
+                            <a href="terminal.html?tool=hydra" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-purple-600 dark:text-purple-400 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Hydra</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Ferramenta rápida e
+                                        flexível para cracking de login de rede.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Burp Suite Card -->
+                            <a href="terminal.html?tool=burpsuite" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-orange-600 dark:text-orange-400 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Burp Suite</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Plataforma integrada para
+                                        testes de segurança em aplicações web.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Naabu Card -->
+                            <a href="terminal.html?tool=naabu" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-pink-600 dark:text-pink-400 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Naabu</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Scanner de portas rápido e
+                                        confiável escrito em Go.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Nikto Card -->
+                            <a href="terminal.html?tool=nikto" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-red-600 dark:text-red-500 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Nikto</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Scanner de servidor web
+                                        para detectar configurações perigosas.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Maltego Card -->
+                            <a href="terminal.html?tool=maltego" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-blue-500 dark:text-blue-300 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Maltego</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Ferramenta de inteligência
+                                        open source e forense para mineração de dados.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- DNSX Card -->
+                            <a href="terminal.html?tool=dnsx" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-indigo-600 dark:text-indigo-400 mb-2 group-hover:translate-x-1 transition-transform">
+                                        DNSX</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Toolkit DNS rápido e
+                                        multiuso para execução de múltiplas consultas.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Nuclei Card -->
+                            <a href="terminal.html?tool=nuclei" class="group block">
+                                <div
+                                    class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4
+                                        class="font-bold font-mono text-xl text-green-500 dark:text-green-400 mb-2 group-hover:translate-x-1 transition-transform">
+                                        Nuclei</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Scanner de vulnerabilidades
+                                        rápido baseado em templates.</p>
+                                    <span
+                                        class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar
+                                        Módulo &rarr;</span>
+                                </div>
+                            </a>
+
                         </div>
                     </div>
-
-                    <!-- FASE 2 -->
-                    <div>
-                        <h3
-                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-dark-border flex items-center">
-                            <span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
-                            FASE 2: ANÁLISE DE APLICAÇÃO WEB
-                        </h3>
-                        <div class="grid md:grid-cols-1 gap-6">
-                            <!-- Mission 4 -->
-                            <div
-                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
-                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 4:
-                                    Brute-force de Diretórios</h4>
-                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Descubra áreas
-                                    ocultas e não indexadas de um site usando força bruta baseada em dicionário.</p>
-                                <div class="relative">
-                                    <div
-                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
-                                        <code
-                                            class="block text-white">gobuster dir -u http://testphp.vulnweb.com -w /usr/share/wordlists/dirb/common.txt</code>
-                                    </div>
-                                    <button
-                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FASE 3 -->
-                    <div>
-                        <h3
-                            class="text-2xl font-semibold font-mono text-gray-800 dark:text-gray-200 mb-6 pb-2 border-b dark:border-dark-border flex items-center">
-                            <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-3"></span>
-                            FASE 3: CRIPTOGRAFIA E SENHAS
-                        </h3>
-                        <div class="grid md:grid-cols-1 gap-6">
-                            <!-- Mission 5 -->
-                            <div
-                                class="mission-card border border-gray-200 dark:border-dark-border rounded-xl p-6 bg-gray-50 dark:bg-dark-bg/50 hover:bg-white dark:hover:bg-dark-card transition-all">
-                                <h4 class="font-bold font-mono text-lg text-gray-900 dark:text-white mb-2">Missão 5:
-                                    Quebra de Hash MD5</h4>
-                                <p class="text-sm text-gray-600 dark:text-dark-text-secondary mb-4">Recupere a senha
-                                    original a partir de seu hash usando o Hashcat em modo de ataque direto.</p>
-                                <div class="relative">
-                                    <div
-                                        class="code-block font-mono p-3 text-sm rounded bg-gray-800 dark:bg-black overflow-x-auto">
-                                        <code class="block text-white">echo "8d788385431273d11e8b43bb78f3aa41" > hash.txt
-echo -e "senha\n123456\npassword" > wordlist.txt
-hashcat -m 0 -a 0 hash.txt wordlist.txt</code>
-                                    </div>
-                                    <button
-                                        class="copy-btn absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded">Copiar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-
         </main>
     </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-kali-border bg-kali-card mt-auto py-6 relative z-10">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+                <span>© 2026 LearningFly Labs</span>
+                <span class="text-kali-border">|</span>
+                <span>By Vitor Krewer</span>
+            </div>
+            <a href="about.html"
+                class="flex items-center gap-2 text-kali-blue hover:text-kali-green transition-colors text-sm font-bold">
+                <span>[ Dev Profile ]</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+            </a>
+        </div>
+    </footer>
 
     <script src="../assets/js/script.js"></script>
 </body>
