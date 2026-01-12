@@ -1,6 +1,12 @@
 
 export const guides = [
     {
+        id: "00-inicio",
+        title: "00. Nossa Jornada Começa Aqui",
+        file: "00-inicio.md",
+        category: "Introdução"
+    },
+    {
         id: "01-intro",
         title: "01. Introdução ao Kali Linux",
         file: "01-intro.md",

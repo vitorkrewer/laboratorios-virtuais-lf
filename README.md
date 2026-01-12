@@ -61,6 +61,15 @@ Um ambiente gamificado para experimentação química.
 
 - **Funcionalidades:** Workspace para arrastar e combinar elementos, sugestões de "Receitas" e visualização de resultados.
 
+### 7. 🛡️ Laboratório Virtual - Kali Linux (Iniciante)
+
+**Diretório:** `kali-linux-labs-beginner`
+
+Uma interface interativa simulando o Kali Linux para ensino de cibersegurança e ética hacker.
+
+- **Funcionalidades:** Terminal simulado (Xterm.js), missões práticas (Nmap, SQLMap), guias de instalação e vídeos integrados.
+- **Destaque:** Ambiente seguro (sandbox) no navegador que recria a experiência de uso das ferramentas reais sem riscos.
+
 ---
 
 ## 🛠️ Tecnologias Utilizadas
@@ -75,7 +84,7 @@ Os laboratórios foram construídos com foco em performance e usabilidade, utili
 
 A maioria dos projetos é estática e pode ser executada simplesmente abrindo o arquivo `index.html` em seu navegador.
 
-Para projetos que utilizam ES Modules (como o **SQL Playground**), é recomendável usar um servidor local simples para evitar bloqueios de CORS:
+Para projetos que utilizam ES Modules (como o **SQL Playground** e o **Kali Linux Labs**), é recomendável usar um servidor local simples para evitar bloqueios de CORS:
 
 ```bash
 # Exemplo com Python

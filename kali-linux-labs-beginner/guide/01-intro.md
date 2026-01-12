@@ -1,9 +1,9 @@
 
 # **Kali Linux: do Zero ao Terminal**
 
-## **Introdução: Olá, Futuro Explorador Digital\!**
+## **Introdução: Olá, Futuro Explorador Digital!**
 
-Olá\! Seja muito bem-vindo. Pense em mim como seu tutor pessoal nesta jornada. O que estamos prestes a fazer pode parecer complexo, mas garanto que, com um passo de cada vez, você vai dominar o processo. Instalar um novo sistema operacional é como abrir a primeira página de um livro fascinante. É o seu primeiro passo em um mundo muito maior e mais interessante da tecnologia e segurança digital. Vamos começar essa aventura juntos.
+Olá! Seja muito bem-vindo. Pense em mim como seu tutor pessoal nesta jornada. O que estamos prestes a fazer pode parecer complexo, mas garanto que, com um passo de cada vez, você vai dominar o processo. Instalar um novo sistema operacional é como abrir a primeira página de um livro fascinante. É o seu primeiro passo em um mundo muito maior e mais interessante da tecnologia e segurança digital. Vamos começar essa aventura juntos.
 
 ### **O que é o Kali Linux? (Em bom português)**
 
