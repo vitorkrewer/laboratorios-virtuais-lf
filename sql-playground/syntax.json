@@ -1,50 +1,121 @@
 [
-    {
-        "command": "SELECT",
-        "description": "Recupera dados de uma ou mais tabelas.",
-        "syntax": "SELECT coluna1, coluna2, ...\nFROM nome_da_tabela\n[WHERE condicao]\n[ORDER BY coluna]\n[LIMIT numero];",
-        "example": "SELECT nome, salario FROM funcionarios WHERE salario > 5000 ORDER BY nome;"
-    },
-    {
-        "command": "CREATE TABLE",
-        "description": "Cria uma nova tabela no banco de dados.",
-        "syntax": "CREATE TABLE nome_da_tabela (\n  coluna1 tipo_dado [restricoes],\n  coluna2 tipo_dado [restricoes],\n  ...\n);",
-        "example": "CREATE TABLE produtos (\n  id INTEGER PRIMARY KEY,\n  nome TEXT NOT NULL,\n  preco REAL\n);"
-    },
-    {
-        "command": "INSERT INTO",
-        "description": "Adiciona novos registros a uma tabela.",
-        "syntax": "INSERT INTO nome_da_tabela (coluna1, coluna2, ...)\nVALUES (valor1, valor2, ...);",
-        "example": "INSERT INTO produtos (nome, preco) VALUES ('Laptop', 3500.50);"
-    },
-    {
-        "command": "UPDATE",
-        "description": "Modifica registros existentes em uma tabela.",
-        "syntax": "UPDATE nome_da_tabela\nSET coluna1 = valor1, ...\n[WHERE condicao];",
-        "example": "UPDATE produtos SET preco = 3200.00 WHERE nome = 'Laptop';"
-    },
-    {
-        "command": "DELETE",
-        "description": "Remove registros de uma tabela.",
-        "syntax": "DELETE FROM nome_da_tabela [WHERE condicao];",
-        "example": "DELETE FROM produtos WHERE id = 1;"
-    },
-    {
-        "command": "JOIN",
-        "description": "Combina registros de duas ou mais tabelas com base em uma coluna relacionada.",
-        "syntax": "SELECT colunas\nFROM tabela1\n[INNER | LEFT | RIGHT] JOIN tabela2\nON tabela1.coluna = tabela2.coluna;",
-        "example": "SELECT f.nome, d.nome\nFROM funcionarios f\nINNER JOIN departamentos d ON f.id_depto = d.id;"
-    },
-    {
-        "command": "ALTER TABLE",
-        "description": "Modifica a estrutura de uma tabela existente (adicionar, remover ou alterar colunas).",
-        "syntax": "ALTER TABLE nome_da_tabela\n[ADD COLUMN nome tipo] | \n[DROP COLUMN nome] | \n[RENAME TO novo_nome];",
-        "example": "ALTER TABLE funcionarios ADD COLUMN data_admissao DATE;"
-    },
-    {
-        "command": "CREATE VIEW",
-        "description": "Cria uma tabela virtual baseada no resultado de uma consulta SELECT.",
-        "syntax": "CREATE VIEW nome_da_view AS\nSELECT colunas\nFROM tabelas\n[WHERE condicao];",
-        "example": "CREATE VIEW v_funcionarios_ti AS\nSELECT nome, cargo FROM funcionarios WHERE id_depto = 1;"
-    }
+  {
+    "category": "DQL (Consultas)",
+    "command": "SELECT",
+    "description": "Recupera dados de uma ou mais tabelas.",
+    "syntax": "SELECT coluna1, coluna2, ...\nFROM nome_da_tabela\n[WHERE condicao]\n[ORDER BY coluna [ASC|DESC]]\n[LIMIT numero [OFFSET deslocamento]];",
+    "example": "SELECT nome, salario FROM funcionarios WHERE salario > 5000 ORDER BY salario DESC LIMIT 10;"
+  },
+  {
+    "category": "DQL (Consultas)",
+    "command": "WHERE & Operadores Lógicos",
+    "description": "Filtra registros baseando-se em condições lógicas (AND, OR, NOT, IN, BETWEEN, LIKE, IS NULL).",
+    "syntax": "SELECT * FROM tabela\nWHERE coluna1 = 'valor' AND (coluna2 BETWEEN 10 AND 50 OR coluna3 IN ('A', 'B'));",
+    "example": "SELECT * FROM clientes WHERE estado = 'SP' AND data_cadastro >= '2025-01-01';"
+  },
+  {
+    "category": "DQL (Consultas)",
+    "command": "Funções de Agregação",
+    "description": "Calcula valores sumarizados sobre conjuntos de linhas (COUNT, SUM, AVG, MIN, MAX).",
+    "syntax": "SELECT COUNT(*) AS total, AVG(preco) AS media, MAX(preco) AS mais_caro\nFROM produtos;",
+    "example": "SELECT COUNT(*) AS total_clientes, MIN(data_cadastro) AS primeiro_cadastro FROM clientes;"
+  },
+  {
+    "category": "DQL (Consultas)",
+    "command": "GROUP BY & HAVING",
+    "description": "Agrupa registros idênticos e aplica filtros sobre o resultado das funções agregadas.",
+    "syntax": "SELECT coluna_agrupamento, COUNT(*), SUM(valor)\nFROM tabela\nGROUP BY coluna_agrupamento\nHAVING SUM(valor) > 1000;",
+    "example": "SELECT categoria_id, COUNT(*) AS qtd, AVG(preco) AS preco_medio FROM produtos GROUP BY categoria_id HAVING AVG(preco) > 2000;"
+  },
+  {
+    "category": "DQL (Junções)",
+    "command": "INNER JOIN",
+    "description": "Combina registros que possuem valores correspondentes em ambas as tabelas (interseção).",
+    "syntax": "SELECT a.coluna, b.coluna\nFROM tabelaA a\nINNER JOIN tabelaB b ON a.chave_estrangeira = b.chave_primaria;",
+    "example": "SELECT p.nome AS produto, c.nome AS categoria, p.preco\nFROM produtos p\nINNER JOIN categorias c ON p.categoria_id = c.id;"
+  },
+  {
+    "category": "DQL (Junções)",
+    "command": "LEFT JOIN",
+    "description": "Retorna todos os registros da tabela à esquerda e os registros correspondentes da tabela à direita (ou NULL).",
+    "syntax": "SELECT a.coluna, b.coluna\nFROM tabelaA a\nLEFT JOIN tabelaB b ON a.id = b.tabelaA_id;",
+    "example": "SELECT c.nome, p.id AS pedido_id, p.valor_total\nFROM clientes c\nLEFT JOIN pedidos p ON c.id = p.cliente_id;"
+  },
+  {
+    "category": "DQL (Consultas)",
+    "command": "Subconsultas (Subqueries)",
+    "description": "Consultas aninhadas dentro de cláusulas WHERE, FROM ou SELECT.",
+    "syntax": "SELECT * FROM produtos\nWHERE preco > (SELECT AVG(preco) FROM produtos);",
+    "example": "SELECT nome, salario FROM funcionarios WHERE departamento_id IN (SELECT id FROM departamentos WHERE orcamento_anual > 1000000);"
+  },
+  {
+    "category": "DQL (Consultas)",
+    "command": "CASE WHEN (Condicional)",
+    "description": "Avalia condições lógicas linha a linha e retorna um valor correspondente (If-Else no SQL).",
+    "syntax": "SELECT nome, preco,\n  CASE\n    WHEN preco > 5000 THEN 'Premium'\n    WHEN preco BETWEEN 2000 AND 5000 THEN 'Intermediário'\n    ELSE 'Econômico'\n  END AS faixa_preco\nFROM produtos;",
+    "example": "SELECT nome, nota_final, CASE WHEN nota_final >= 7.0 THEN 'Aprovado' ELSE 'Recuperação' END AS situacao FROM matriculas;"
+  },
+  {
+    "category": "DDL (Estrutura)",
+    "command": "CREATE TABLE",
+    "description": "Cria uma nova tabela definindo colunas, tipos de dados e restrições (PRIMARY KEY, NOT NULL, UNIQUE, FOREIGN KEY).",
+    "syntax": "CREATE TABLE nome_da_tabela (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  coluna1 TIPO NOT NULL,\n  coluna2 TIPO UNIQUE,\n  chave_fk INTEGER,\n  FOREIGN KEY (chave_fk) REFERENCES outra_tabela(id)\n);",
+    "example": "CREATE TABLE fornecedores (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  razao_social VARCHAR(150) NOT NULL,\n  cnpj VARCHAR(18) UNIQUE NOT NULL,\n  ativo BOOLEAN DEFAULT 1\n);"
+  },
+  {
+    "category": "DDL (Estrutura)",
+    "command": "ALTER TABLE",
+    "description": "Modifica a estrutura de uma tabela existente (adiciona coluna ou renomeia).",
+    "syntax": "ALTER TABLE nome_da_tabela ADD COLUMN nova_coluna TIPO;\nALTER TABLE nome_da_tabela RENAME TO novo_nome;",
+    "example": "ALTER TABLE clientes ADD COLUMN telefone VARCHAR(20);"
+  },
+  {
+    "category": "DDL (Estrutura)",
+    "command": "DROP TABLE",
+    "description": "Remove permanentemente uma tabela e todos os seus dados do banco.",
+    "syntax": "DROP TABLE [IF EXISTS] nome_da_tabela;",
+    "example": "DROP TABLE IF EXISTS fornecedores;"
+  },
+  {
+    "category": "DDL (Estrutura)",
+    "command": "CREATE INDEX",
+    "description": "Cria um índice para acelerar drasticamente buscas e ordenações em colunas frequentemente consultadas.",
+    "syntax": "CREATE INDEX idx_nome ON tabela (coluna1, coluna2);",
+    "example": "CREATE INDEX idx_clientes_email ON clientes (email);"
+  },
+  {
+    "category": "DDL (Estrutura)",
+    "command": "CREATE VIEW",
+    "description": "Cria uma tabela virtual baseada em uma consulta SELECT pré-definida.",
+    "syntax": "CREATE VIEW nome_da_view AS\nSELECT colunas FROM tabelas WHERE condicoes;",
+    "example": "CREATE VIEW v_pedidos_completos AS\nSELECT p.id, c.nome AS cliente, p.data_pedido, p.status, p.valor_total\nFROM pedidos p\nINNER JOIN clientes c ON p.cliente_id = c.id;"
+  },
+  {
+    "category": "DML (Manipulação)",
+    "command": "INSERT INTO",
+    "description": "Insere um ou múltiplos novos registros em uma tabela.",
+    "syntax": "INSERT INTO nome_da_tabela (col1, col2, ...)\nVALUES (val1, val2, ...), (val3, val4, ...);",
+    "example": "INSERT INTO categorias (nome, departamento) VALUES ('Tablets', 'Tecnologia'), ('Smartwatches', 'Acessórios');"
+  },
+  {
+    "category": "DML (Manipulação)",
+    "command": "UPDATE",
+    "description": "Altera dados existentes em uma tabela. Atenção: utilize sempre WHERE para não alterar todas as linhas!",
+    "syntax": "UPDATE nome_da_tabela\nSET col1 = novo_valor1, col2 = novo_valor2\nWHERE condicao;",
+    "example": "UPDATE produtos SET preco = preco * 0.9 WHERE categoria_id = 1;"
+  },
+  {
+    "category": "DML (Manipulação)",
+    "command": "DELETE",
+    "description": "Remove registros de uma tabela. Utilize WHERE para especificar quais registros serão excluídos.",
+    "syntax": "DELETE FROM nome_da_tabela\nWHERE condicao;",
+    "example": "DELETE FROM pedidos WHERE status = 'Cancelado' AND data_pedido < '2024-01-01';"
+  },
+  {
+    "category": "TCL (Transações)",
+    "command": "Transações (BEGIN, COMMIT, ROLLBACK)",
+    "description": "Garante as propriedades ACID, executando um lote de comandos de forma atômica ou revertendo em caso de falha.",
+    "syntax": "BEGIN TRANSACTION;\n  UPDATE contas SET saldo = saldo - 100 WHERE id = 1;\n  UPDATE contas SET saldo = saldo + 100 WHERE id = 2;\nCOMMIT; -- ou ROLLBACK caso haja erro",
+    "example": "BEGIN TRANSACTION;\nINSERT INTO categorias (nome, departamento) VALUES ('Drones', 'Robótica');\nCOMMIT;"
+  }
 ]

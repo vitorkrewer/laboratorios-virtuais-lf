@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
-    <title>SQL Playground - Laboratório Virtual</title>
+    <title>SQL Playground Pro - Laboratório Virtual de Banco de Dados | Learning Fly</title>
+    <meta name="description" content="Laboratório Virtual de Banco de Dados com motor WebAssembly (SQLite/MySQL/PostgreSQL), Time-Travel Snapshots, Datasets prontos e Desafios Práticos.">
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome para ícones -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
@@ -15,35 +16,72 @@
     <div id="welcome-overlay">
         <div id="welcome-modal">
             <img src="../assets/img/logo-learning-fly-full.png" alt="Logo LearningFly">
-            <h2>Bem-vindo ao SQL Playground!</h2>
-            <p>Seu laboratório virtual para praticar e dominar a linguagem SQL. Crie tabelas, insira dados e faça consultas em um ambiente seguro e interativo.</p>
-            <button id="start-btn">Começar a Praticar</button>
+            <h2>Bem-vindo ao SQL Playground Pro!</h2>
+            <p>Seu laboratório virtual seguro para dominar Banco de Dados e linguagem SQL. Pratique consultas, crie esquemas, teste comandos complexos e use pontos de restauração (Time-Travel) para experimentar <strong>sem medo de quebrar nada</strong>.</p>
+            <div class="welcome-actions">
+                <button id="start-btn" class="btn-primary">Começar a Praticar</button>
+            </div>
         </div>
     </div>
 
     <!-- Loader -->
     <div id="loader">
         <div class="spinner"></div>
-        <p>Carregando o motor SQL...</p>
+        <p id="loader-msg">Carregando motor SQL WebAssembly...</p>
     </div>
 
     <!-- Container Principal da Aplicação -->
     <div class="app-container">
+        
+        <!-- Header Principal -->
         <header class="app-header">
-            <div class="header-title">
-                <a href="../" class="hub-back-btn" title="Voltar ao Hub de Laboratórios"><i class="fa-solid fa-arrow-left"></i> Hub</a>
+            <div class="header-left">
+                <a href="../" class="hub-back-btn" title="Voltar ao Portal de Laboratórios"><i class="fa-solid fa-arrow-left"></i> <span>Hub</span></a>
                 <img src="../assets/img/logo-learning-fly-full.png" alt="Logo LearningFly" class="logo">
-                <h1>SQL Playground: Laboratório Virtual de Banco de Dados</h1>
+                <div class="app-title-group">
+                    <h1>SQL Playground Pro</h1>
+                    <span class="badge-tag">Sandbox Client-Side</span>
+                </div>
             </div>
+
+            <!-- Controles Globais do Topo -->
             <div class="header-controls">
-                <div class="db-selector">
-                    <label for="db-type">Dialeto SQL:</label>
-                    <select id="db-type" name="db-type">
-                        <option value="sqlite">SQLite</option>
-                        <option value="mysql">MySQL</option>
+                
+                <!-- Dialeto SQL -->
+                <div class="control-group">
+                    <label for="db-type"><i class="fa-solid fa-server text-icon"></i> Dialeto:</label>
+                    <select id="db-type" name="db-type" title="Selecione o dialeto SQL">
+                        <option value="sqlite">SQLite (Nativo WASM)</option>
+                        <option value="mysql">MySQL (Simulado)</option>
+                        <option value="postgres">PostgreSQL (Simulado)</option>
                     </select>
                 </div>
-                 <div class="theme-switcher">
+
+                <!-- Datasets Pré-carregados -->
+                <div class="control-group">
+                    <label for="dataset-select"><i class="fa-solid fa-database text-icon"></i> Dataset:</label>
+                    <select id="dataset-select" title="Carregar dataset de exemplo">
+                        <option value="ecommerce">🛒 E-Commerce & Vendas</option>
+                        <option value="universidade">🎓 Universidade & Alunos</option>
+                        <option value="empresa_rh">🏢 Empresa & RH</option>
+                        <option value="empty">🧹 Banco Vazio</option>
+                    </select>
+                </div>
+
+                <!-- Botões Rápidos no Header -->
+                <button id="open-timetravel-btn" class="header-action-btn" title="Gerenciar Pontos de Restauração no Tempo">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span class="btn-label">Time-Travel</span>
+                    <span id="snapshot-count-badge" class="badge-counter">1</span>
+                </button>
+
+                <button id="open-export-modal-btn" class="header-action-btn" title="Exportar ou Importar Banco">
+                    <i class="fa-solid fa-file-export"></i>
+                    <span class="btn-label">Dados</span>
+                </button>
+
+                <!-- Alternador de Tema -->
+                <div class="theme-switcher" title="Alternar tema Claro/Escuro">
                     <i class="fa-solid fa-sun theme-icon"></i>
                     <label class="switch">
                         <input type="checkbox" id="theme-toggle">
@@ -51,54 +89,209 @@
                     </label>
                     <i class="fa-solid fa-moon theme-icon"></i>
                 </div>
+
             </div>
         </header>
 
+        <!-- Layout Central com 3 Painéis -->
         <main class="main-content">
+            
             <!-- Barra Lateral Esquerda: Esquema do Banco -->
-            <aside class="sidebar">
-                <h2><i class="fa-solid fa-database"></i> Esquema do Banco</h2>
-                <div id="schema-tree">
-                    <p class="empty-state">Nenhuma tabela criada ainda.</p>
+            <aside class="sidebar sidebar-left" id="sidebar-schema">
+                <div class="sidebar-header">
+                    <h2><i class="fa-solid fa-database text-primary"></i> Esquema do Banco</h2>
+                    <button id="refresh-schema-btn" class="icon-btn" title="Recarregar Esquema"><i class="fa-solid fa-rotate"></i></button>
+                </div>
+                <div id="schema-tree" class="sidebar-scrollable custom-scrollbar">
+                    <p class="empty-state">Carregando esquema...</p>
                 </div>
             </aside>
 
             <!-- Painel Central: Editor e Resultados -->
             <div class="editor-panel">
+                
+                <!-- Barra de Ações do Editor -->
                 <div class="editor-controls">
-                    <button id="execute-btn"><i class="fa-solid fa-play"></i> Executar (Ctrl+Enter)</button>
-                    <button id="clear-btn"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                    <div class="left-actions">
+                        <button id="execute-btn" class="btn-primary" title="Executar consulta (Ctrl + Enter)">
+                            <i class="fa-solid fa-play"></i> Executar
+                        </button>
+                        <button id="explain-btn" class="btn-secondary" title="Analisar Plano de Execução (EXPLAIN QUERY PLAN)">
+                            <i class="fa-solid fa-bolt"></i> EXPLAIN
+                        </button>
+                        <button id="format-btn" class="btn-secondary" title="Formatar e Indentar SQL">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Formatar
+                        </button>
+                    </div>
+
+                    <div class="right-actions">
+                        <button id="snapshot-quick-btn" class="btn-ghost" title="Salvar Ponto de Restauração antes de rodar comandos arriscados">
+                            <i class="fa-solid fa-camera-retro"></i> Salvar Snapshot
+                        </button>
+                        <button id="clear-btn" class="btn-ghost" title="Limpar editor">
+                            <i class="fa-solid fa-eraser"></i> Limpar
+                        </button>
+                    </div>
                 </div>
-                <textarea id="sql-editor" spellcheck="false" placeholder="Digite seu comando SQL aqui..."></textarea>
+
+                <!-- Editor de Código SQL -->
+                <div class="editor-container">
+                    <textarea id="sql-editor" spellcheck="false" placeholder="-- Digite seu comando SQL aqui... (Ctrl + Enter para executar)&#10;SELECT * FROM produtos;"></textarea>
+                </div>
+
+                <!-- Painel Inferior de Saídas e Abas -->
                 <div class="output-panel">
                     <div class="tabs">
-                        <button class="tab-link active" data-tab="results-tab">Resultados</button>
-                        <button class="tab-link" data-tab="messages-tab">Mensagens</button>
-                    </div>
-                    <div id="results-tab" class="tab-content active">
-                        <div id="results-output" class="output-area">
-                            <p class="empty-state">Os resultados de suas consultas <code>SELECT</code> aparecerão aqui.</p>
+                        <button class="tab-link active" data-tab="results-tab">
+                            <i class="fa-solid fa-table"></i> Resultados <span id="results-count-badge" class="tab-count-badge hidden">0</span>
+                        </button>
+                        <button class="tab-link" data-tab="explain-tab">
+                            <i class="fa-solid fa-diagram-project"></i> Plano EXPLAIN
+                        </button>
+                        <button class="tab-link" data-tab="messages-tab">
+                            <i class="fa-solid fa-terminal"></i> Mensagens & Logs
+                        </button>
+                        <button class="tab-link" data-tab="history-tab">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Histórico de Queries
+                        </button>
+                        
+                        <div class="output-tab-actions">
+                            <button id="export-csv-btn" class="mini-btn hidden" title="Exportar resultado para CSV"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                            <button id="export-json-btn" class="mini-btn hidden" title="Exportar resultado para JSON"><i class="fa-solid fa-code"></i> JSON</button>
                         </div>
                     </div>
-                    <div id="messages-tab" class="tab-content">
+
+                    <!-- Conteúdo Aba 1: Resultados Tabulares -->
+                    <div id="results-tab" class="tab-content active custom-scrollbar">
+                        <div id="results-output" class="output-area">
+                            <p class="empty-state">Os resultados de suas consultas <code>SELECT</code> aparecerão aqui em formato tabular.</p>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo Aba 2: EXPLAIN Performance Plan -->
+                    <div id="explain-tab" class="tab-content custom-scrollbar">
+                        <div id="explain-output" class="output-area">
+                            <p class="empty-state">Clique no botão <strong>EXPLAIN</strong> acima para inspecionar a estratégia do otimizador de consultas (Varredura de Índices vs Full Table Scan).</p>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo Aba 3: Mensagens -->
+                    <div id="messages-tab" class="tab-content custom-scrollbar">
                         <div id="messages-output" class="output-area">
-                             <p class="empty-state">Mensagens de sucesso e erros serão exibidas aqui.</p>
+                            <p class="empty-state">Mensagens de execução, erros e confirmações de comandos aparecerão aqui.</p>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo Aba 4: Histórico -->
+                    <div id="history-tab" class="tab-content custom-scrollbar">
+                        <div id="history-output" class="output-area">
+                            <p class="empty-state">Nenhum comando executado nesta sessão ainda.</p>
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            <!-- Barra Lateral Direita: Ajuda de Sintaxe -->
-            <aside class="sidebar sidebar-right">
-                <h2><i class="fa-solid fa-book"></i> Ajuda de Sintaxe</h2>
-                <input type="search" id="syntax-search" placeholder="Buscar comando...">
-                <div id="syntax-list"></div>
+            <!-- Barra Lateral Direita: Ajuda de Sintaxe & Desafios -->
+            <aside class="sidebar sidebar-right" id="sidebar-help">
+                <div class="sidebar-tabs">
+                    <button class="sidebar-tab-btn active" data-side-tab="syntax-pane">
+                        <i class="fa-solid fa-book"></i> Sintaxe SQL
+                    </button>
+                    <button class="sidebar-tab-btn" data-side-tab="challenges-pane">
+                        <i class="fa-solid fa-trophy"></i> Desafios
+                    </button>
+                </div>
+
+                <!-- Painel de Sintaxe -->
+                <div id="syntax-pane" class="sidebar-tab-content active custom-scrollbar">
+                    <div class="search-box">
+                        <input type="search" id="syntax-search" placeholder="🔍 Filtrar comando (SELECT, JOIN...)...">
+                    </div>
+                    <div id="syntax-list"></div>
+                </div>
+
+                <!-- Painel de Desafios Práticos -->
+                <div id="challenges-pane" class="sidebar-tab-content custom-scrollbar">
+                    <div class="challenges-header">
+                        <p class="text-xs text-muted">Exercícios práticos com validação automática.</p>
+                    </div>
+                    <div id="challenges-list" class="space-y-3"></div>
+                </div>
             </aside>
+
         </main>
     </div>
 
+    <!-- =================================================================== -->
+    <!-- MODAL: TIME-TRAVEL / SNAPSHOTS NO TEMPO                             -->
+    <!-- =================================================================== -->
+    <div id="timetravel-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left text-primary"></i> Time-Travel: Pontos de Restauração</h3>
+                <button class="modal-close-btn" data-close="timetravel-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Experimente comandos DDL e DML arriscados (como <code>DELETE</code> ou <code>DROP TABLE</code>) sem medo. Restaure o banco para qualquer momento anterior com 1 clique.</p>
+                
+                <div class="create-snapshot-form">
+                    <input type="text" id="new-snapshot-name" placeholder="Nome do Snapshot (Ex: Antes de alterar preços)">
+                    <button id="create-snapshot-btn" class="btn-primary"><i class="fa-solid fa-plus"></i> Criar Snapshot</button>
+                </div>
+
+                <div class="snapshots-history">
+                    <h4>Histórico de Snapshots Salvos:</h4>
+                    <div id="snapshots-list" class="snapshots-list custom-scrollbar">
+                        <!-- Populated by script.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL: EXPORTAR / IMPORTAR DADOS                                    -->
+    <!-- =================================================================== -->
+    <div id="export-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-export text-primary"></i> Exportar / Importar Banco de Dados</h3>
+                <button class="modal-close-btn" data-close="export-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options-grid">
+                    
+                    <!-- Opção 1: Dump SQL -->
+                    <div class="export-box">
+                        <div class="export-icon"><i class="fa-solid fa-file-code"></i></div>
+                        <h4>Script Dump (.sql)</h4>
+                        <p>Baixe todas as tabelas e dados como comandos <code>CREATE</code> e <code>INSERT</code>.</p>
+                        <button id="download-sql-dump-btn" class="btn-secondary w-full">Baixar .sql</button>
+                    </div>
+
+                    <!-- Opção 2: Binário SQLite -->
+                    <div class="export-box">
+                        <div class="export-icon"><i class="fa-solid fa-database"></i></div>
+                        <h4>Banco SQLite (.sqlite)</h4>
+                        <p>Baixe o arquivo binário real para abrir no DBeaver ou DB Browser for SQLite.</p>
+                        <button id="download-sqlite-db-btn" class="btn-secondary w-full">Baixar .sqlite</button>
+                    </div>
+
+                </div>
+
+                <div class="import-section">
+                    <h4>Importar Script SQL ou Arquivo:</h4>
+                    <input type="file" id="import-sql-file" accept=".sql,.sqlite,.db" class="file-input">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bibliotecas Externas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
     <script src="script.js" type="module"></script>
 </body>
 </html>
+
 

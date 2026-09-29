@@ -1,102 +1,96 @@
-# SQL Playground - Laboratório Virtual de Banco de Dados
+# SQL Playground Pro - Laboratório Virtual de Banco de Dados 🗄️
 
-O **SQL Playground** é uma ferramenta interativa e segura projetada para estudantes e entusiastas de banco de dados praticarem a linguagem SQL diretamente no navegador.
+![Status](https://img.shields.io/badge/status-active-success.svg)
+![WebAssembly](https://img.shields.io/badge/engine-WebAssembly_sql.js-blue)
+![Dialetos](https://img.shields.io/badge/dialetos-SQLite_|_MySQL_|_PostgreSQL-orange)
+![Segurança](https://img.shields.io/badge/time--travel-Snapshots_Instantâneos-emerald)
 
-Desenvolvido para ser leve e eficiente, o projeto não requer instalação de servidores ou configurações complexas, permitindo que o usuário foque totalmente no aprendizado.
+O **SQL Playground Pro** é uma ferramenta educacional interativa projetada para que estudantes de graduação e tecnologia pratiquem Banco de Dados Relacional e comandos SQL diretamente no navegador, **com total liberdade e sem medo de quebrar nada**.
+
+A aplicação conta com motor **WebAssembly**, pontos de restauração no tempo (**Time-Travel Snapshots**), múltiplos dialetos (**SQLite, MySQL e PostgreSQL**), datasets pedagógicos prontos, visualizador de planos de execução (**EXPLAIN**), formatador de código e trilha de desafios práticos com validação.
 
 [🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/sql-playground/)
 
-## 🚀 Funcionalidades
+---
 
-- **Execução Client-Side**: Todo o processamento é feito no navegador utilizando WebAssembly (`sql.js`), garantindo privacidade e rapidez.
-- **Múltiplos Motores (Simulados)**:
-  - **SQLite**: Suporte nativo completo.
-  - **MySQL**: Camada de compatibilidade que traduz comandos comuns do MySQL (como `AUTO_INCREMENT`, `SHOW TABLES`, `DESCRIBE`) para o motor SQLite subjacente.
-- **Persistência de Dados**: O banco de dados é salvo automaticamente no `localStorage` do navegador, permitindo que você feche a aba e continue seu trabalho depois.
-- **Interface Intuitiva**:
-  - **Editor SQL**: Área de código com suporte a execução via atalho (`Ctrl + Enter`).
-  - **Visualizador de Esquema**: Barra lateral dinâmica que mostra suas tabelas, colunas e chaves primárias.
-  - **Resultados e Mensagens**: Abas separadas para visualização de dados (tabelas) e logs de execução.
-- **Ajuda Integrada**: Guia de sintaxe pesquisável com exemplos de comandos.
-- **Temas**: Suporte a modo Claro e Escuro.
+## 🚀 Novidades & Funcionalidades Avançadas
 
-## 🛠️ Tecnologias Utilizadas
+### 1. ⏱️ Time-Travel & Snapshots Instantâneos ("Sem Medo de Quebrar")
+- Crie **Pontos de Restauração** antes de testar comandos arriscados (como `DROP TABLE` ou `DELETE` sem `WHERE`).
+- Reverta o banco de dados inteiro para qualquer momento anterior com apenas 1 clique.
+- Snapshots automáticos a cada troca de dataset ou operação crítica.
 
-Este projeto foi construído utilizando tecnologias web modernas, sem dependências de frameworks pesados:
+### 2. 🗃️ 3 Dialetos SQL Suportados
+- **SQLite (Nativo WASM):** Processamento client-side completo com suporte a foreign keys e transações.
+- **MySQL (Emulação Avançada):** Suporte a `AUTO_INCREMENT`, `SHOW TABLES`, `DESCRIBE`, `LIMIT offset, count`, `NOW()`, `TRUNCATE`, etc.
+- **PostgreSQL (Emulado):** Suporte a `SERIAL PRIMARY KEY`, `ILIKE`, `RETURNING`, `VARCHAR`, etc.
 
-- **HTML5 & CSS3**: Para estrutura e estilização responsiva.
-- **JavaScript (ES Modules)**: Lógica da aplicação modularizada.
-- **[sql.js](https://github.com/sql-js/sql.js)**: Um porte do SQLite para WebAssembly, permitindo um banco de dados relacional completo no navegador.
-- **Font Awesome**: Para ícones da interface.
+### 3. 📦 Datasets Educacionais Pré-carregados
+Troque de contexto em 1 clique para praticar cenários do mundo real:
+- 🛒 **E-Commerce & Vendas:** `clientes`, `produtos`, `categorias`, `pedidos`, `itens_pedido`.
+- 🎓 **Universidade & Ensino:** `alunos`, `cursos`, `disciplinas`, `professores`, `matriculas`.
+- 🏢 **Empresa & RH:** `departamentos`, `cargos`, `funcionarios`, `projetos`, `alocacoes`.
+- 🧹 **Banco Vazio:** Para criar sua própria modelagem do zero.
+
+### 4. ⚡ EXPLAIN Query Plan (Análise de Desempenho)
+- Analise a estratégia do otimizador de consultas para identificar se o banco realiza **Full Table Scan (SCAN TABLE)** ou busca indexada otimizada (**SEARCH TABLE USING INDEX**).
+
+### 5. 🛠️ Produtividade & Ferramentas do Editor
+- **Formatador SQL (Prettify):** Indentação e padronização automática de palavras-chave.
+- **Histórico de Consultas:** Acesso rápido aos últimos 20 comandos executados na sessão.
+- **Exportação Flexível:**
+  - Baixar **Dump SQL (.sql)** completo com `CREATE TABLE` e `INSERT INTO`.
+  - Baixar o banco **Binário SQLite (.sqlite)** para abrir no DBeaver ou DB Browser.
+  - Exportar resultados de consultas para **CSV** ou **JSON**.
+
+### 6. 🏆 Trilha de Desafios Práticos
+- Exercícios categorizados por nível (*Iniciante*, *Intermediário*, *Avançado*) cobrindo `SELECT`, `WHERE`, `GROUP BY / HAVING`, `INNER JOIN` e `CREATE VIEW`, com dicas e consulta de referência.
+
+---
 
 ## 📂 Estrutura do Projeto
 
-A estrutura de arquivos é simples e direta, facilitando a localização e modificação de qualquer parte do código.
-
 ```bash
 sql-playground/
-├── 📄 index.html        # Arquivo principal da aplicação
-├── ⚙️ mysql_engine.js   # Motor de execução do MySQL
-├── 🎨 style.css         # Folha de estilos personalizada
-├── ⚙️ script.js         # Lógica principal e dados dos elementos
-├── ⚙️ sqlite_engine.js  # Motor de execução do SQLite
-└── 📖 README.md         # Esta documentação
+├── 📄 index.html          # Interface responsiva da aplicação
+├── ⚙️ sqlite_engine.js     # Motor nativo SQLite WebAssembly com snapshots
+├── ⚙️ mysql_engine.js      # Camada de emulação MySQL
+├── ⚙️ postgres_engine.js   # Camada de emulação PostgreSQL
+├── 📦 datasets.js         # Datasets educacionais e banco de desafios
+├── 📖 syntax.json         # Biblioteca categorizada de sintaxe SQL
+├── 🎨 style.css           # Folha de estilos responsiva com temas Claro/Escuro
+├── ⚙️ script.js           # Orquestrador da aplicação
+└── 📖 README.md           # Esta documentação
 ```
 
-## 📦 Como Usar
+---
 
-1. **Clone o repositório** ou baixe os arquivos.
-2. **Navegue até a pasta do projeto:**
+## 🏁 Como Executar Localmente
 
-    ```bash
-    cd sql-playground
-    ```
+1. Clone o repositório principal:
+   ```bash
+   git clone https://github.com/vitorkrewer/laboratorios-virtuais-lf.git
+   ```
+2. Navegue até a pasta do laboratório:
+   ```bash
+   cd laboratorios-virtuais-lf/sql-playground
+   ```
+3. Inicie um servidor HTTP local:
+   ```bash
+   python -m http.server
+   ```
+4. Abra `http://localhost:8000` no seu navegador.
 
-3. **Execute:**
+---
 
-    ```bash
-    python -m http.server
-    ```
+## 📄 Licença
 
-4. **Abra o arquivo `index.html` em qualquer navegador moderno.**
-   - *Nota: Em alguns navegadores, pode ser necessário servir os arquivos via um servidor HTTP local (como `Live Server` do VS Code ou `python -m http.server`) devido a restrições de segurança do módulo WASM e ES Modules.*
+[![Licença: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-### Exemplos de Comandos
+Este projeto está licenciado sob os termos da [Creative Commons Atribuição-NãoComercial 4.0 Internacional (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
 
-**Criar uma Tabela (Sintaxe MySQL Compatível):**
-
-```sql
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100),
-    email VARCHAR(100)
-);
-```
-
-**Inserir Dados:**
-
-```sql
-INSERT INTO usuarios (nome, email) VALUES ('Vitor', 'vitor@exemplo.com');
-INSERT INTO usuarios (nome, email) VALUES ('Ana', 'ana@exemplo.com');
-```
-
-**Consultar Dados:**
-
-```sql
-SELECT * FROM usuarios;
-```
-
-## ⚠️ Limitações do Motor MySQL
-
-O modo **MySQL** é uma simulação educacional. Ele funciona traduzindo comandos MySQL para a sintaxe do SQLite em tempo de execução.
-
-- Comandos básicos (`CREATE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`) funcionam perfeitamente.
-- Comandos de metadados (`SHOW TABLES`, `DESCRIBE table`) são emulados.
-- Funções avançadas ou específicas do MySQL (como Stored Procedures, Triggers complexas ou tipos de dados exóticos) podem não funcionar se não tiverem um equivalente direto no SQLite.
-
-## 🤝 Contribuição
-
-Sinta-se à vontade para abrir **Issues** ou enviar **Pull Requests** para melhorar a ferramenta, adicionar novos comandos à tradução do MySQL ou melhorar a interface.
+Você pode usá-lo, modificá-lo e compartilhá-lo **para fins não comerciais**, desde que com a devida atribuição a **Vitor Krewer**.  
+Para qualquer uso comercial, entre em contato diretamente.
 
 ---
 

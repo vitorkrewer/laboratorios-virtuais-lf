@@ -1,7 +1,7 @@
 /**
- * SQLite Engine - SQL Playground
- * Motor Client-Side WebAssembly baseado no sql.js
- * Suporte a Snapshots no Tempo (Time-Travel), EXPLAIN QUERY PLAN, Exportação e Dump SQL.
+ * PostgreSQL Engine (Emulação Avançada) - SQL Playground
+ * Camada de compatibilidade para sintaxe e comandos do PostgreSQL sobre WebAssembly.
+ * Suporta SERIAL PRIMARY KEY, ILIKE, RETURNING, VARCHAR, Snapshots e Dump.
  */
 
 const icons = {
@@ -13,10 +13,40 @@ const icons = {
 
 let SQLInstance = null;
 let db = null;
-let snapshots = []; // [{ id, name, timestamp, data }]
+let snapshots = [];
+
+function translatePostgresQuery(query) {
+    let translated = query.trim();
+
+    // \\dt or \d -> SELECT
+    if (translated.match(/^\\d[t+]?\s*;?$/i)) {
+        return "SELECT name AS 'tablename', 'table' AS 'schemaname' FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';";
+    }
+
+    // SERIAL PRIMARY KEY -> INTEGER PRIMARY KEY AUTOINCREMENT
+    translated = translated.replace(/\bSERIAL\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
+    translated = translated.replace(/\bBIGSERIAL\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
+    translated = translated.replace(/\bSERIAL\b/ig, 'INTEGER');
+    translated = translated.replace(/\bBIGSERIAL\b/ig, 'INTEGER');
+
+    // ILIKE -> LIKE (SQLite LIKE é case-insensitive por padrão)
+    translated = translated.replace(/\bILIKE\b/ig, 'LIKE');
+
+    // VARCHAR, TEXT, BOOLEAN
+    translated = translated.replace(/\bVARCHAR\s*\(\d+\)/ig, 'TEXT');
+    translated = translated.replace(/\bBOOLEAN\b/ig, 'INTEGER');
+    translated = translated.replace(/\bTRUE\b/ig, '1');
+    translated = translated.replace(/\bFALSE\b/ig, '0');
+    translated = translated.replace(/\bNOW\(\)/ig, "datetime('now', 'localtime')");
+
+    // RETURNING id (simplificado)
+    translated = translated.replace(/\bRETURNING\s+[\w\s,*]+\s*;?$/i, ';');
+
+    return translated;
+}
 
 export const engine = {
-    dialectName: "SQLite",
+    dialectName: "PostgreSQL (Simulado)",
 
     async init() {
         if (!SQLInstance) {
@@ -25,48 +55,46 @@ export const engine = {
             });
         }
 
-        const savedDb = localStorage.getItem('sqlite_db_data_v2');
+        const savedDb = localStorage.getItem('postgres_db_data_v2');
         if (savedDb) {
             try {
                 const dbArray = savedDb.split(',').map(Number);
                 db = new SQLInstance.Database(new Uint8Array(dbArray));
             } catch (e) {
-                console.warn("Criando novo banco SQLite:", e);
                 db = new SQLInstance.Database();
             }
         } else {
             db = new SQLInstance.Database();
         }
 
-        // Habilitar Foreign Keys por padrão no SQLite
         try {
             db.exec("PRAGMA foreign_keys = ON;");
         } catch (e) {}
 
         this.loadSnapshots();
-        // Criar snapshot inicial se não houver
         if (snapshots.length === 0) {
             this.createSnapshot("Ponto Inicial (Auto)");
         }
     },
 
     execute(query) {
-        if (!db) throw new Error("Banco de dados SQLite não inicializado.");
-        const results = db.exec(query);
+        if (!db) throw new Error("Banco de dados PostgreSQL não inicializado.");
+        const translated = translatePostgresQuery(query);
+        const results = db.exec(translated);
         this.save();
         return results;
     },
 
     explain(query) {
         if (!db) throw new Error("Banco de dados não inicializado.");
-        const cleanQuery = query.replace(/;\s*$/, '');
-        return db.exec(`EXPLAIN QUERY PLAN ${cleanQuery};`);
+        const translated = translatePostgresQuery(query).replace(/;\s*$/, '');
+        return db.exec(`EXPLAIN QUERY PLAN ${translated};`);
     },
 
     save() {
         if (db) {
             const data = db.export();
-            localStorage.setItem('sqlite_db_data_v2', data.join(','));
+            localStorage.setItem('postgres_db_data_v2', data.join(','));
         }
     },
 
@@ -80,14 +108,12 @@ export const engine = {
 
     loadDataset(sqlScript) {
         this.resetDatabase();
-        db.exec(sqlScript);
+        const translated = translatePostgresQuery(sqlScript);
+        db.exec(translated);
         this.save();
-        this.createSnapshot("Carga de Dataset");
+        this.createSnapshot("Carga de Dataset (PostgreSQL)");
     },
 
-    // ========================================================================
-    // TIME-TRAVEL & SNAPSHOTS (SEM MEDO DE QUEBRAR NADA)
-    // ========================================================================
     createSnapshot(name = "Ponto de Restauração") {
         if (!db) return null;
         const snapshot = {
@@ -97,7 +123,6 @@ export const engine = {
             data: db.export()
         };
         snapshots.unshift(snapshot);
-        // Limitar a 10 snapshots recentes
         if (snapshots.length > 10) snapshots.pop();
         this.saveSnapshots();
         return snapshot;
@@ -123,15 +148,13 @@ export const engine = {
                 timestamp: s.timestamp,
                 data: Array.from(s.data).join(',')
             }));
-            localStorage.setItem('sqlite_snapshots_v2', JSON.stringify(simplified));
-        } catch (e) {
-            console.warn("Aviso ao salvar snapshots:", e);
-        }
+            localStorage.setItem('postgres_snapshots_v2', JSON.stringify(simplified));
+        } catch (e) {}
     },
 
     loadSnapshots() {
         try {
-            const raw = localStorage.getItem('sqlite_snapshots_v2');
+            const raw = localStorage.getItem('postgres_snapshots_v2');
             if (raw) {
                 const parsed = JSON.parse(raw);
                 snapshots = parsed.map(s => ({
@@ -146,9 +169,6 @@ export const engine = {
         }
     },
 
-    // ========================================================================
-    // EXPORTAÇÃO (DUMP SQL & BINÁRIO .SQLITE)
-    // ========================================================================
     exportBinary() {
         if (!db) return null;
         return db.export();
@@ -156,9 +176,8 @@ export const engine = {
 
     exportSqlDump() {
         if (!db) return '';
-        let dump = `-- Dump gerado pelo SQL Playground (Learning Fly)\n-- Data: ${new Date().toLocaleString('pt-BR')}\n\n`;
+        let dump = `-- PostgreSQL Dump simulado (Learning Fly SQL Playground)\n-- Gerado em: ${new Date().toLocaleString('pt-BR')}\n\n`;
         
-        // 1. Tabelas
         const tablesResult = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
         if (tablesResult.length > 0 && tablesResult[0].values) {
             tablesResult[0].values.forEach(row => {
@@ -166,7 +185,6 @@ export const engine = {
                 const createSql = row[1];
                 dump += `${createSql};\n\n`;
 
-                // Exportar dados da tabela
                 try {
                     const dataResult = db.exec(`SELECT * FROM "${tableName}";`);
                     if (dataResult.length > 0 && dataResult[0].values.length > 0) {
@@ -184,21 +202,9 @@ export const engine = {
                 } catch (e) {}
             });
         }
-
-        // 2. Views
-        const viewsResult = db.exec("SELECT name, sql FROM sqlite_master WHERE type='view';");
-        if (viewsResult.length > 0 && viewsResult[0].values) {
-            viewsResult[0].values.forEach(row => {
-                dump += `${row[1]};\n\n`;
-            });
-        }
-
         return dump;
     },
 
-    // ========================================================================
-    // ESQUEMA INTROSPECTIVO DETALHADO (Contadores de Linhas & Colunas)
-    // ========================================================================
     getSchemaHTML() {
         if (!db) return '<p class="empty-state">Banco de dados não carregado.</p>';
         
@@ -212,7 +218,7 @@ export const engine = {
             return `
                 <div class="empty-state p-4 text-center">
                     <i class="fa-solid fa-folder-open text-2xl text-gray-400 mb-2 block"></i>
-                    <p class="text-xs text-gray-400">Nenhuma tabela ou view criada ainda.</p>
+                    <p class="text-xs text-gray-400">Nenhuma tabela criada no PostgreSQL.</p>
                     <p class="text-[11px] text-cyan-400 mt-1 cursor-pointer" onclick="window.loadDefaultDataset()">👉 Clique para carregar um dataset</p>
                 </div>
             `;
@@ -220,9 +226,8 @@ export const engine = {
 
         let html = '';
 
-        // Renderizar Tabelas
         if (hasTables) {
-            html += '<div class="schema-section-title">TABELAS</div>';
+            html += '<div class="schema-section-title">TABELAS (public)</div>';
             tablesResult[0].values.forEach(row => {
                 const tableName = row[0];
                 let rowCount = 0;
@@ -252,7 +257,7 @@ export const engine = {
                                 <div class="column-item">
                                     ${col[5] ? icons.pk : icons.column}
                                     <span class="font-mono">${col[1]}</span>
-                                    <span class="column-details">${col[2] || 'ANY'}${col[3] ? ' • NOT NULL' : ''}</span>
+                                    <span class="column-details">${col[2] || 'VARCHAR'}${col[3] ? ' • NOT NULL' : ''}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -261,9 +266,8 @@ export const engine = {
             });
         }
 
-        // Renderizar Views
         if (hasViews) {
-            html += '<div class="schema-section-title mt-3">VIEWS VIRTUAIS</div>';
+            html += '<div class="schema-section-title mt-3">VIEWS</div>';
             viewsResult[0].values.forEach(row => {
                 const viewName = row[0];
                 html += `
@@ -282,4 +286,3 @@ export const engine = {
         return html;
     }
 };
-

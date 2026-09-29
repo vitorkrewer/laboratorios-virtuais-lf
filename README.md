@@ -17,14 +17,14 @@ O repositório conta com um **Portal Institucional / Hub de Navegação** hosped
 
 ## 📚 Projetos e Funcionalidades
 
-### 1. 🗄️ SQL Playground
+### 1. 🗄️ SQL Playground Pro
 
 **Diretório:** `sql-playground`
 
-Um laboratório interativo para prática de Banco de Dados.
+Um laboratório interativo avançado para prática de Banco de Dados Relacional e comandos SQL.
 
-- **Funcionalidades:** Execução de comandos SQL em tempo real, visualização de tabelas e esquemas, suporte a sintaxe SQLite e simulação de MySQL.
-- **Destaque:** Totalmente client-side (WebAssembly com `sql.js`), garantindo privacidade e rapidez.
+- **Funcionalidades:** Execução em tempo real via WebAssembly com suporte a 3 dialetos (SQLite, MySQL e PostgreSQL), pontos de restauração no tempo (**Time-Travel Snapshots**), datasets pré-carregados (E-Commerce, Universidade, RH), visualizador de plano de execução (**EXPLAIN Query Plan**), formatador de código, histórico de queries e trilha de desafios práticos com validação.
+- **Destaque:** Permite aos estudantes testar qualquer comando DDL e DML (como `DROP TABLE` e `DELETE`) com total segurança, revertendo o estado do banco instantaneamente com 1 clique.
 
 ### 2. 🧪 Tabela Periódica Interativa & Construtor Atômico
 
