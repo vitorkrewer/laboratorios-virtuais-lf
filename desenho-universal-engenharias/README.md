@@ -2,7 +2,7 @@
 
 Bem-vindo ao repositório do **Laboratório Virtual de Desenho Universal para Engenharias**, um hub educacional interativo que une a precisão técnica da engenharia com os princípios da inclusão e acessibilidade. Este projeto faz parte da iniciativa **LearningFly**, focado em transformar conceitos complexos em experiências visuais e práticas.
 
-[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/desenho-universal-engenharias/)
+[🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/desenho-universal-engenharias/)
 
 ## 🎯 Objetivo
 

@@ -1,12 +1,8 @@
 # Laboratório de Química Interativo 🧪
 
-![GitHub repo size](https://img.shields.io/github/repo-size/vitor-krewer/tabela-periodica-interativa?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/vitor-krewer/tabela-periodica-interativa?style=for-the-badge)
-![GitHub license](https://img.shields.io/github/license/vitor-krewer/tabela-periodica-interativa?style=for-the-badge)
-
 Um laboratório virtual de química de código aberto, construído com HTML, CSS e JavaScript puro, para explorar a tabela periódica e a estrutura atômica de forma interativa e visualmente atraente.
 
-[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/tabela-periodica-interativa/)
+[🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/tabela-periodica-interativa/)
 
 ---
 
@@ -60,7 +56,7 @@ Nenhuma instalação complexa ou dependências são necessárias. Basta seguir o
 1. **Clone o repositório:**
 
     ```bash
-    git clone https://github.com/vitor-krewer/tabela-periodica-interativa.git
+    git clone https://github.com/vitorkrewer/laboratorios-virtuais-lf.git
     ```
 
 2. **Navegue até o diretório do projeto:**

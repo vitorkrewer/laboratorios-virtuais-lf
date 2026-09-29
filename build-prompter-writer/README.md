@@ -6,7 +6,7 @@ Ao invés de gastar tempo escrevendo prompts do zero, o usuário preenche um for
 
 ![Status do Projeto](https://img.shields.io/badge/Status-Ativo-success)
 
-[🔗 Acessar Ferramenta Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/build-prompter-writer/)
+[🔗 Acessar Ferramenta Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/build-prompter-writer/)
 
 ## 🚀 Funcionalidades Principais
 

@@ -10,7 +10,7 @@ Cada projeto é independente e utiliza tecnologias web modernas para oferecer ex
 
 O repositório conta com um **Portal Institucional / Hub de Navegação** hospedado na raiz (`/index.html`), permitindo navegar entre todos os laboratórios com busca em tempo real e filtros por área de conhecimento.
 
-- **URL de Produção:** `https://vitor-v-costa.github.io/laboratorios-virtuais-lf/`
+- **URL de Produção:** `https://vitorkrewer.github.io/laboratorios-virtuais-lf/`
 - **Execução Local:** Basta abrir o arquivo `index.html` da raiz no navegador ou rodar um servidor HTTP local.
 
 ---

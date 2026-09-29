@@ -4,7 +4,7 @@ O **Laboratório de Química Virtual** é um ambiente interativo e gamificado on
 
 A ferramenta foi projetada para tornar o aprendizado de estequiometria e ligações químicas mais visual e intuitivo, permitindo que os alunos "brinquem" com os átomos em um espaço seguro.
 
-[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/build-quimical-elements/)
+[🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/build-quimical-elements/)
 
 ## 🚀 Funcionalidades Principais
 
