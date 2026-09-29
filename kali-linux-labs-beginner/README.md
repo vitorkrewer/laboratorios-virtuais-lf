@@ -12,7 +12,7 @@
 
 Bem-vindo ao repositório do **Laboratório Virtual de Kali Linux**, uma interface interativa projetada para guiar iniciantes através dos fundamentos do sistema operacional favorito dos profissionais de segurança ofensiva. Este projeto faz parte da iniciativa **LearningFly**, focada em criar experiências educacionais práticas e imersivas.
 
-[Preview do Projeto](https://learningfly.b-cdn.net/labs/kali-linux-labs-beginner/index.html)
+[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/kali-linux-labs-beginner/)
 
 ## 🎯 Objetivo
 

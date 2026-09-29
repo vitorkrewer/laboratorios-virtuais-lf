@@ -4,7 +4,7 @@ Este projeto é uma ferramenta educacional interativa projetada para guiar estud
 
 A aplicação funciona como um **workshop digital**, onde o usuário aprende fazendo, preenchendo atividades práticas em cada etapa e exportando um relatório completo do seu projeto ao final.
 
-[Preview do Projeto](https://learningfly.b-cdn.net/labs/design-thinking-build-projects/index.html)
+[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/design-thinking-build-projects/)
 
 ## 🎯 Funcionalidades e Fases
 

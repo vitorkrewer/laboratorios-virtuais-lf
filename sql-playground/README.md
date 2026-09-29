@@ -4,7 +4,7 @@ O **SQL Playground** é uma ferramenta interativa e segura projetada para estuda
 
 Desenvolvido para ser leve e eficiente, o projeto não requer instalação de servidores ou configurações complexas, permitindo que o usuário foque totalmente no aprendizado.
 
-[Preview do Projeto](https://learningfly.b-cdn.net/labs/sql-playground/index.html)
+[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/sql-playground/)
 
 ## 🚀 Funcionalidades
 

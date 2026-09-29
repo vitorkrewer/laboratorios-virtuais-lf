@@ -6,7 +6,7 @@
 
 Um laboratório virtual de química de código aberto, construído com HTML, CSS e JavaScript puro, para explorar a tabela periódica e a estrutura atômica de forma interativa e visualmente atraente.
 
-[Preview do Projeto](https://learningfly.b-cdn.net/labs/tabela-periodica-interativa/index.html)
+[🔗 Acessar Laboratório Online](https://vitor-v-costa.github.io/laboratorios-virtuais-lf/tabela-periodica-interativa/)
 
 ---
 
