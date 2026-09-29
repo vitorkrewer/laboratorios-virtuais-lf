@@ -282,6 +282,52 @@ Utilize a seguinte hierarquia:
 # Título do Capítulo
 ## Seção Principal
 ### Subseção`
+    },
+
+    template5: {
+        name: 'Artigo Científico',
+        description: 'Template especializado para redação, estruturação e submissão de artigos científicos com rigor metodológico e normas acadêmicas.',
+        template: `1. Persona e Atuação:
+Assuma a persona de um Pesquisador Científico Sênior, Parecerista de Periódicos Qualis A e Revisor Acadêmico na área de [areaConhecimento]. Sua missão é orientar e elaborar o conteúdo completo de um artigo científico do tipo [tipoArtigoCientifico], garantindo alto rigor metodológico, clareza conceitual e adesão às normas [normasCitacao].
+
+2. Identificação e Escopo do Artigo:
+* Área do Conhecimento: [areaConhecimento]
+* Título/Tema do Artigo: [nomeUnidade]
+* Tipo de Artigo: [tipoArtigoCientifico]
+* Idioma de Publicação: [idiomaArtigo]
+* Periódico/Evento Alvo: [periodicoAlvo]
+
+3. Problema de Pesquisa e Objetivos:
+* Pergunta/Problema de Pesquisa: [problemaPesquisa]
+* Hipótese / Tese Central: [hipotesePesquisa]
+* Objetivo Geral e Específicos: [objetivosAprendizagem]
+
+4. Metodologia e Abordagem:
+* Abordagem Metodológica: [metodologiaArtigo]
+* Procedimentos de Coleta e Análise de Dados: [conteudoProgramatico]
+
+5. Fundamentação Teórica e Referencial Bibliográfico:
+* Fontes e Qualidade das Referências: O artigo deve fundamentar suas premissas em literatura acadêmica de alto impacto (Scopus, Web of Science, SciELO, PubMed e Google Scholar).
+* Critérios de Seleção: Priorize artigos publicados nos últimos 5 anos nos principais periódicos da área, além de autores clássicos do referencial teórico.
+* Normas de Citação: Aplicar rigorosamente as normas [normasCitacao] para citações diretas, indiretas e lista de referências final.
+
+6. Estrutura Padrão do Artigo:
+O texto deve ser desenvolvido seguindo a estrutura lógica acadêmica:
+* Resumo / Abstract: Síntese estruturada (Contexto, Objetivo, Metodologia, Resultados e Conclusão) com 3 a 5 Palavras-chave / Keywords.
+* Introdução: Contextualização, justificativa, problema de pesquisa, objetivos e relevância acadêmica/social.
+* Fundamentação Teórica / Revisão de Literatura: Estado da arte e diálogo crítico entre autores da área.
+* Metodologia: Descrição detalhada e replicável dos procedimentos metodológicos aplicados.
+* Resultados e Discussão: Apresentação dos achados, tabelas/quadros analíticos e discussão crítica confrontando com a literatura.
+* Considerações Finais / Conclusão: Resposta à pergunta de pesquisa, limitações do estudo e sugestões para trabalhos futuros.
+* Referências: Lista completa formatada segundo [normasCitacao].
+
+7. Linguagem e Tom:
+[LINGUAGEM_TOM]
+
+8. Diretrizes de Rigor e Escrita Acadêmica:
+* Mantenha tom impessoal, objetivo, fundamentado e isento de impressões de senso comum.
+* Evite plágio e paráfrases imprecisas — toda afirmação teórica deve conter a devida citação segundo [normasCitacao].
+* Argumentação coerente, encadeamento lógico entre parágrafos e rigor na terminologia científica.`
     }
 };
 
@@ -300,6 +346,8 @@ function changeTemplate() {
         document.body.classList.add('template-concursos');
     } else if (currentTemplate === 'template4') {
         document.body.classList.add('template-livro-superior');
+    } else if (currentTemplate === 'template5') {
+        document.body.classList.add('template-artigo');
     }
     
     // Atualizar descrição do template
@@ -353,20 +401,20 @@ function updateFichamentoFields() {
 // Função para coletar dados do formulário
 function getFormData() {
     const data = {
-        // Campos comuns
+        // Campos comuns / didático
         nomeDisciplina: document.getElementById('nomeDisciplina')?.value || '[Nome da Disciplina]',
         tipoMaterial: document.getElementById('tipoMaterial')?.value || '[Tipo de Material]',
-        nomeUnidade: document.getElementById('nomeUnidade')?.value || '[Nome da Unidade/Capítulo]',
+        nomeUnidade: document.getElementById('nomeUnidade')?.value || document.getElementById('tituloObraFichamento')?.value || document.getElementById('tituloArtigo')?.value || '[Nome da Unidade/Capítulo/Obra]',
         focoMaterial: document.getElementById('focoMaterial')?.value || '[Foco do material]',
         tipoPublico: document.getElementById('tipoPublico')?.value || '[Tipo do Público]',
         nivelInstrucao: document.getElementById('nivelInstrucao')?.value || '[Nível de Instrução]',
         objetivosAprendizagem: document.getElementById('objetivosAprendizagem')?.value || '[Objetivos de Aprendizagem]',
         conteudoProgramatico: document.getElementById('conteudoProgramatico')?.value || '[Conteúdo Programático]',
         linguagemTom: document.getElementById('linguagemTom')?.value || 'academica',
-
         
         // Campos de fichamento
         tipoMaterialFichamento: document.getElementById('tipoMaterialFichamento')?.value || '[Tipo de Material]',
+        tituloObraFichamento: document.getElementById('tituloObraFichamento')?.value || '[Título do Texto / Obra]',
         autorLivro: document.getElementById('autorLivro')?.value || '[Autor]',
         editoraLivro: document.getElementById('editoraLivro')?.value || '[Editora]',
         autorArtigo: document.getElementById('autorArtigo')?.value || '[Autor]',
@@ -387,6 +435,20 @@ function getFormData() {
         relevanciaImediata: document.getElementById('relevanciaImediata')?.value || '[Relevância Imediata]',
         conexaoExperiencias: document.getElementById('conexaoExperiencias')?.value || '[Conexão com Experiências Prévias]',
         orientacaoProblemas: document.getElementById('orientacaoProblemas')?.value || '[Orientação para Problemas]',
+
+        // Campos do Artigo Científico (Template 5)
+        tituloArtigo: document.getElementById('tituloArtigo')?.value || '[Título/Tema do Artigo]',
+        areaConhecimento: document.getElementById('areaConhecimento')?.value || '[Área de Conhecimento]',
+        tipoArtigoCientifico: document.getElementById('tipoArtigoCientifico')?.value || '[Tipo de Artigo]',
+        normasCitacao: document.getElementById('normasCitacao')?.value || '[Normas de Citação]',
+        idiomaArtigo: document.getElementById('idiomaArtigo')?.value || '[Idioma de Publicação]',
+        periodicoAlvo: document.getElementById('periodicoAlvo')?.value || '[Periódico/Evento Alvo]',
+        problemaPesquisa: document.getElementById('problemaPesquisa')?.value || '[Problema de Pesquisa / Problematização]',
+        justificativaPesquisa: document.getElementById('justificativaPesquisa')?.value || '[Justificativa e Relevância]',
+        objetivosArtigo: document.getElementById('objetivosArtigo')?.value || '[Objetivos da Pesquisa]',
+        metodologiaArtigo: document.getElementById('metodologiaArtigo')?.value || '[Abordagem Metodológica]',
+        hipotesePesquisa: document.getElementById('hipotesePesquisa')?.value || '[Hipótese/Tese Central]',
+        linguagemTomArtigo: document.getElementById('linguagemTomArtigo')?.value || 'academico_rigoroso',
 
         // Checkboxes
         objetivosCapitulo: document.getElementById('objetivosCapitulo')?.checked || false,
@@ -412,6 +474,18 @@ function generateLinguagemTom(option) {
         return `
 * Estilo de Linguagem: Casual, estabelecendo uma linguagem de empatia com o interlocutor. Utilizar exemplos para tornar conteúdos complexos mais leves e descontraídos, mantendo a clareza e objetividade de um texto didático.
 * Tom: Neutro, imparcial e preciso. Explicar jargões técnicos na primeira vez que aparecerem, utilizando analogias levando em consideração que o aluno é leigo.`;
+    }
+}
+
+function generateLinguagemTomArtigo(option) {
+    if (option === 'academico_fluido') {
+        return `* Estilo de Redação: Acadêmico fluido, claro, direto e acessível, mantendo o rigor técnico sem sobrecarregar com verborragia.
+* Tom: Objetivo, neutro, impessoal e analítico.
+* Clareza: Conceitos técnicos e termos específicos devem ser explicados de forma precisa em sua primeira aparição.`;
+    } else {
+        return `* Estilo de Redação: Formal acadêmico estrito, alinhado aos padrões dos principais periódicos científicos de alto impacto.
+* Tom: Impessoal, analítico, fundamentado em evidências e totalmente isento de juízos de valor ou opiniões não sustentadas por dados/literatura.
+* Rigor Científico: Uso de terminologia precisa da área, com encadeamento lógico rigoroso entre premissas, fundamentação teórica e conclusões.`;
     }
 }
 
@@ -522,6 +596,20 @@ function generatePrompt() {
         prompt = prompt.replace(/\[relevanciaImediata\]/g, data.relevanciaImediata);
         prompt = prompt.replace(/\[conexaoExperiencias\]/g, data.conexaoExperiencias);
         prompt = prompt.replace(/\[orientacaoProblemas\]/g, data.orientacaoProblemas);
+        prompt = prompt.replace(/\[LINGUAGEM_TOM\]/g, linguagemTomText);
+    } else if (currentTemplate === 'template5') {
+        const linguagemTomText = generateLinguagemTomArtigo(data.linguagemTomArtigo);
+        prompt = prompt.replace(/\[tituloArtigo\]/g, data.tituloArtigo);
+        prompt = prompt.replace(/\[areaConhecimento\]/g, data.areaConhecimento);
+        prompt = prompt.replace(/\[tipoArtigoCientifico\]/g, data.tipoArtigoCientifico);
+        prompt = prompt.replace(/\[normasCitacao\]/g, data.normasCitacao);
+        prompt = prompt.replace(/\[idiomaArtigo\]/g, data.idiomaArtigo);
+        prompt = prompt.replace(/\[periodicoAlvo\]/g, data.periodicoAlvo);
+        prompt = prompt.replace(/\[problemaPesquisa\]/g, data.problemaPesquisa);
+        prompt = prompt.replace(/\[justificativaPesquisa\]/g, data.justificativaPesquisa);
+        prompt = prompt.replace(/\[objetivosArtigo\]/g, data.objetivosArtigo);
+        prompt = prompt.replace(/\[metodologiaArtigo\]/g, data.metodologiaArtigo);
+        prompt = prompt.replace(/\[hipotesePesquisa\]/g, data.hipotesePesquisa);
         prompt = prompt.replace(/\[LINGUAGEM_TOM\]/g, linguagemTomText);
     }
     

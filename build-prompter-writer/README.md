@@ -18,6 +18,7 @@ A ferramenta oferece 4 templates distintos, adaptando o formulário e a estrutur
 * **🔖 Fichamento Acadêmico:** Especializado para resumir e analisar textos (livros, artigos, teses). Gera um prompt que instrui a IA a fazer um fichamento crítico e estruturado.
 * **🏆 Concursos Públicos:** Focado em materiais preparatórios. Inclui instruções para gerar "bizus", questões comentadas, mapas mentais e focar na aprovação.
 * **🎓 Livro Didático (Nível Superior):** O template mais robusto. Foca em rigor acadêmico, citações ABNT estritas, andragogia (ensino para adultos) e uso de fontes primárias.
+* **🔬 Artigo Científico:** Focado na redação e estruturação acadêmica para artigos científicos (originais, revisões sistemáticas, estudos de caso e ensaios teoricos), considerando normas de citação (ABNT, APA, IEEE, Vancouver), problema de pesquisa, hipótese e metodologia.
 
 ### 2. Interface Dinâmica e Intuitiva
 

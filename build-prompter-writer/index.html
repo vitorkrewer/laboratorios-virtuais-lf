@@ -29,6 +29,7 @@
                         <option value="template2">Fichamento Acadêmico - Para textos</option>
                         <option value="template3">Concursos Públicos - Foco em apostilas</option>
                         <option value="template4">Livro Didático - Nível Superior</option>
+                        <option value="template5">Artigo Científico - Produção Acadêmica</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -43,7 +44,7 @@
         <div class="row">
             <div class="col-lg-8" id="formContainer">
                 
-                <div class="card mb-4">
+                <div class="card mb-4 didatico-section">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">
                             <i class="bi bi-bookmark"></i> 1. Título/Identificação do Projeto
@@ -55,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-4">
+                <div class="card mb-4 didatico-section">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">
                             <i class="bi bi-target"></i> 2. Objetivo Principal
@@ -82,7 +83,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-4">
+                <div class="card mb-4 didatico-section">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">
                             <i class="bi bi-people"></i> 3. Público-Alvo
@@ -99,7 +100,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card mb-4">
+                <div class="card mb-4 didatico-section">
                   <div class="card-body">
                     <h4 class="card-title text-primary mb-3">
                       <i class="bi bi-translate"></i> 9. Linguagem e Tom
@@ -113,7 +114,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="card mb-4">
+                <div class="card mb-4 didatico-section">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">
                             <i class="bi bi-bullseye"></i> 4. Objetivos de Aprendizagem
@@ -125,7 +126,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-4">
+                <div class="card mb-4 didatico-section concurso-section">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">
                             <i class="bi bi-list-ul"></i> 5. Conteúdo Programático
@@ -153,6 +154,115 @@
                         <div class="mb-3">
                             <label for="orientacaoProblemas" class="form-label">Orientação para Problemas</label>
                             <input type="text" class="form-control" id="orientacaoProblemas" placeholder="Ex: Foco na resolução de questões de concursos da área.">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 artigo-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-journal-bookmark"></i> 1. Identificação do Artigo
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="tituloArtigo" class="form-label">Título ou Tema do Artigo</label>
+                                <input type="text" class="form-control" id="tituloArtigo" placeholder="Ex: O Impacto da Inteligência Artificial Generativa no Ensino Superior">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="areaConhecimento" class="form-label">Área de Conhecimento / Subárea</label>
+                                <input type="text" class="form-control" id="areaConhecimento" placeholder="Ex: Ciência da Computação / Tecnologia Educacional">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tipoArtigoCientifico" class="form-label">Tipo de Artigo</label>
+                                <select class="form-select" id="tipoArtigoCientifico">
+                                    <option value="">Selecione...</option>
+                                    <option value="Artigo Original / Empírico">Artigo Original / Empírico</option>
+                                    <option value="Revisão Sistemática / Integrativa">Revisão Sistemática / Integrativa</option>
+                                    <option value="Estudo de Caso">Estudo de Caso</option>
+                                    <option value="Ensaio Teórico">Ensaio Teórico</option>
+                                    <option value="Comunicação Curta / Short Paper">Comunicação Curta / Short Paper</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="normasCitacao" class="form-label">Normas de Citação e Formatação</label>
+                                <select class="form-select" id="normasCitacao">
+                                    <option value="ABNT (NBR 10520 e 6023)">ABNT (NBR 10520 e 6023)</option>
+                                    <option value="APA 7ª ed.">APA 7ª ed.</option>
+                                    <option value="IEEE">IEEE</option>
+                                    <option value="Vancouver">Vancouver</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="idiomaArtigo" class="form-label">Idioma de Publicação</label>
+                                <select class="form-select" id="idiomaArtigo">
+                                    <option value="Português">Português</option>
+                                    <option value="Inglês">Inglês</option>
+                                    <option value="Espanhol">Espanhol</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="periodicoAlvo" class="form-label">Periódico ou Evento Alvo (opcional)</label>
+                                <input type="text" class="form-control" id="periodicoAlvo" placeholder="Ex: Revista Brasileira de Educação (Qualis A1)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 artigo-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-question-square"></i> 2. Problematização e Justificativa
+                        </h4>
+                        <div class="mb-3">
+                            <label for="problemaPesquisa" class="form-label">Problematização / Pergunta de Pesquisa</label>
+                            <textarea class="form-control" id="problemaPesquisa" rows="3" placeholder="Qual é a pergunta central, a lacuna na literatura ou o problema prático/teórico que o artigo investiga?"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="justificativaPesquisa" class="form-label">Justificativa e Relevância do Estudo</label>
+                            <textarea class="form-control" id="justificativaPesquisa" rows="3" placeholder="Por que esta pesquisa é importante? Qual a relevância científica, social e prática e as contribuições esperadas?"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hipotesePesquisa" class="form-label">Hipótese ou Tese Central (opcional)</label>
+                            <input type="text" class="form-control" id="hipotesePesquisa" placeholder="Ex: O uso orientado de IAs generativas aumenta a autonomia e a retenção de conceitos complexos.">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 artigo-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-bullseye"></i> 3. Objetivos da Pesquisa
+                        </h4>
+                        <div class="mb-3">
+                            <label for="objetivosArtigo" class="form-label">Objetivo Geral e Objetivos Específicos</label>
+                            <textarea class="form-control" id="objetivosArtigo" rows="4" placeholder="Descreva o objetivo geral do artigo e os objetivos específicos (ex: analisar X, comparar Y, propor Z)..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 artigo-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-diagram-3"></i> 4. Metodologia da Pesquisa
+                        </h4>
+                        <div class="mb-3">
+                            <label for="metodologiaArtigo" class="form-label">Abordagem e Procedimentos Metodológicos</label>
+                            <textarea class="form-control" id="metodologiaArtigo" rows="4" placeholder="Descreva o tipo de pesquisa (qualitativa, quantitativa, mista), universo/amostra, instrumentos de coleta de dados e técnicas de análise..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 artigo-section">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-3">
+                            <i class="bi bi-translate"></i> 5. Estilo de Escrita e Tom
+                        </h4>
+                        <div class="mb-3">
+                            <label for="linguagemTomArtigo" class="form-label">Estilo e Tom da Redação</label>
+                            <select class="form-select" id="linguagemTomArtigo">
+                                <option value="academico_rigoroso">Acadêmico Rigoroso (Formal, impessoal, focado em evidências)</option>
+                                <option value="academico_fluido">Acadêmico Fluido (Claro, direto, acessível sem perder o rigor)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -191,7 +301,7 @@
                 <div class="card mb-4 fichamento-section">
                     <div class="card-body">
                         <h4 class="card-title text-primary mb-3">
-                            <i class="bi bi-file-earmark-text"></i> Tipo de Material para Fichamento
+                            <i class="bi bi-file-earmark-text"></i> Especificações do Fichamento
                         </h4>
                         <div class="mb-3">
                             <label for="tipoMaterialFichamento" class="form-label">Tipo de Material</label>
@@ -203,6 +313,10 @@
                                 <option value="tese">Tese</option>
                                 <option value="dissertacao">Dissertação</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tituloObraFichamento" class="form-label">Título do Texto / Obra</label>
+                            <input type="text" class="form-control" id="tituloObraFichamento" placeholder="Ex: Pedagogia do Oprimido">
                         </div>
                         
                         <div id="livroSection" style="display: none;">

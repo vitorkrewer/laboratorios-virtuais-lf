@@ -119,14 +119,29 @@ body {
 .concurso-section,
 .fichamento-section,
 .didatico-section,
-.livro-superior-section {
+.livro-superior-section,
+.artigo-section {
     display: none;
 }
 
 /* Exibir seções com base na classe do body */
-.template-concursos .concurso-section,
-.template-fichamento .fichamento-section,
-.template-didatico .didatico-section,
+.template-didatico .didatico-section {
+    display: block !important;
+}
+
+.template-fichamento .fichamento-section {
+    display: block !important;
+}
+
+.template-concursos .concurso-section {
+    display: block !important;
+}
+
+.template-livro-superior .didatico-section,
 .template-livro-superior .livro-superior-section {
+    display: block !important;
+}
+
+.template-artigo .artigo-section {
     display: block !important;
 }
