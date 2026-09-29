@@ -1,0 +1,172 @@
+/* ==========================================================================
+   Git Labs Simulator - Style System
+   Tema Cyber/Dark Terminal com Destaques Neon & Visual DAG Graph
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #0B0F19;
+    --bg-card: #111827;
+    --bg-panel: #161f30;
+    --border-color: #1F293D;
+    --border-focus: #38bdf8;
+    
+    --git-orange: #f05032;
+    --git-green: #39d353;
+    --git-blue: #38bdf8;
+    --git-purple: #c084fc;
+    --git-yellow: #facc15;
+    --git-rose: #f43f5e;
+
+    --terminal-bg: #090d16;
+    --terminal-text: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-main);
+    color: #f1f5f9;
+    overflow-x: hidden;
+}
+
+.font-mono {
+    font-family: 'Fira Code', monospace;
+}
+
+.font-heading {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.6);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #1F293D;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* Terminal Styles */
+.terminal-window {
+    background-color: var(--terminal-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-prompt {
+    color: var(--git-green);
+}
+
+.terminal-branch {
+    color: var(--git-blue);
+}
+
+/* SVG DAG Graph Styles */
+.graph-container {
+    background-color: #0d1322;
+    background-image: radial-gradient(#1e293b 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.commit-node {
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.commit-node:hover {
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+.graph-edge {
+    stroke-dasharray: 4;
+    animation: dash 30s linear infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
+
+/* 3-Areas Flow Box */
+.stage-box {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.stage-box.active-stage {
+    border-color: var(--git-blue);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+/* Interactive Tabs */
+.tab-btn.active {
+    background-color: #1e293b;
+    color: #38bdf8;
+    border-bottom: 2px solid #38bdf8;
+}
+
+/* Conventional Commit Badges & Type Cards */
+.commit-type-pill {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.commit-type-pill:hover, .commit-type-pill.active-type {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.badge-feat     { background: rgba(57, 211, 83, 0.15); color: #39d353; border: 1px solid rgba(57, 211, 83, 0.4); }
+.badge-fix      { background: rgba(244, 63, 94, 0.15);  color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4); }
+.badge-docs     { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.4); }
+.badge-style    { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+.badge-refactor { background: rgba(192, 132, 252, 0.15);color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
+.badge-perf     { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.4); }
+.badge-test     { background: rgba(45, 212, 191, 0.15); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.4); }
+.badge-chore    { background: rgba(148, 163, 184, 0.15);color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.4); }
+.badge-build    { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+.badge-ci       { background: rgba(129, 140, 248, 0.15);color: #818cf8; border: 1px solid rgba(129, 140, 248, 0.4); }
+.badge-revert   { background: rgba(225, 29, 72, 0.15);  color: #fb7185; border: 1px solid rgba(225, 29, 72, 0.4); }
+
+/* Linter checklist items */
+.linter-rule {
+    transition: all 0.2s ease;
+}
+
+.linter-valid {
+    color: #34d399;
+}
+
+.linter-invalid {
+    color: #94a3b8;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    background-color: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(6px);
+}
+
+/* Pulse badge */
+@keyframes glow-pulse {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+.glow-effect {
+    animation: glow-pulse 3s infinite;
+}

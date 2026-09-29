@@ -79,6 +79,15 @@ Uma interface interativa simulando o Kali Linux para ensino de cibersegurança e
 - **Funcionalidades:** Terminal simulado (Xterm.js), missões práticas (Nmap, SQLMap), guias de instalação e vídeos integrados.
 - **Destaque:** Ambiente seguro (sandbox) no navegador que recria a experiência de uso das ferramentas reais sem riscos.
 
+### 8. 🌿 Laboratório Virtual de Git & Controle de Versão (DAG Simulator)
+
+**Diretório:** `git-labs-simulator`
+
+Simulador visual avançado de Git desenvolvido para estudantes de graduação em Computação e Engenharia de Software.
+
+- **Funcionalidades:** Grafo Direcionado Acíclico (DAG) renderizado dinamicamente em SVG com nós de commits, ramificações (branches), merge commits de múltiplos pais, visualização das 4 áreas (Working Directory, Staging, Local Repo e Remote), terminal CLI interativo e 8 missões práticas guiadas com validação automática.
+- **Destaque:** Permite aos alunos visualizar instantaneamente o impacto de cada comando no grafo de versionamento e entender a fundo o modelo de ponteiros e snapshots do Git.
+
 ---
 
 ## 🛠️ Tecnologias Utilizadas
