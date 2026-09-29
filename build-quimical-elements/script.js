@@ -136,6 +136,95 @@ document.addEventListener('DOMContentLoaded', () => {
                 bonds: [ { from: 0, to: 1 }, { from: 0, to: 2 } ]
             }
         },
+        "H2": {
+            name: "Hidrogênio Molecular",
+            formula: "H₂",
+            category: "Diatômica",
+            structure: {
+                atoms: [
+                    { symbol: "H", x: "35%", y: "50%" },
+                    { symbol: "H", x: "65%", y: "50%" }
+                ],
+                bonds: [{ from: 0, to: 1, order: 1 }]
+            }
+        },
+        "N2": {
+            name: "Nitrogênio Molecular",
+            formula: "N₂",
+            category: "Diatômica",
+            structure: {
+                atoms: [
+                    { symbol: "N", x: "35%", y: "50%" },
+                    { symbol: "N", x: "65%", y: "50%" }
+                ],
+                bonds: [{ from: 0, to: 1, order: 3 }]
+            }
+        },
+        "O2": {
+            name: "Oxigênio Molecular",
+            formula: "O₂",
+            category: "Diatômica",
+            structure: {
+                atoms: [
+                    { symbol: "O", x: "35%", y: "50%" },
+                    { symbol: "O", x: "65%", y: "50%" }
+                ],
+                bonds: [{ from: 0, to: 1, order: 2 }]
+            }
+        },
+        "H3N": {
+            name: "Amônia",
+            formula: "NH₃",
+            category: "Inorgânica",
+            structure: {
+                atoms: [
+                    { symbol: "N", x: "50%", y: "46%" },
+                    { symbol: "H", x: "50%", y: "27%" },
+                    { symbol: "H", x: "30%", y: "63%" },
+                    { symbol: "H", x: "70%", y: "63%" }
+                ],
+                bonds: [{ from: 0, to: 1 }, { from: 0, to: 2 }, { from: 0, to: 3 }]
+            }
+        },
+        "ClNa": {
+            name: "Cloreto de Sódio",
+            formula: "NaCl",
+            category: "Iônica",
+            structure: {
+                atoms: [
+                    { symbol: "Na", x: "37%", y: "50%" },
+                    { symbol: "Cl", x: "63%", y: "50%" }
+                ],
+                bonds: [{ from: 0, to: 1 }]
+            }
+        },
+        "H2O2": {
+            name: "Peróxido de Hidrogênio",
+            formula: "H₂O₂",
+            category: "Inorgânica",
+            structure: {
+                atoms: [
+                    { symbol: "H", x: "24%", y: "50%" },
+                    { symbol: "O", x: "42%", y: "50%" },
+                    { symbol: "O", x: "58%", y: "50%" },
+                    { symbol: "H", x: "76%", y: "50%" }
+                ],
+                bonds: [{ from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }]
+            }
+        },
+        "O2S": {
+            name: "Dióxido de Enxofre",
+            formula: "SO₂",
+            category: "Inorgânica",
+            structure: {
+                atoms: [
+                    { symbol: "O", x: "30%", y: "50%" },
+                    { symbol: "S", x: "50%", y: "50%" },
+                    { symbol: "O", x: "70%", y: "50%" }
+                ],
+                bonds: [{ from: 0, to: 1, order: 2 }, { from: 1, to: 2, order: 2 }]
+            }
+        },
         "CH4": { /* ... (receita do Metano) ... */ 
             name: "Metano",
             formula: "CH₄",
@@ -332,6 +421,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             }
         },
+        "C2H4O2": {
+            name: "Ácido Acético",
+            formula: "C₂H₄O₂",
+            category: "Orgânica",
+            structure: {
+                atoms: [
+                    { symbol: "C", x: "38%", y: "50%" },
+                    { symbol: "C", x: "57%", y: "50%" },
+                    { symbol: "O", x: "74%", y: "39%" },
+                    { symbol: "O", x: "74%", y: "61%" },
+                    { symbol: "H", x: "25%", y: "37%" },
+                    { symbol: "H", x: "23%", y: "50%" },
+                    { symbol: "H", x: "25%", y: "63%" },
+                    { symbol: "H", x: "88%", y: "64%" }
+                ],
+                bonds: [
+                    { from: 0, to: 1 }, { from: 1, to: 2, order: 2 }, { from: 1, to: 3 },
+                    { from: 0, to: 4 }, { from: 0, to: 5 }, { from: 0, to: 6 }, { from: 3, to: 7 }
+                ]
+            }
+        },
+        "C6H6": {
+            name: "Benzeno",
+            formula: "C₆H₆",
+            category: "Orgânica",
+            structure: {
+                atoms: [
+                    { symbol: "C", x: "50%", y: "26%" }, { symbol: "C", x: "68%", y: "37%" },
+                    { symbol: "C", x: "68%", y: "60%" }, { symbol: "C", x: "50%", y: "72%" },
+                    { symbol: "C", x: "32%", y: "60%" }, { symbol: "C", x: "32%", y: "37%" },
+                    { symbol: "H", x: "50%", y: "10%" }, { symbol: "H", x: "84%", y: "27%" },
+                    { symbol: "H", x: "84%", y: "70%" }, { symbol: "H", x: "50%", y: "88%" },
+                    { symbol: "H", x: "16%", y: "70%" }, { symbol: "H", x: "16%", y: "27%" }
+                ],
+                bonds: [
+                    { from: 0, to: 1, order: 2 }, { from: 1, to: 2 }, { from: 2, to: 3, order: 2 },
+                    { from: 3, to: 4 }, { from: 4, to: 5, order: 2 }, { from: 5, to: 0 },
+                    { from: 0, to: 6 }, { from: 1, to: 7 }, { from: 2, to: 8 },
+                    { from: 3, to: 9 }, { from: 4, to: 10 }, { from: 5, to: 11 }
+                ]
+            }
+        },
 
         // DIÓXIDO DE CARBONO (CO2) - 3 átomos
         "CO2": {
@@ -375,8 +506,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     { symbol: "O", x: "65%", y: "50%" }  // 2
                 ],
                 bonds: [
-                    { from: 0, to: 1 }, // O=C
-                    { from: 1, to: 2 }  // C=O
+                    { from: 0, to: 1, order: 2 }, // O=C
+                    { from: 1, to: 2, order: 2 }  // C=O
                     // Nota: O ideal seria ter 2 bonds para cada,
                     // mas nossa lógica atual só desenha uma linha.
                     // Podemos simular!
@@ -566,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const recipe = recipes_final[key];
             const btn = document.createElement('button');
             btn.className = 'btn recipe-card'; 
-            btn.innerHTML = `<strong>${recipe.name}</strong><span class="recipe-formula">${recipe.formula}</span>`;
+            btn.innerHTML = `<strong>${recipe.name}</strong><span class="recipe-formula">${recipe.formula}</span><span class="recipe-category">${recipe.category || 'Clássica'}</span>`;
             btn.dataset.recipeKey = key;
             btn.addEventListener('click', handleRecipeClick);
             recipeSelector.appendChild(btn);
@@ -709,15 +840,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Etapa B: cria e cresce cada aresta apenas depois que os nós estão organizados.
             structure.bonds.forEach(bondTemplate => {
-                const bond = createBond(
-                    animatedAtoms[bondTemplate.from],
-                    animatedAtoms[bondTemplate.to],
-                    layoutAtoms[bondTemplate.from],
-                    layoutAtoms[bondTemplate.to],
-                    workspaceRect
-                );
-                animatedBonds.push(bond);
-                workspace.appendChild(bond);
+                const bondOrder = bondTemplate.order || 1;
+                for (let lineIndex = 0; lineIndex < bondOrder; lineIndex++) {
+                    const bond = createBond(
+                        animatedAtoms[bondTemplate.from],
+                        animatedAtoms[bondTemplate.to],
+                        layoutAtoms[bondTemplate.from],
+                        layoutAtoms[bondTemplate.to],
+                        workspaceRect,
+                        bondOrder,
+                        lineIndex
+                    );
+                    animatedBonds.push(bond);
+                    workspace.appendChild(bond);
+                }
             });
 
             await anime({
@@ -760,7 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 6. (NOVO) FUNÇÃO AUXILIAR PARA CRIAR LIGAÇÕES ---
     // Esta função NÃO anima. Ela prepara o 'div' da ligação.
     
-    function createBond(atom1, atom2, template1, template2, workspaceRect) {
+    function createBond(atom1, atom2, template1, template2, workspaceRect, bondOrder = 1, lineIndex = 0) {
         const wsWidth = workspaceRect.width;
         const wsHeight = workspaceRect.height;
         const atomSize = 50; // Tamanho do átomo (definido no CSS)
@@ -784,14 +920,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Calcula comprimento e ângulo
         const length = Math.sqrt(Math.pow(x2_center - x1_center, 2) + Math.pow(y2_center - y1_center, 2));
-        const angle = Math.atan2(y2_center - y1_center, x2_center - x1_center) * 180 / Math.PI;
+        const angleRadians = Math.atan2(y2_center - y1_center, x2_center - x1_center);
+        const angle = angleRadians * 180 / Math.PI;
+        const offset = (lineIndex - (bondOrder - 1) / 2) * 6;
+        const offsetX = -Math.sin(angleRadians) * offset;
+        const offsetY = Math.cos(angleRadians) * offset;
 
         const bond = document.createElement('div');
         bond.className = 'bond';
         
         // A ligação começa no centro do átomo 1
-        bond.style.left = `${x1_center}px`;
-        bond.style.top = `${y1_center}px`;
+        bond.style.left = `${x1_center + offsetX}px`;
+        bond.style.top = `${y1_center + offsetY}px`;
         
         // Gira para apontar para o átomo 2
         bond.style.transform = `rotate(${angle}deg)`;
@@ -801,6 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Guarda o comprimento final para a animação usar
         bond.dataset.finalLength = length;
+        bond.dataset.order = bondOrder;
 
         return bond;
     }
@@ -823,15 +964,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const workspaceRect = workspace.getBoundingClientRect();
         recipe.structure.bonds.forEach(bondTemplate => {
-            const bond = createBond(
-                atoms[bondTemplate.from],
-                atoms[bondTemplate.to],
-                layoutAtoms[bondTemplate.from],
-                layoutAtoms[bondTemplate.to],
-                workspaceRect
-            );
-            bond.style.width = `${bond.dataset.finalLength}px`;
-            workspace.appendChild(bond);
+            const bondOrder = bondTemplate.order || 1;
+            for (let lineIndex = 0; lineIndex < bondOrder; lineIndex++) {
+                const bond = createBond(
+                    atoms[bondTemplate.from],
+                    atoms[bondTemplate.to],
+                    layoutAtoms[bondTemplate.from],
+                    layoutAtoms[bondTemplate.to],
+                    workspaceRect,
+                    bondOrder,
+                    lineIndex
+                );
+                bond.style.width = `${bond.dataset.finalLength}px`;
+                workspace.appendChild(bond);
+            }
         });
         refreshWorkspaceStatus();
     }

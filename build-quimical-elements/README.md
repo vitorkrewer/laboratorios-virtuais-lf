@@ -22,7 +22,7 @@ Uma área de trabalho livre onde os alunos podem adicionar átomos clicando na T
 
 O núcleo do laboratório é um sistema inteligente que verifica se os átomos presentes no workspace correspondem a uma molécula conhecida.
 
-* **Receitas Prontas:** Água (H₂O), Metano (CH₄), Dióxido de Carbono (CO₂), Glicose (C₆H₁₂O₆), Etanol (C₂H₆O), Cafeína e Dopamina.
+* **Receitas Prontas:** 16 moléculas guiadas, incluindo Água (H₂O), Hidrogênio (H₂), Nitrogênio (N₂), Oxigênio (O₂), Amônia (NH₃), Cloreto de Sódio (NaCl), Peróxido de Hidrogênio (H₂O₂), Dióxido de Carbono (CO₂), Dióxido de Enxofre (SO₂), Metano (CH₄), Etanol (C₂H₆O), Ácido Acético (C₂H₄O₂), Benzeno (C₆H₆), Glicose (C₆H₁₂O₆), Cafeína e Dopamina.
 * **Validação em Tempo Real:** Ao clicar em "Combinar", o sistema conta os átomos e verifica se formam uma estrutura estável.
 * **Auditoria de Composição:** Na inicialização, cada receita é conferida contra a quantidade real de átomos da estrutura, evitando fórmulas inconsistentes. A estrutura da cafeína foi ajustada para C₈H₁₀N₄O₂.
 
@@ -70,9 +70,18 @@ O laboratório foi redesenhado como uma bancada científica responsiva:
 O sistema atualmente suporta a visualização estrutural detalhada de:
 
 * Água
+* Hidrogênio Molecular
+* Nitrogênio Molecular
+* Oxigênio Molecular
+* Amônia
+* Cloreto de Sódio
+* Peróxido de Hidrogênio
 * Metano
 * Dióxido de Carbono
+* Dióxido de Enxofre
 * Etanol
+* Ácido Acético
+* Benzeno
 * Glicose
 * Cafeína
 * Dopamina
