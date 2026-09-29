@@ -1,7 +1,7 @@
 /**
- * PostgreSQL Engine (Emulação Avançada) - SQL Playground
- * Camada de compatibilidade para sintaxe e comandos do PostgreSQL sobre WebAssembly.
- * Suporta SERIAL PRIMARY KEY, ILIKE, RETURNING, VARCHAR, Snapshots e Dump.
+ * Microsoft SQL Server Engine (T-SQL Emulação Avançada) - SQL Playground Pro
+ * Camada de compatibilidade para sintaxe e comandos do Microsoft SQL Server (T-SQL).
+ * Suporta IDENTITY(1,1), SELECT TOP n, GETDATE(), ISNULL(), LEN(), sp_help, colchetes [tabela], Snapshots e Dump.
  */
 
 const icons = {
@@ -15,38 +15,69 @@ let SQLInstance = null;
 let db = null;
 let snapshots = [];
 
-function translatePostgresQuery(query) {
+function translateTSQLQuery(query) {
     let translated = query.trim();
 
-    // \\dt or \d -> SELECT
-    if (translated.match(/^\\d[t+]?\s*;?$/i)) {
-        return "SELECT name AS 'tablename', 'table' AS 'schemaname' FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';";
+    // SELECT @@VERSION
+    if (translated.match(/@@version/i)) {
+        return "SELECT 'Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) - WebAssembly Simulated' AS 'ServerVersion';";
     }
 
-    // SERIAL PRIMARY KEY -> INTEGER PRIMARY KEY AUTOINCREMENT
-    translated = translated.replace(/\bSERIAL\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
-    translated = translated.replace(/\bBIGSERIAL\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
-    translated = translated.replace(/\bSERIAL\b/ig, 'INTEGER');
-    translated = translated.replace(/\bBIGSERIAL\b/ig, 'INTEGER');
+    // sp_help 'tabela' ou sp_help tabela
+    const spHelpMatch = translated.match(/^exec(?:\s+sp_help|\s+dbo\.sp_help)?\s+['"]?(\w+)['"]?\s*;?$/i) || translated.match(/^sp_help\s+['"]?(\w+)['"]?\s*;?$/i);
+    if (spHelpMatch) {
+        return `SELECT name AS 'Column_name', type AS 'Type', CASE WHEN "notnull"=1 THEN 'no' ELSE 'yes' END AS 'Nullable', CASE WHEN pk=1 THEN 'PRIMARY KEY' ELSE '' END AS 'Constraint' FROM pragma_table_info('${spHelpMatch[1]}');`;
+    }
 
-    // ILIKE -> LIKE (SQLite LIKE é case-insensitive por padrão)
-    translated = translated.replace(/\bILIKE\b/ig, 'LIKE');
+    // sys.tables ou INFORMATION_SCHEMA.TABLES
+    if (translated.match(/\b(?:sys\.tables|information_schema\.tables)\b/i)) {
+        return "SELECT name AS 'TABLE_NAME', 'BASE TABLE' AS 'TABLE_TYPE' FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';";
+    }
 
-    // VARCHAR, TEXT, BOOLEAN
-    translated = translated.replace(/\bVARCHAR\s*\(\d+\)/ig, 'TEXT');
-    translated = translated.replace(/\bBOOLEAN\b/ig, 'INTEGER');
-    translated = translated.replace(/\bTRUE\b/ig, '1');
-    translated = translated.replace(/\bFALSE\b/ig, '0');
-    translated = translated.replace(/\bNOW\(\)/ig, "datetime('now', 'localtime')");
+    // Remover prefixo dbo. ou "dbo". ou [dbo].
+    translated = translated.replace(/\[dbo\]\.\[(\w+)\]/ig, '$1');
+    translated = translated.replace(/\b(?:dbo\.|"dbo"\.)(\w+)/ig, '$1');
 
-    // RETURNING id (simplificado)
-    translated = translated.replace(/\bRETURNING\s+[\w\s,*]+\s*;?$/i, ';');
+    // Tradução de Colchetes [tabela].[coluna] -> "tabela"."coluna"
+    translated = translated.replace(/\[([\w\s]+)\]/g, '"$1"');
+
+    // Tradução de SELECT TOP (n) ou SELECT TOP n -> SELECT ... LIMIT n
+    const topMatch = translated.match(/\bSELECT\s+(?:DISTINCT\s+)?TOP\s+(?:\(?\s*(\d+)\s*\)?)\s+(.+?)(?=\bFROM\b)/i);
+    if (topMatch) {
+        const topCount = topMatch[1];
+        translated = translated.replace(/\bTOP\s+(?:\(?\s*\d+\s*\)?)\s+/i, '');
+        if (!translated.match(/\bLIMIT\b/i)) {
+            translated = translated.replace(/;?\s*$/, ` LIMIT ${topCount};`);
+        }
+    }
+
+    // Tradução de Tipos de Dados do SQL Server
+    translated = translated.replace(/\bINT\s+IDENTITY(?:\s*\(\s*\d+\s*,\s*\d+\s*\))?\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
+    translated = translated.replace(/\bBIGINT\s+IDENTITY(?:\s*\(\s*\d+\s*,\s*\d+\s*\))?\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
+    translated = translated.replace(/\bIDENTITY(?:\s*\(\s*\d+\s*,\s*\d+\s*\))?\b/ig, 'PRIMARY KEY AUTOINCREMENT');
+
+    translated = translated.replace(/\bNVARCHAR\s*\(\s*(?:MAX|\d+)\s*\)/ig, 'TEXT');
+    translated = translated.replace(/\bVARCHAR\s*\(\s*MAX\s*\)/ig, 'TEXT');
+    translated = translated.replace(/\bNCHAR\s*\(\s*\d+\s*\)/ig, 'TEXT');
+    translated = translated.replace(/\bDATETIME2?\b/ig, 'TEXT');
+    translated = translated.replace(/\bSMALLDATETIME\b/ig, 'TEXT');
+    translated = translated.replace(/\bBIT\b/ig, 'INTEGER');
+    translated = translated.replace(/\bMONEY\b/ig, 'DECIMAL(10,2)');
+    translated = translated.replace(/\bSMALLMONEY\b/ig, 'DECIMAL(6,2)');
+
+    // Tradução de Funções Built-in do T-SQL
+    translated = translated.replace(/\bGETDATE\(\)/ig, "datetime('now', 'localtime')");
+    translated = translated.replace(/\bSYSDATETIME\(\)/ig, "datetime('now', 'localtime')");
+    translated = translated.replace(/\bGETUTCDATE\(\)/ig, "datetime('now')");
+    translated = translated.replace(/\bISNULL\(/ig, "IFNULL(");
+    translated = translated.replace(/\bLEN\(/ig, "LENGTH(");
+    translated = translated.replace(/\bCHARINDEX\(/ig, "INSTR(");
 
     return translated;
 }
 
 export const engine = {
-    dialectName: "PostgreSQL (Simulado)",
+    dialectName: "SQL Server (T-SQL Simulado)",
 
     async init() {
         if (!SQLInstance) {
@@ -55,7 +86,7 @@ export const engine = {
             });
         }
 
-        const savedDb = localStorage.getItem('postgres_db_data_v2');
+        const savedDb = localStorage.getItem('sqlserver_db_data_v2');
         if (savedDb) {
             try {
                 const dbArray = savedDb.split(',').map(Number);
@@ -88,8 +119,8 @@ export const engine = {
     },
 
     execute(query) {
-        if (!db) throw new Error("Banco de dados PostgreSQL não inicializado.");
-        const translated = translatePostgresQuery(query);
+        if (!db) throw new Error("Banco de dados SQL Server não inicializado.");
+        const translated = translateTSQLQuery(query);
         const results = db.exec(translated);
         this.save();
         return results;
@@ -97,14 +128,14 @@ export const engine = {
 
     explain(query) {
         if (!db) throw new Error("Banco de dados não inicializado.");
-        const translated = translatePostgresQuery(query).replace(/;\s*$/, '');
+        const translated = translateTSQLQuery(query).replace(/;\s*$/, '');
         return db.exec(`EXPLAIN QUERY PLAN ${translated};`);
     },
 
     save() {
         if (db) {
             const data = db.export();
-            localStorage.setItem('postgres_db_data_v2', data.join(','));
+            localStorage.setItem('sqlserver_db_data_v2', data.join(','));
         }
     },
 
@@ -118,10 +149,10 @@ export const engine = {
 
     loadDataset(sqlScript) {
         this.resetDatabase();
-        const translated = translatePostgresQuery(sqlScript);
+        const translated = translateTSQLQuery(sqlScript);
         db.exec(translated);
         this.save();
-        this.createSnapshot("Carga de Dataset (PostgreSQL)");
+        this.createSnapshot("Carga de Dataset (SQL Server)");
     },
 
     createSnapshot(name = "Ponto de Restauração") {
@@ -158,13 +189,13 @@ export const engine = {
                 timestamp: s.timestamp,
                 data: Array.from(s.data).join(',')
             }));
-            localStorage.setItem('postgres_snapshots_v2', JSON.stringify(simplified));
+            localStorage.setItem('sqlserver_snapshots_v2', JSON.stringify(simplified));
         } catch (e) {}
     },
 
     loadSnapshots() {
         try {
-            const raw = localStorage.getItem('postgres_snapshots_v2');
+            const raw = localStorage.getItem('sqlserver_snapshots_v2');
             if (raw) {
                 const parsed = JSON.parse(raw);
                 snapshots = parsed.map(s => ({
@@ -186,28 +217,28 @@ export const engine = {
 
     exportSqlDump() {
         if (!db) return '';
-        let dump = `-- PostgreSQL Dump simulado (Learning Fly SQL Playground)\n-- Gerado em: ${new Date().toLocaleString('pt-BR')}\n\n`;
+        let dump = `-- Microsoft SQL Server (T-SQL) Dump simulado\n-- Gerado em: ${new Date().toLocaleString('pt-BR')}\n\n`;
         
         const tablesResult = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
         if (tablesResult.length > 0 && tablesResult[0].values) {
             tablesResult[0].values.forEach(row => {
                 const tableName = row[0];
                 const createSql = row[1];
-                dump += `${createSql};\n\n`;
+                dump += `${createSql};\nGO\n\n`;
 
                 try {
                     const dataResult = db.exec(`SELECT * FROM "${tableName}";`);
                     if (dataResult.length > 0 && dataResult[0].values.length > 0) {
-                        const cols = dataResult[0].columns.map(c => `"${c}"`).join(', ');
+                        const cols = dataResult[0].columns.map(c => `[${c}]`).join(', ');
                         dataResult[0].values.forEach(valRow => {
                             const formattedVals = valRow.map(v => {
                                 if (v === null) return 'NULL';
                                 if (typeof v === 'number') return v;
                                 return `'${String(v).replace(/'/g, "''")}'`;
                             }).join(', ');
-                            dump += `INSERT INTO "${tableName}" (${cols}) VALUES (${formattedVals});\n`;
+                            dump += `INSERT INTO [${tableName}] (${cols}) VALUES (${formattedVals});\n`;
                         });
-                        dump += '\n';
+                        dump += 'GO\n\n';
                     }
                 } catch (e) {}
             });
@@ -228,7 +259,7 @@ export const engine = {
             return `
                 <div class="empty-state p-4 text-center">
                     <i class="fa-solid fa-folder-open text-2xl text-gray-400 mb-2 block"></i>
-                    <p class="text-xs text-gray-400">Nenhuma tabela criada no PostgreSQL.</p>
+                    <p class="text-xs text-gray-400">Nenhuma tabela criada no SQL Server.</p>
                     <p class="text-[11px] text-cyan-400 mt-1 cursor-pointer" onclick="window.loadDefaultDataset()">👉 Clique para carregar um dataset</p>
                 </div>
             `;
@@ -237,7 +268,7 @@ export const engine = {
         let html = '';
 
         if (hasTables) {
-            html += '<div class="schema-section-title">TABELAS (public)</div>';
+            html += '<div class="schema-section-title">TABELAS (dbo)</div>';
             tablesResult[0].values.forEach(row => {
                 const tableName = row[0];
                 let rowCount = 0;
@@ -255,18 +286,18 @@ export const engine = {
                     <details class="schema-item" open>
                         <summary class="flex items-center justify-between">
                             <span class="flex items-center gap-1.5 font-bold truncate">
-                                ${icons.table} ${tableName}
+                                ${icons.table} [dbo].[${tableName}]
                             </span>
                             <div class="flex items-center gap-1">
                                 <span class="table-badge">${rowCount} ${rowCount === 1 ? 'reg' : 'regs'}</span>
-                                <button class="quick-query-btn" onclick="window.insertSampleQuery('${tableName}')" title="Gerar SELECT * da tabela">+</button>
+                                <button class="quick-query-btn" onclick="window.insertSampleQuery('[dbo].[${tableName}]')" title="Gerar SELECT TOP 10 da tabela">+</button>
                             </div>
                         </summary>
                         <div class="schema-columns">
                             ${columnsResult.values.map(col => `
                                 <div class="column-item">
                                     ${col[5] ? icons.pk : icons.column}
-                                    <span class="font-mono">${col[1]}</span>
+                                    <span class="font-mono">[${col[1]}]</span>
                                     <span class="column-details">${col[2] || 'VARCHAR'}${col[3] ? ' • NOT NULL' : ''}</span>
                                 </div>
                             `).join('')}
@@ -277,16 +308,16 @@ export const engine = {
         }
 
         if (hasViews) {
-            html += '<div class="schema-section-title mt-3">VIEWS</div>';
+            html += '<div class="schema-section-title mt-3">VIEWS (dbo)</div>';
             viewsResult[0].values.forEach(row => {
                 const viewName = row[0];
                 html += `
                     <details class="schema-item">
                         <summary class="flex items-center justify-between">
                             <span class="flex items-center gap-1.5 font-bold text-purple-400 truncate">
-                                ${icons.view} ${viewName}
+                                ${icons.view} [dbo].[${viewName}]
                             </span>
-                            <button class="quick-query-btn" onclick="window.insertSampleQuery('${viewName}')" title="Consultar View">+</button>
+                            <button class="quick-query-btn" onclick="window.insertSampleQuery('[dbo].[${viewName}]')" title="Consultar View">+</button>
                         </summary>
                     </details>
                 `;

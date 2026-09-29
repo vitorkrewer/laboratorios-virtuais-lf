@@ -103,6 +103,16 @@ export const engine = {
         }
     },
 
+    hasTables() {
+        if (!db) return false;
+        try {
+            const res = db.exec("SELECT count(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
+            return res.length > 0 && res[0].values[0][0] > 0;
+        } catch (e) {
+            return false;
+        }
+    },
+
     execute(query) {
         if (!db) throw new Error("Banco de dados MySQL não inicializado.");
         const translated = translateMySQLQuery(query);

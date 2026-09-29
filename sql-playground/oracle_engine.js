@@ -1,7 +1,7 @@
 /**
- * PostgreSQL Engine (Emulação Avançada) - SQL Playground
- * Camada de compatibilidade para sintaxe e comandos do PostgreSQL sobre WebAssembly.
- * Suporta SERIAL PRIMARY KEY, ILIKE, RETURNING, VARCHAR, Snapshots e Dump.
+ * Oracle Database Engine (SQL / PL-SQL Emulação Avançada) - SQL Playground Pro
+ * Camada de compatibilidade para sintaxe e comandos do Oracle Database.
+ * Suporta VARCHAR2, NUMBER, SYSDATE, NVL(), Tabela DUAL, FETCH FIRST n ROWS ONLY, USER_TABLES, Snapshots e Dump.
  */
 
 const icons = {
@@ -15,38 +15,66 @@ let SQLInstance = null;
 let db = null;
 let snapshots = [];
 
-function translatePostgresQuery(query) {
+function translateOracleQuery(query) {
     let translated = query.trim();
 
-    // \\dt or \d -> SELECT
-    if (translated.match(/^\\d[t+]?\s*;?$/i)) {
-        return "SELECT name AS 'tablename', 'table' AS 'schemaname' FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';";
+    // USER_TABLES, ALL_TABLES, TAB
+    if (translated.match(/\b(?:user_tables|all_tables|tab)\b/i)) {
+        return "SELECT name AS 'TABLE_NAME', 'VALID' AS 'STATUS', 'TABLE' AS 'TABLE_TYPE' FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'dual';";
     }
 
-    // SERIAL PRIMARY KEY -> INTEGER PRIMARY KEY AUTOINCREMENT
-    translated = translated.replace(/\bSERIAL\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
-    translated = translated.replace(/\bBIGSERIAL\s+PRIMARY\s+KEY\b/ig, 'INTEGER PRIMARY KEY AUTOINCREMENT');
-    translated = translated.replace(/\bSERIAL\b/ig, 'INTEGER');
-    translated = translated.replace(/\bBIGSERIAL\b/ig, 'INTEGER');
+    // USER_VIEWS
+    if (translated.match(/\buser_views\b/i)) {
+        return "SELECT name AS 'VIEW_NAME' FROM sqlite_master WHERE type='view';";
+    }
 
-    // ILIKE -> LIKE (SQLite LIKE é case-insensitive por padrão)
-    translated = translated.replace(/\bILIKE\b/ig, 'LIKE');
+    // DESCRIBE table / DESC table
+    const descMatch = translated.match(/^(?:describe|desc)\s+(\w+)\s*;?$/i);
+    if (descMatch) {
+        return `SELECT name AS "COLUMN_NAME", type AS "DATA_TYPE", CASE WHEN "notnull"=1 THEN 'N' ELSE 'Y' END AS "NULLABLE", CASE WHEN pk=1 THEN 'PK' ELSE '' END AS "KEY" FROM pragma_table_info('${descMatch[1]}');`;
+    }
 
-    // VARCHAR, TEXT, BOOLEAN
-    translated = translated.replace(/\bVARCHAR\s*\(\d+\)/ig, 'TEXT');
-    translated = translated.replace(/\bBOOLEAN\b/ig, 'INTEGER');
-    translated = translated.replace(/\bTRUE\b/ig, '1');
-    translated = translated.replace(/\bFALSE\b/ig, '0');
-    translated = translated.replace(/\bNOW\(\)/ig, "datetime('now', 'localtime')");
+    // Tipos de dados Oracle
+    translated = translated.replace(/\bVARCHAR2\s*\(\s*(\d+)\s*\)/ig, 'VARCHAR($1)');
+    translated = translated.replace(/\bNUMBER\s*\(\s*\d+\s*,\s*\d+\s*\)/ig, 'REAL');
+    translated = translated.replace(/\bNUMBER\s*\(\s*\d+\s*\)/ig, 'INTEGER');
+    translated = translated.replace(/\bNUMBER\b/ig, 'REAL');
+    translated = translated.replace(/\bCLOB\b/ig, 'TEXT');
+    translated = translated.replace(/\bBLOB\b/ig, 'BLOB');
 
-    // RETURNING id (simplificado)
-    translated = translated.replace(/\bRETURNING\s+[\w\s,*]+\s*;?$/i, ';');
+    // Funções de data e utilitários
+    translated = translated.replace(/\bSYSDATE\b/ig, "datetime('now', 'localtime')");
+    translated = translated.replace(/\bSYSTIMESTAMP\b/ig, "datetime('now', 'localtime')");
+    translated = translated.replace(/\bCURRENT_TIMESTAMP\b/ig, "datetime('now', 'localtime')");
+    translated = translated.replace(/\bNVL\(/ig, "IFNULL(");
+
+    // ROWNUM <= n ou ROWNUM = 1
+    const rownumMatch = translated.match(/\bWHERE\s+ROWNUM\s*(?:<=|=)\s*(\d+)\b/i) || translated.match(/\bAND\s+ROWNUM\s*(?:<=|=)\s*(\d+)\b/i);
+    if (rownumMatch) {
+        const rownumLimit = rownumMatch[1];
+        translated = translated.replace(rownumMatch[0], '');
+        if (!translated.match(/\bLIMIT\b/i)) {
+            translated = translated.replace(/;?\s*$/, ` LIMIT ${rownumLimit};`);
+        }
+    }
+
+    // FETCH FIRST n ROWS ONLY -> LIMIT n
+    const fetchFirstMatch = translated.match(/\bFETCH\s+FIRST\s+(\d+)\s+ROWS?\s+ONLY\b/i);
+    if (fetchFirstMatch) {
+        translated = translated.replace(fetchFirstMatch[0], `LIMIT ${fetchFirstMatch[1]}`);
+    }
+
+    // OFFSET m ROWS FETCH NEXT n ROWS ONLY -> LIMIT n OFFSET m
+    const offsetFetchMatch = translated.match(/\bOFFSET\s+(\d+)\s+ROWS?\s+FETCH\s+NEXT\s+(\d+)\s+ROWS?\s+ONLY\b/i);
+    if (offsetFetchMatch) {
+        translated = translated.replace(offsetFetchMatch[0], `LIMIT ${offsetFetchMatch[2]} OFFSET ${offsetFetchMatch[1]}`);
+    }
 
     return translated;
 }
 
 export const engine = {
-    dialectName: "PostgreSQL (Simulado)",
+    dialectName: "Oracle Database (Simulado)",
 
     async init() {
         if (!SQLInstance) {
@@ -55,7 +83,7 @@ export const engine = {
             });
         }
 
-        const savedDb = localStorage.getItem('postgres_db_data_v2');
+        const savedDb = localStorage.getItem('oracle_db_data_v2');
         if (savedDb) {
             try {
                 const dbArray = savedDb.split(',').map(Number);
@@ -69,6 +97,12 @@ export const engine = {
 
         try {
             db.exec("PRAGMA foreign_keys = ON;");
+            // Criar tabela DUAL padrão do Oracle
+            db.exec("CREATE TABLE IF NOT EXISTS dual (dummy VARCHAR(1));");
+            const checkDual = db.exec("SELECT COUNT(*) FROM dual;");
+            if (checkDual[0].values[0][0] === 0) {
+                db.exec("INSERT INTO dual (dummy) VALUES ('X');");
+            }
         } catch (e) {}
 
         this.loadSnapshots();
@@ -80,7 +114,7 @@ export const engine = {
     hasTables() {
         if (!db) return false;
         try {
-            const res = db.exec("SELECT count(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
+            const res = db.exec("SELECT count(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'dual';");
             return res.length > 0 && res[0].values[0][0] > 0;
         } catch (e) {
             return false;
@@ -88,8 +122,8 @@ export const engine = {
     },
 
     execute(query) {
-        if (!db) throw new Error("Banco de dados PostgreSQL não inicializado.");
-        const translated = translatePostgresQuery(query);
+        if (!db) throw new Error("Banco de dados Oracle não inicializado.");
+        const translated = translateOracleQuery(query);
         const results = db.exec(translated);
         this.save();
         return results;
@@ -97,14 +131,14 @@ export const engine = {
 
     explain(query) {
         if (!db) throw new Error("Banco de dados não inicializado.");
-        const translated = translatePostgresQuery(query).replace(/;\s*$/, '');
+        const translated = translateOracleQuery(query).replace(/;\s*$/, '');
         return db.exec(`EXPLAIN QUERY PLAN ${translated};`);
     },
 
     save() {
         if (db) {
             const data = db.export();
-            localStorage.setItem('postgres_db_data_v2', data.join(','));
+            localStorage.setItem('oracle_db_data_v2', data.join(','));
         }
     },
 
@@ -112,16 +146,17 @@ export const engine = {
         if (SQLInstance) {
             db = new SQLInstance.Database();
             db.exec("PRAGMA foreign_keys = ON;");
+            db.exec("CREATE TABLE IF NOT EXISTS dual (dummy VARCHAR(1)); INSERT INTO dual (dummy) VALUES ('X');");
             this.save();
         }
     },
 
     loadDataset(sqlScript) {
         this.resetDatabase();
-        const translated = translatePostgresQuery(sqlScript);
+        const translated = translateOracleQuery(sqlScript);
         db.exec(translated);
         this.save();
-        this.createSnapshot("Carga de Dataset (PostgreSQL)");
+        this.createSnapshot("Carga de Dataset (Oracle)");
     },
 
     createSnapshot(name = "Ponto de Restauração") {
@@ -158,13 +193,13 @@ export const engine = {
                 timestamp: s.timestamp,
                 data: Array.from(s.data).join(',')
             }));
-            localStorage.setItem('postgres_snapshots_v2', JSON.stringify(simplified));
+            localStorage.setItem('oracle_snapshots_v2', JSON.stringify(simplified));
         } catch (e) {}
     },
 
     loadSnapshots() {
         try {
-            const raw = localStorage.getItem('postgres_snapshots_v2');
+            const raw = localStorage.getItem('oracle_snapshots_v2');
             if (raw) {
                 const parsed = JSON.parse(raw);
                 snapshots = parsed.map(s => ({
@@ -186,14 +221,14 @@ export const engine = {
 
     exportSqlDump() {
         if (!db) return '';
-        let dump = `-- PostgreSQL Dump simulado (Learning Fly SQL Playground)\n-- Gerado em: ${new Date().toLocaleString('pt-BR')}\n\n`;
+        let dump = `-- Oracle Database Export (SQL Dump)\n-- Gerado em: ${new Date().toLocaleString('pt-BR')}\n\n`;
         
-        const tablesResult = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
+        const tablesResult = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'dual';");
         if (tablesResult.length > 0 && tablesResult[0].values) {
             tablesResult[0].values.forEach(row => {
                 const tableName = row[0];
                 const createSql = row[1];
-                dump += `${createSql};\n\n`;
+                dump += `${createSql};\n/\n\n`;
 
                 try {
                     const dataResult = db.exec(`SELECT * FROM "${tableName}";`);
@@ -207,7 +242,7 @@ export const engine = {
                             }).join(', ');
                             dump += `INSERT INTO "${tableName}" (${cols}) VALUES (${formattedVals});\n`;
                         });
-                        dump += '\n';
+                        dump += 'COMMIT;\n\n';
                     }
                 } catch (e) {}
             });
@@ -218,7 +253,7 @@ export const engine = {
     getSchemaHTML() {
         if (!db) return '<p class="empty-state">Banco de dados não carregado.</p>';
         
-        const tablesResult = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;");
+        const tablesResult = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'dual' ORDER BY name;");
         const viewsResult = db.exec("SELECT name FROM sqlite_master WHERE type='view' ORDER BY name;");
 
         const hasTables = tablesResult.length > 0 && tablesResult[0].values.length > 0;
@@ -228,7 +263,7 @@ export const engine = {
             return `
                 <div class="empty-state p-4 text-center">
                     <i class="fa-solid fa-folder-open text-2xl text-gray-400 mb-2 block"></i>
-                    <p class="text-xs text-gray-400">Nenhuma tabela criada no PostgreSQL.</p>
+                    <p class="text-xs text-gray-400">Nenhuma tabela criada no Oracle.</p>
                     <p class="text-[11px] text-cyan-400 mt-1 cursor-pointer" onclick="window.loadDefaultDataset()">👉 Clique para carregar um dataset</p>
                 </div>
             `;
@@ -237,7 +272,7 @@ export const engine = {
         let html = '';
 
         if (hasTables) {
-            html += '<div class="schema-section-title">TABELAS (public)</div>';
+            html += '<div class="schema-section-title">TABELAS (USER_TABLES)</div>';
             tablesResult[0].values.forEach(row => {
                 const tableName = row[0];
                 let rowCount = 0;
@@ -255,7 +290,7 @@ export const engine = {
                     <details class="schema-item" open>
                         <summary class="flex items-center justify-between">
                             <span class="flex items-center gap-1.5 font-bold truncate">
-                                ${icons.table} ${tableName}
+                                ${icons.table} ${tableName.toUpperCase()}
                             </span>
                             <div class="flex items-center gap-1">
                                 <span class="table-badge">${rowCount} ${rowCount === 1 ? 'reg' : 'regs'}</span>
@@ -266,8 +301,8 @@ export const engine = {
                             ${columnsResult.values.map(col => `
                                 <div class="column-item">
                                     ${col[5] ? icons.pk : icons.column}
-                                    <span class="font-mono">${col[1]}</span>
-                                    <span class="column-details">${col[2] || 'VARCHAR'}${col[3] ? ' • NOT NULL' : ''}</span>
+                                    <span class="font-mono">${col[1].toUpperCase()}</span>
+                                    <span class="column-details">${col[2] ? col[2].replace(/TEXT/i, 'VARCHAR2').replace(/INTEGER/i, 'NUMBER') : 'VARCHAR2'}${col[3] ? ' • NOT NULL' : ''}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -277,14 +312,14 @@ export const engine = {
         }
 
         if (hasViews) {
-            html += '<div class="schema-section-title mt-3">VIEWS</div>';
+            html += '<div class="schema-section-title mt-3">VIEWS (USER_VIEWS)</div>';
             viewsResult[0].values.forEach(row => {
                 const viewName = row[0];
                 html += `
                     <details class="schema-item">
                         <summary class="flex items-center justify-between">
                             <span class="flex items-center gap-1.5 font-bold text-purple-400 truncate">
-                                ${icons.view} ${viewName}
+                                ${icons.view} ${viewName.toUpperCase()}
                             </span>
                             <button class="quick-query-btn" onclick="window.insertSampleQuery('${viewName}')" title="Consultar View">+</button>
                         </summary>

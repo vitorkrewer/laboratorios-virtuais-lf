@@ -117,5 +117,19 @@
     "description": "Garante as propriedades ACID, executando um lote de comandos de forma atômica ou revertendo em caso de falha.",
     "syntax": "BEGIN TRANSACTION;\n  UPDATE contas SET saldo = saldo - 100 WHERE id = 1;\n  UPDATE contas SET saldo = saldo + 100 WHERE id = 2;\nCOMMIT; -- ou ROLLBACK caso haja erro",
     "example": "BEGIN TRANSACTION;\nINSERT INTO categorias (nome, departamento) VALUES ('Drones', 'Robótica');\nCOMMIT;"
+  },
+  {
+    "category": "Dialetos (T-SQL)",
+    "command": "TOP n & GETDATE() (SQL Server)",
+    "description": "Sintaxe do Microsoft SQL Server para limitar linhas e obter data/hora atual.",
+    "syntax": "SELECT TOP (10) coluna1, coluna2\nFROM [dbo].[tabela]\nWHERE data_cadastro <= GETDATE()\nORDER BY coluna1 DESC;",
+    "example": "SELECT TOP 5 nome, preco FROM produtos ORDER BY preco DESC;"
+  },
+  {
+    "category": "Dialetos (Oracle)",
+    "command": "DUAL, SYSDATE & NVL() (Oracle)",
+    "description": "Sintaxe clássica do Oracle Database utilizando a tabela dummy DUAL e tratamento de nulos.",
+    "syntax": "SELECT SYSDATE, NVL(coluna_nula, 'Padrão')\nFROM tabela\nFETCH FIRST 10 ROWS ONLY;",
+    "example": "SELECT SYSDATE AS data_atual, NVL(nome, 'Sem Nome') FROM dual;"
   }
 ]

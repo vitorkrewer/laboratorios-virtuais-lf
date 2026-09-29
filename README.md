@@ -23,7 +23,7 @@ O repositório conta com um **Portal Institucional / Hub de Navegação** hosped
 
 Um laboratório interativo avançado para prática de Banco de Dados Relacional e comandos SQL.
 
-- **Funcionalidades:** Execução em tempo real via WebAssembly com suporte a 3 dialetos (SQLite, MySQL e PostgreSQL), pontos de restauração no tempo (**Time-Travel Snapshots**), datasets pré-carregados (E-Commerce, Universidade, RH), visualizador de plano de execução (**EXPLAIN Query Plan**), formatador de código, histórico de queries e trilha de desafios práticos com validação.
+- **Funcionalidades:** Execução em tempo real via WebAssembly com suporte a 5 dialetos relacionais (**SQLite, MySQL, PostgreSQL, Microsoft SQL Server e Oracle Database**), pontos de restauração no tempo (**Time-Travel Snapshots**), datasets pré-carregados (E-Commerce, Universidade, RH), visualizador de plano de execução (**EXPLAIN Query Plan**), formatador de código, histórico de queries e trilha de desafios práticos com validação.
 - **Destaque:** Permite aos estudantes testar qualquer comando DDL e DML (como `DROP TABLE` e `DELETE`) com total segurança, revertendo o estado do banco instantaneamente com 1 clique.
 
 ### 2. 🧪 Tabela Periódica Interativa & Construtor Atômico

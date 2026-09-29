@@ -2,12 +2,12 @@
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![WebAssembly](https://img.shields.io/badge/engine-WebAssembly_sql.js-blue)
-![Dialetos](https://img.shields.io/badge/dialetos-SQLite_|_MySQL_|_PostgreSQL-orange)
+![Dialetos](https://img.shields.io/badge/dialetos-SQLite_|_MySQL_|_Postgres_|_SQLServer_|_Oracle-orange)
 ![Segurança](https://img.shields.io/badge/time--travel-Snapshots_Instantâneos-emerald)
 
 O **SQL Playground Pro** é uma ferramenta educacional interativa projetada para que estudantes de graduação e tecnologia pratiquem Banco de Dados Relacional e comandos SQL diretamente no navegador, **com total liberdade e sem medo de quebrar nada**.
 
-A aplicação conta com motor **WebAssembly**, pontos de restauração no tempo (**Time-Travel Snapshots**), múltiplos dialetos (**SQLite, MySQL e PostgreSQL**), datasets pedagógicos prontos, visualizador de planos de execução (**EXPLAIN**), formatador de código e trilha de desafios práticos com validação.
+A aplicação conta com motor **WebAssembly**, pontos de restauração no tempo (**Time-Travel Snapshots**), múltiplos dialetos (**SQLite, MySQL, PostgreSQL, Microsoft SQL Server e Oracle Database**), datasets pedagógicos prontos, visualizador de planos de execução (**EXPLAIN**), formatador de código e trilha de desafios práticos com validação.
 
 [🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/sql-playground/)
 
@@ -20,10 +20,12 @@ A aplicação conta com motor **WebAssembly**, pontos de restauração no tempo 
 - Reverta o banco de dados inteiro para qualquer momento anterior com apenas 1 clique.
 - Snapshots automáticos a cada troca de dataset ou operação crítica.
 
-### 2. 🗃️ 3 Dialetos SQL Suportados
+### 2. 🗃️ 5 Dialetos Relacionais Suportados
 - **SQLite (Nativo WASM):** Processamento client-side completo com suporte a foreign keys e transações.
 - **MySQL (Emulação Avançada):** Suporte a `AUTO_INCREMENT`, `SHOW TABLES`, `DESCRIBE`, `LIMIT offset, count`, `NOW()`, `TRUNCATE`, etc.
 - **PostgreSQL (Emulado):** Suporte a `SERIAL PRIMARY KEY`, `ILIKE`, `RETURNING`, `VARCHAR`, etc.
+- **Microsoft SQL Server (T-SQL Emulado):** Suporte a `IDENTITY(1,1)`, `SELECT TOP n`, `GETDATE()`, `ISNULL()`, `LEN()`, identificadores `[dbo].[tabela]`, etc.
+- **Oracle Database (Emulado):** Suporte a `VARCHAR2`, `NUMBER`, `SYSDATE`, `NVL()`, tabela `DUAL`, `USER_TABLES`, `FETCH FIRST n ROWS ONLY`, etc.
 
 ### 3. 📦 Datasets Educacionais Pré-carregados
 Troque de contexto em 1 clique para praticar cenários do mundo real:

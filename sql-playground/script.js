@@ -77,15 +77,9 @@ async function main() {
 
     // Inicializar Engine Padrão
     await switchEngine(dbTypeSelector.value);
-
-    // Se o banco estiver vazio na primeira vez, carrega o dataset de ecommerce
-    const schemaHtml = await activeEngine.getSchemaHTML();
-    if (schemaHtml.includes('Nenhuma tabela')) {
-        await applyDataset('ecommerce');
-    }
 }
 
-// --- Alternância de Engines (SQLite, MySQL, PostgreSQL) ---
+// --- Alternância de Engines (SQLite, MySQL, PostgreSQL, SQL Server, Oracle) ---
 async function switchEngine(dialect) {
     loader.style.display = 'flex';
     loaderMsg.textContent = `Carregando motor ${dialect.toUpperCase()}...`;
@@ -96,16 +90,43 @@ async function switchEngine(dialect) {
         activeEngine = engineModule.engine;
         await activeEngine.init();
 
+        // Se o banco estiver vazio na primeira inicialização deste dialeto, popula automaticamente
+        if (!activeEngine.hasTables()) {
+            const currentDataset = (datasetSelector.value && datasetSelector.value !== 'empty') ? datasetSelector.value : 'ecommerce';
+            datasetSelector.value = currentDataset;
+            activeEngine.loadDataset(datasets[currentDataset].sql);
+        }
+
         await updateSchema();
         updateSnapshotBadge();
         renderSnapshotsList();
 
+        // Atualizar editor com consulta exemplo característica do dialeto
+        updateEditorSampleForDialect(dialect);
+
         loader.style.display = 'none';
         appContainer.style.visibility = 'visible';
-        displayMessage(`Motor ${activeEngine.dialectName} carregado com sucesso.`, 'success');
+        displayMessage(`Motor ${activeEngine.dialectName} pronto para uso.`, 'success');
     } catch (err) {
         console.error(`Erro ao carregar o motor ${dialect}:`, err);
         loader.innerHTML = `<p style="color:#f43f5e; font-weight:bold;">Falha ao carregar o motor ${dialect}: ${err.message}</p>`;
+    }
+}
+
+function updateEditorSampleForDialect(dialect) {
+    const currentDataset = datasetSelector.value || 'ecommerce';
+    const dsName = datasets[currentDataset] ? datasets[currentDataset].name : 'Banco';
+
+    if (dialect === 'sqlserver') {
+        sqlEditor.value = `-- Dialeto: Microsoft SQL Server (T-SQL)\n-- Dataset ativo: ${dsName}\n\nSELECT TOP (5) * FROM [dbo].[produtos];\n\n-- Teste também:\n-- EXEC sp_help 'produtos';\n-- SELECT GETDATE() AS DataHoraAtual;`;
+    } else if (dialect === 'oracle') {
+        sqlEditor.value = `-- Dialeto: Oracle Database\n-- Dataset ativo: ${dsName}\n\nSELECT * FROM PRODUTOS FETCH FIRST 5 ROWS ONLY;\n\n-- Teste também:\n-- SELECT SYSDATE FROM dual;\n-- SELECT * FROM user_tables;`;
+    } else if (dialect === 'mysql') {
+        sqlEditor.value = `-- Dialeto: MySQL\n-- Dataset ativo: ${dsName}\n\nSHOW TABLES;\nSELECT * FROM produtos LIMIT 5;`;
+    } else if (dialect === 'postgres') {
+        sqlEditor.value = `-- Dialeto: PostgreSQL\n-- Dataset ativo: ${dsName}\n\nSELECT * FROM produtos LIMIT 5;\n\n-- Teste também com ILIKE:\nSELECT nome, preco FROM produtos WHERE nome ILIKE '%pro%';`;
+    } else {
+        sqlEditor.value = `-- Dialeto: SQLite\n-- Dataset ativo: ${dsName}\n\nSELECT * FROM produtos LIMIT 5;`;
     }
 }
 
@@ -117,6 +138,7 @@ async function applyDataset(datasetKey) {
             await updateSchema();
             updateSnapshotBadge();
             displayMessage("Banco de dados resetado para o estado vazio.", "success");
+            sqlEditor.value = "-- Banco vazio. Comece criando suas tabelas com CREATE TABLE...";
         }
         return;
     }
@@ -130,11 +152,7 @@ async function applyDataset(datasetKey) {
         updateSnapshotBadge();
         displayMessage(`Dataset "${ds.name}" carregado com sucesso!`, 'success');
         
-        // Coloca uma consulta de exemplo no editor
-        const firstTableMatch = ds.sql.match(/CREATE TABLE (\w+)/i);
-        if (firstTableMatch) {
-            sqlEditor.value = `-- Dataset: ${ds.name}\n-- Experimente consultas como:\nSELECT * FROM ${firstTableMatch[1]} LIMIT 10;`;
-        }
+        updateEditorSampleForDialect(dbTypeSelector.value);
     } catch (e) {
         displayMessage(`Erro ao carregar dataset: ${e.message}`, 'error');
     }
@@ -145,8 +163,17 @@ window.loadDefaultDataset = () => {
     applyDataset('ecommerce');
 };
 
-window.insertSampleQuery = (tableName) => {
-    sqlEditor.value = `SELECT * FROM ${tableName} LIMIT 10;`;
+window.insertSampleQuery = (rawTableName) => {
+    const cleanTable = rawTableName.replace(/[\[\]]/g, '').replace(/^dbo\./i, '');
+    const dialect = dbTypeSelector.value;
+
+    if (dialect === 'sqlserver') {
+        sqlEditor.value = `SELECT TOP (10) * FROM [dbo].[${cleanTable}];`;
+    } else if (dialect === 'oracle') {
+        sqlEditor.value = `SELECT * FROM ${cleanTable.toUpperCase()} FETCH FIRST 10 ROWS ONLY;`;
+    } else {
+        sqlEditor.value = `SELECT * FROM ${cleanTable} LIMIT 10;`;
+    }
     executeSql();
 };
 
