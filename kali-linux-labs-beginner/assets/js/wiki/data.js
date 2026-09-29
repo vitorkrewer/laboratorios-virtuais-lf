@@ -160,5 +160,82 @@ export const wikiData = [
         command: "hydra -L <users.txt> -P <passwords.txt> <target> <protocol>",
         description: "Ataque com lista de usuários e lista de senhas.",
         labId: "hydra"
+    },
+    {
+        tool: "Wireshark",
+        category: "Defensive Network Analysis",
+        command: "wireshark -r campus-lab.pcap -Y dns",
+        description: "Abre uma PCAP sintética em modo leitura e filtra consultas DNS para investigação didática.",
+        labId: "wireshark"
+    },
+    {
+        tool: "Zeek",
+        category: "SOC Telemetry",
+        command: "zeek-cut query < dns.log",
+        description: "Extrai campos de um log Zeek sintético para correlacionar eventos DNS.",
+        labId: "zeek"
+    },
+    {
+        tool: "Zeek",
+        category: "SOC Telemetry",
+        command: "zeek-cut id.orig_h id.resp_h service < conn.log",
+        description: "Mostra origem, destino e serviço de conexões fictícias para criar uma linha do tempo.",
+        labId: "zeek"
+    },
+    {
+        tool: "Suricata",
+        category: "IDS & Detection",
+        command: "suricata -T -S training.rules",
+        description: "Valida a sintaxe de regras IDS de treinamento sem iniciar captura ou bloqueio.",
+        labId: "suricata"
+    },
+    {
+        tool: "Suricata",
+        category: "IDS & Detection",
+        command: "jq 'select(.alert.severity <= 2)' alerts/eve.json",
+        description: "Filtra alertas de maior prioridade em um EVE JSON sintético usando jq.",
+        labId: "suricata"
+    },
+    {
+        tool: "YARA",
+        category: "Forensics & Classification",
+        command: "yara -m training_rules.yar samples/",
+        description: "Classifica amostras textuais inofensivas e exibe metadados da regra correspondente.",
+        labId: "yara"
+    },
+    {
+        tool: "osquery",
+        category: "Endpoint Investigation",
+        command: "osqueryi \"SELECT pid, name, path FROM processes WHERE name = 'python3';\"",
+        description: "Consulta uma tabela de processos sintética usando SQL para investigação de endpoint.",
+        labId: "osquery"
+    },
+    {
+        tool: "Lynis",
+        category: "Linux Hardening",
+        command: "lynis audit system",
+        description: "Avalia uma postura Linux sintética e apresenta recomendações de hardening priorizáveis.",
+        labId: "lynis"
+    },
+    {
+        tool: "Trivy",
+        category: "Supply Chain Security",
+        command: "trivy image --severity HIGH learningfly/webapp:1.0",
+        description: "Prioriza vulnerabilidades altas em uma imagem de container fictícia.",
+        labId: "trivy"
+    },
+    {
+        tool: "Semgrep",
+        category: "Secure Code Review",
+        command: "semgrep --config p/security-audit --json demo-api",
+        description: "Executa SAST em código de treinamento e retorna achados no formato JSON.",
+        labId: "semgrep"
+    },
+    {
+        tool: "Gitleaks",
+        category: "Secret Management",
+        command: "gitleaks protect --staged",
+        description: "Simula uma verificação pré-commit de segredos antes do código seguir para revisão.",
+        labId: "gitleaks"
     }
 ];

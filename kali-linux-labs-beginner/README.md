@@ -10,7 +10,7 @@
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=flat&logo=tailwind-css&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=flat&logo=javascript&logoColor=%23F7DF1E)
 
-Bem-vindo ao repositório do **Laboratório Virtual de Kali Linux**, uma interface interativa projetada para guiar iniciantes através dos fundamentos do sistema operacional favorito dos profissionais de segurança ofensiva. Este projeto faz parte da iniciativa **LearningFly**, focada em criar experiências educacionais práticas e imersivas.
+Bem-vindo ao repositório do **Laboratório Virtual de Kali Linux**, uma interface interativa projetada para guiar iniciantes pelos fundamentos de segurança ofensiva responsável, análise defensiva e DevSecOps. Este projeto faz parte da iniciativa **LearningFly**, focada em criar experiências educacionais práticas e imersivas.
 
 [🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/kali-linux-labs-beginner/)
 
@@ -21,7 +21,7 @@ Este projeto serve como um **hub educacional interativo**, fornecendo um caminho
 - 🛡️ **Ética Hacker:** A importância da responsabilidade e autorização no uso de ferramentas ofensivas.
 - 💻 **Instalação:** Guia passo a passo para configurar o Kali Linux via WSL (Windows Subsystem for Linux) ou Bare-Metal.
 - ⌨️ **Terminal Interativo (Xterm.js):** Um ambiente simulado que permite a execução segura de ferramentas reais em um sandbox navegador.
-- 🔬 **Laboratório Prático:** Missões simuladas cobrindo fases reais de um pentest (Reconhecimento, Análise Web, Quebra de Hashes).
+- 🔬 **Laboratório Prático:** Missões simuladas cobrindo reconhecimento autorizado, análise web, análise de tráfego, segurança de código, gestão de dependências e proteção de segredos.
 - 📚 **Wiki & Guia em Markdown:** Documentação viva de comandos e tutoriais passo a passo (`guide.html`, `wiki.html`).
 - 🎥 **Vídeos Integrados:** Curadoria de aulas e demos práticas diretamente na interface.
 
@@ -31,7 +31,16 @@ O projeto foi desenhado para oferecer uma experiência de usuário (UX) moderna 
 
 - **Design Híbrido & Responsivo:** Interface limpa, com foco na estética "Kali Dark", utilizando fontes monoespaçadas (`Fira Code`) e animações de Scanline.
 - **Terminal Simulado Realista:** Implementação com **Xterm.js** + `fit-addon` para criar uma experiência de linha de comando autêntica no navegador, com suporte a autocompletar e *streaming* de saída de comandos.
+- **Instruções Recolhíveis em Mobile:** Em telas menores, o briefing da missão vira um drawer acessível pelo botão `Instruções`, com fechamento por botão, clique externo ou `Esc`, liberando o viewport para o terminal.
+- **Shell Didático Expandido:** O Playground oferece `man`, `which`, `tree`, `grep`, `head`, `tail`, `find`, `ip` e `ss` sobre um filesystem de treinamento, permitindo explorar logs, regras, amostras inofensivas e projetos fictícios.
+- **Biblioteca Executável de Comandos:** A Wiki inclui exemplos copiáveis para cada ferramenta; os exemplos da trilha defensiva podem ser executados diretamente no Sandbox com saídas explicadas.
+- **Wiki → Sandbox:** O botão `EXEC NO SANDBOX` preserva o comando selecionado, abre o Terminal Livre e executa a linha automaticamente no ambiente local simulado.
+- **Guia de Campo Responsivo:** Leitor Markdown com índice horizontal em mobile, navegação Anterior/Próximo, URL compartilhável por capítulo, progresso local de leitura e ações para copiar ou executar exemplos no Sandbox.
+- **Novos Capítulos Defensivos:** SOC e telemetria de rede, DevSecOps, endpoint/hardening Linux e resposta a incidentes, com exercícios integradores baseados nos dados sintéticos do laboratório.
 - **Engine de Cenários:** Sistema próprio (`lab-engine.js`) que gerencia missões interativas, validando comandos do usuário e oferecendo feedback em tempo real.
+- **Trilha Defensiva & DevSecOps:** Missões com dados sintéticos para análise de tráfego (Wireshark), avaliação de dependências e containers (Trivy), SAST (Semgrep) e prevenção de segredos expostos (Gitleaks).
+- **SOC, Forense & Hardening:** Cenários progressivos de telemetria de rede (Zeek), alertas IDS (Suricata), classificação de artefatos (YARA), investigação de endpoint com SQL (osquery) e auditoria Linux (Lynis).
+- **Progresso Local:** O navegador registra módulos concluídos e apresenta o avanço do aluno diretamente na galeria de laboratórios.
 - **Wiki de Comandos:** Base de dados pesquisável (`wiki.html`) com "Copy-Paste" rápido para ferramentas essenciais.
 - **Modo Claro / Escuro:** Alternância de tema com persistência local (localStorage) e detecção de preferência do sistema.
 - **Sobre (Terminal Style):** Uma página de perfil interativa (`about.html`) que demonstra as capacidades do desenvolvedor e do projeto via terminal.
@@ -103,6 +112,15 @@ O laboratório cobre as seguintes ferramentas e conceitos através de cenários 
 - **Hydra:** Ataques de força bruta contra serviços (SSH/FTP).
 - **Burp Suite:** Introdução à interceptação e modificação de requisições HTTP.
 - **Naabu / Nuclei / DNSX / Maltego:** Ferramentas modernas de reconhecimento e scans de vulnerabilidade.
+- **Wireshark:** Análise defensiva de captura de tráfego PCAP sintética com filtros DNS e HTTP.
+- **Trivy:** Priorização de vulnerabilidades em dependências e imagens de container fictícias.
+- **Semgrep:** Revisão estática de código para identificar padrões de risco antes do deploy.
+- **Gitleaks:** Detecção e prevenção de segredos sintéticos em repositórios de treinamento.
+- **Zeek:** Correlação de logs DNS, HTTP e conexões para investigação baseada em telemetria.
+- **Suricata:** Triagem de alertas de IDS e validação segura de regras de detecção.
+- **YARA:** Classificação de artefatos textuais inofensivos por regras e metadados.
+- **osquery:** Investigação de processos, usuários e serviços de um endpoint fictício usando SQL.
+- **Lynis:** Auditoria de hardening Linux e priorização de recomendações de segurança.
 - **Playground Livre:** Um ambiente seguro para testar comandos Linux básicos (`ls`, `cd`, `cat`, `grep`, etc.).
 
 ---

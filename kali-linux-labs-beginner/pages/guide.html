@@ -75,47 +75,113 @@
 
         /* Markdown Styles */
         .markdown-body h1 {
-            @apply text-3xl font-bold mb-6 text-gray-900 dark:text-white border-b border-gray-200 dark:border-kali-border pb-2;
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin: 0 0 1.5rem;
+            padding-bottom: 0.5rem;
+            color: #111827;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .markdown-body h2 {
-            @apply text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: #111827;
         }
 
         .markdown-body h3 {
-            @apply text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.75rem;
+            color: #111827;
         }
 
         .markdown-body p {
-            @apply mb-4 leading-relaxed text-gray-700 dark:text-gray-300;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: #374151;
         }
 
         .markdown-body ul {
-            @apply list-disc list-inside mb-4 text-gray-700 dark:text-gray-300;
+            list-style: disc inside;
+            margin-bottom: 1rem;
+            color: #374151;
         }
 
         .markdown-body pre {
-            @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6 font-mono text-sm border border-kali-border;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            color: #f3f4f6;
+            background: #111827;
+            border: 1px solid #30363d;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
         }
 
         .markdown-body code {
-            @apply bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded font-mono text-sm text-pink-600 dark:text-pink-400;
+            padding: 0.125rem 0.25rem;
+            color: #db2777;
+            background: #f3f4f6;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
         }
 
         .markdown-body pre code {
-            @apply bg-transparent text-gray-100 p-0;
+            padding: 0;
+            color: #f3f4f6;
+            background: transparent;
         }
 
         .markdown-body blockquote {
-            @apply border-l-4 border-kali-blue pl-4 py-1 italic bg-blue-50 dark:bg-blue-900/20 text-gray-700 dark:text-gray-300 rounded-r;
+            margin: 1rem 0;
+            padding: 0.25rem 1rem;
+            color: #374151;
+            background: #eff6ff;
+            border-left: 4px solid #58a6ff;
+            border-radius: 0 0.25rem 0.25rem 0;
+            font-style: italic;
         }
 
         .markdown-body img {
-            @apply rounded-lg shadow-lg max-w-full my-6;
+            max-width: 100%;
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
         }
 
         .active-guide {
-            @apply bg-blue-50 dark:bg-blue-900/20 border-l-4 border-kali-green text-kali-blue dark:text-kali-green !important;
+            color: #39d353 !important;
+            background: rgba(30, 58, 138, 0.2) !important;
+            border-left-color: #39d353 !important;
+        }
+
+        .dark .markdown-body h1 {
+            color: #ffffff;
+            border-bottom-color: #30363d;
+        }
+
+        .dark .markdown-body h2,
+        .dark .markdown-body h3 {
+            color: #ffffff;
+        }
+
+        .dark .markdown-body p,
+        .dark .markdown-body ul,
+        .dark .markdown-body blockquote {
+            color: #d1d5db;
+        }
+
+        .dark .markdown-body code {
+            color: #f9a8d4;
+            background: #1f2937;
+        }
+
+        .dark .markdown-body blockquote {
+            background: rgba(30, 58, 138, 0.2);
         }
 
         body {
@@ -149,7 +215,7 @@
 </head>
 
 <body
-    class="bg-gray-100 dark:bg-kali-bg text-gray-800 dark:text-kali-text transition-colors duration-300 h-screen flex flex-col overflow-hidden">
+    class="bg-gray-100 dark:bg-kali-bg text-gray-800 dark:text-kali-text transition-colors duration-300 min-h-screen flex flex-col overflow-x-hidden">
     <div
         class="fixed inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20 z-0">
     </div>
@@ -189,11 +255,11 @@
         </div>
     </nav>
 
-    <div class="flex flex-col lg:flex-row flex-grow overflow-hidden relative z-10 max-w-[1600px] mx-auto w-full">
+    <div class="flex flex-col lg:flex-row flex-grow min-h-0 lg:h-[calc(100vh-5rem)] overflow-y-auto lg:overflow-hidden relative z-10 max-w-[1600px] mx-auto w-full">
 
         <!-- Sidebar Navigation -->
         <aside
-            class="w-full lg:w-64 bg-white dark:bg-kali-card border-r border-gray-200 dark:border-kali-border flex flex-col flex-shrink-0 h-full overflow-hidden transition-colors">
+            class="w-full lg:w-64 bg-white dark:bg-kali-card border-b lg:border-b-0 border-r-0 lg:border-r border-gray-200 dark:border-kali-border flex flex-col flex-shrink-0 max-h-56 lg:max-h-none lg:h-full overflow-hidden transition-colors">
             <div class="p-4 border-b border-gray-200 dark:border-kali-border">
                 <h2 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
                     <svg class="w-5 h-5 text-kali-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,24 +270,31 @@
                     Capítulos
                 </h2>
             </div>
-            <div id="guides-list" class="flex-grow overflow-y-auto custom-scrollbar p-2 space-y-1">
+            <div id="guides-list" class="flex lg:flex-col flex-grow overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto custom-scrollbar p-2 gap-2 lg:gap-1">
                 <!-- Injected via JS -->
             </div>
         </aside>
 
         <!-- Main Content -->
         <main
-            class="flex-grow flex flex-col h-full overflow-hidden bg-gray-50 dark:bg-kali-bg p-4 md:p-8 transition-colors">
+            class="flex-grow flex flex-col min-h-[65vh] lg:h-full overflow-hidden bg-gray-50 dark:bg-kali-bg p-3 md:p-8 transition-colors">
             <div
                 class="max-w-5xl w-full mx-auto h-full flex flex-col bg-white dark:bg-kali-card rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-kali-border">
 
                 <!-- Toolbar -->
                 <div
-                    class="h-14 bg-gray-50 dark:bg-kali-card/50 border-b border-gray-200 dark:border-kali-border flex items-center justify-between px-6 flex-shrink-0">
+                    class="min-h-14 bg-gray-50 dark:bg-kali-card/50 border-b border-gray-200 dark:border-kali-border flex items-center justify-between gap-3 px-4 md:px-6 py-2 flex-shrink-0">
                     <span id="current-guide-title"
                         class="font-bold text-gray-700 dark:text-kali-green text-sm md:text-base font-mono truncate">Carregando...</span>
 
-                    <div class="flex gap-2">
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button id="prev-guide" class="text-xs px-2 py-1.5 rounded border border-gray-300 dark:border-kali-border text-gray-500 hover:text-kali-green disabled:opacity-40" title="Capítulo anterior" disabled>
+                            &larr;
+                        </button>
+                        <span id="guide-progress" class="hidden sm:inline text-[10px] text-gray-500 dark:text-gray-400 font-mono"></span>
+                        <button id="next-guide" class="text-xs px-2 py-1.5 rounded border border-gray-300 dark:border-kali-border text-gray-500 hover:text-kali-green disabled:opacity-40" title="Próximo capítulo" disabled>
+                            &rarr;
+                        </button>
                         <a id="video-link" href="#"
                             class="hidden text-xs bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1.5 rounded-full font-bold hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors items-center gap-1">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -256,10 +329,24 @@
         const readerContent = document.getElementById('reader-content');
         const currentGuideTitle = document.getElementById('current-guide-title');
         const videoLink = document.getElementById('video-link');
+        const prevGuideBtn = document.getElementById('prev-guide');
+        const nextGuideBtn = document.getElementById('next-guide');
+        const guideProgress = document.getElementById('guide-progress');
+        const guideProgressKey = 'learningfly-kali-read-guides';
+        let activeGuideIndex = 0;
 
         function loadGuide(guide) {
+            activeGuideIndex = guides.findIndex(item => item.id === guide.id);
             currentGuideTitle.innerText = guide.title;
             readerContent.innerHTML = '<div class="flex items-center justify-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-kali-green"></div></div>';
+            history.replaceState({}, '', `?guide=${guide.id}`);
+            guideProgress.innerText = `${activeGuideIndex + 1} / ${guides.length}`;
+            prevGuideBtn.disabled = activeGuideIndex <= 0;
+            nextGuideBtn.disabled = activeGuideIndex >= guides.length - 1;
+
+            const completed = new Set(JSON.parse(localStorage.getItem(guideProgressKey) || '[]'));
+            completed.add(guide.id);
+            localStorage.setItem(guideProgressKey, JSON.stringify([...completed]));
 
             const linkedVideo = videos.find(v => v.guideId === guide.id);
             if (linkedVideo) {
@@ -282,6 +369,8 @@
                 })
                 .then(text => {
                     readerContent.innerHTML = marked.parse(text);
+                    enhanceCodeBlocks();
+                    readerContent.scrollTop = 0;
                 })
                 .catch(err => {
                     readerContent.innerHTML = `<div class="text-red-500 text-center p-4">Erro ao carregar o conteúdo: ${err.message}</div>`;
@@ -291,7 +380,7 @@
         function renderSidebar() {
             guides.forEach(guide => {
                 const btn = document.createElement('button');
-                btn.className = 'guide-item w-full text-left px-4 py-3 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-bg transition-colors font-medium border-l-4 border-transparent truncate';
+                btn.className = 'guide-item flex-none lg:flex-initial min-w-max lg:min-w-0 w-auto lg:w-full text-left px-4 py-3 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-bg transition-colors font-medium border-l-4 border-transparent whitespace-nowrap lg:whitespace-normal';
                 btn.innerText = guide.title;
                 btn.dataset.id = guide.id;
                 btn.onclick = () => loadGuide(guide);
@@ -300,6 +389,49 @@
         }
 
         renderSidebar();
+
+        prevGuideBtn.addEventListener('click', () => {
+            if (activeGuideIndex > 0) loadGuide(guides[activeGuideIndex - 1]);
+        });
+
+        nextGuideBtn.addEventListener('click', () => {
+            if (activeGuideIndex < guides.length - 1) loadGuide(guides[activeGuideIndex + 1]);
+        });
+
+        function enhanceCodeBlocks() {
+            readerContent.querySelectorAll('pre').forEach(pre => {
+                const code = pre.querySelector('code');
+                if (!code || pre.querySelector('.guide-code-actions')) return;
+                const fullCommand = code.innerText.trim();
+                const executableLine = fullCommand.split('\n')
+                    .map(line => line.trim())
+                    .find(line => line && !line.startsWith('#') && !line.toLowerCase().startsWith('bash'));
+                if (!fullCommand) return;
+
+                const actions = document.createElement('div');
+                actions.className = 'guide-code-actions flex justify-end gap-2 mb-2';
+
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'text-[10px] px-2 py-1 rounded border border-gray-600 text-gray-300 hover:text-white hover:border-kali-green';
+                copyBtn.innerText = 'COPIAR';
+                copyBtn.onclick = () => navigator.clipboard.writeText(fullCommand);
+                actions.appendChild(copyBtn);
+
+                if (executableLine) {
+                    const sandboxBtn = document.createElement('button');
+                    sandboxBtn.className = 'text-[10px] px-2 py-1 rounded bg-kali-green text-kali-bg font-bold hover:bg-green-300';
+                    sandboxBtn.innerText = 'EXECUTAR NO SANDBOX';
+                    sandboxBtn.onclick = () => {
+                        const command = executableLine.replace(/^sudo\s+/, '').replace(/\\-/g, '-');
+                        sessionStorage.setItem('learningfly-kali-pending-command', JSON.stringify({ command, source: 'guide', timestamp: Date.now() }));
+                        window.location.href = 'terminal.html?tool=playground&source=guide';
+                    };
+                    actions.appendChild(sandboxBtn);
+                }
+
+                pre.parentNode.insertBefore(actions, pre);
+            });
+        }
 
         const urlParams = new URLSearchParams(window.location.search);
         const guideId = urlParams.get('guide');

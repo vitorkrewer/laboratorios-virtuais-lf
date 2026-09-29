@@ -10,6 +10,15 @@ import { data as sqlmapData } from './scenarios/sqlmap.js';
 import { data as msfData } from './scenarios/msfconsole.js';
 import { data as hydraData } from './scenarios/hydra.js';
 import { data as playgroundData } from './scenarios/playground.js';
+import { data as wiresharkData } from './scenarios/wireshark.js';
+import { data as trivyData } from './scenarios/trivy.js';
+import { data as semgrepData } from './scenarios/semgrep.js';
+import { data as gitleaksData } from './scenarios/gitleaks.js';
+import { data as zeekData } from './scenarios/zeek.js';
+import { data as suricataData } from './scenarios/suricata.js';
+import { data as yaraData } from './scenarios/yara.js';
+import { data as osqueryData } from './scenarios/osquery.js';
+import { data as lynisData } from './scenarios/lynis.js';
 import { wikiData } from './wiki/data.js';
 import { VirtualOS } from './virtual-os.js';
 
@@ -24,6 +33,15 @@ const scenarios = {
     sqlmap: sqlmapData,
     msfconsole: msfData,
     hydra: hydraData,
+    wireshark: wiresharkData,
+    trivy: trivyData,
+    semgrep: semgrepData,
+    gitleaks: gitleaksData,
+    zeek: zeekData,
+    suricata: suricataData,
+    yara: yaraData,
+    osquery: osqueryData,
+    lynis: lynisData,
     playground: playgroundData
 };
 
@@ -36,6 +54,7 @@ class LabEngine {
         this.commandBuffer = '';
         this.history = [];
         this.historyIndex = -1;
+        this.progressStorageKey = 'learningfly-kali-completed-modules';
         // Prompt style: user (red) + host + path (blue) + symbol
         this.promptStr = '\x1b[1;31mroot@kali\x1b[0m:\x1b[1;34m~\x1b[0m# ';
 
@@ -73,6 +92,7 @@ class LabEngine {
         this.updateUI();
         this.initTerminal();
         this.bindEvents();
+        this.runPendingWikiCommand();
     }
 
     updateUI() {
@@ -412,9 +432,22 @@ class LabEngine {
         } else {
             this.ui.nextBtn.innerText = "Concluir Módulo";
             this.ui.nextBtn.onclick = () => {
+                this.recordCompletion();
                 // Celebration
                 this.term.writeln('\x1b[1;32m[+] MODULE COMPLETED SUCCESSFULLY!\x1b[0m');
+                this.term.writeln('\x1b[1;36m[+] Progress saved locally. Return to Labs to choose your next defensive mission.\x1b[0m');
             };
+        }
+    }
+
+    recordCompletion() {
+        if (!this.currentScenario || this.currentScenario.id === 'playground') return;
+        try {
+            const completed = new Set(JSON.parse(localStorage.getItem(this.progressStorageKey) || '[]'));
+            completed.add(this.currentScenario.id);
+            localStorage.setItem(this.progressStorageKey, JSON.stringify([...completed]));
+        } catch (error) {
+            console.warn('Unable to persist module progress:', error);
         }
     }
 
@@ -456,6 +489,36 @@ class LabEngine {
         };
         typeChar();
         this.term.focus();
+    }
+
+    runPendingWikiCommand() {
+        if (!this.currentScenario || this.currentScenario.id !== 'playground') return;
+
+        const storageKey = 'learningfly-kali-pending-command';
+        const rawPayload = sessionStorage.getItem(storageKey);
+        if (!rawPayload) return;
+
+        try {
+            const payload = JSON.parse(rawPayload);
+            sessionStorage.removeItem(storageKey);
+
+            const isFresh = typeof payload.timestamp === 'number' && (Date.now() - payload.timestamp) < 5 * 60 * 1000;
+            const command = typeof payload.command === 'string' ? payload.command.trim() : '';
+            if (!isFresh || !command) return;
+
+            // Aguarda o Xterm renderizar o prompt inicial antes de escrever e executar o comando.
+            setTimeout(() => {
+                const sourceLabel = payload.source === 'guide' ? 'Guia' : 'Wiki';
+                this.term.writeln(`\x1b[1;36m[${sourceLabel}] Executando comando no Sandbox local...\x1b[0m`);
+                this.commandBuffer = command;
+                this.term.write(command);
+                this.term.write('\r\n');
+                this.processCommand();
+            }, 120);
+        } catch (error) {
+            sessionStorage.removeItem(storageKey);
+            console.warn('Unable to restore command sent from Wiki:', error);
+        }
     }
 }
 

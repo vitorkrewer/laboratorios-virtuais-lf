@@ -133,13 +133,122 @@
 
     <div class="container mx-auto p-4 md:p-8 max-w-6xl relative z-10 flex-grow">
         <header class="text-center my-12">
-            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Simulações de Campo
+            <h1 class="text-4xl md:text-5xl font-bold font-mono text-gray-900 dark:text-white mb-4">Simulações de Segurança
             </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-400">Execute protocolos ofensivos em ambientes controlados.
-                Lembre-se da ética.</p>
+            <p class="text-xl text-gray-600 dark:text-gray-400">Aprenda análise, defesa e segurança ofensiva responsável em ambientes isolados.
+                Autorização e ética vêm primeiro.</p>
         </header>
 
         <main class="space-y-12 mb-16">
+            <!-- Defensive Learning Path: safe, progressive and persisted locally -->
+            <section class="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-kali-card border border-emerald-800/50 shadow-xl">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
+                    <div class="max-w-3xl">
+                        <span class="inline-flex items-center gap-2 text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-full mb-3"><i class="fa-solid fa-shield-heart"></i> Trilha defensiva e segura</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Defenda, analise e corrija antes de explorar</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed">Pratique análise de evidências, segurança de software e resposta a achados usando somente dados sintéticos dentro do navegador. Nenhuma ferramenta acessa redes, repositórios ou sistemas reais.</p>
+                    </div>
+                    <div class="min-w-[220px] bg-black/20 border border-emerald-900/60 rounded-xl p-4">
+                        <div class="flex justify-between text-xs mb-2"><span class="text-gray-300">Seu progresso</span><span id="defensive-progress-count" class="font-bold text-emerald-300">0 / 9 módulos concluídos</span></div>
+                        <div class="h-2.5 bg-kali-bg rounded-full overflow-hidden"><div id="defensive-progress-bar" class="h-full w-0 bg-gradient-to-r from-emerald-500 to-kali-green transition-all duration-500"></div></div>
+                        <button id="reset-defensive-progress" class="mt-3 text-[11px] text-gray-400 hover:text-white transition-colors">Reiniciar progresso local</button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-2">
+                    <article class="p-5 rounded-xl bg-kali-bg/70 border border-kali-border">
+                        <span class="text-cyan-300 text-xl"><i class="fa-solid fa-magnifying-glass-chart"></i></span>
+                        <h3 class="mt-3 text-lg font-bold text-white">1. Fundamentos de Defesa</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Comece por evidências, endpoint, postura Linux e riscos de dependências antes de avançar para detecção.</p>
+                        <button class="track-filter-btn mt-4 text-xs font-bold text-cyan-300 hover:text-white" data-track="foundations">Ver ferramentas da trilha →</button>
+                    </article>
+                    <article class="p-5 rounded-xl bg-kali-bg/70 border border-kali-border">
+                        <span class="text-orange-300 text-xl"><i class="fa-solid fa-tower-broadcast"></i></span>
+                        <h3 class="mt-3 text-lg font-bold text-white">2. SOC & Investigação</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Correlacione telemetria, alertas IDS e artefatos para transformar sinais técnicos em uma hipótese investigável.</p>
+                        <button class="track-filter-btn mt-4 text-xs font-bold text-orange-300 hover:text-white" data-track="soc">Ver ferramentas da trilha →</button>
+                    </article>
+                    <article class="p-5 rounded-xl bg-kali-bg/70 border border-kali-border">
+                        <span class="text-purple-300 text-xl"><i class="fa-solid fa-code-branch"></i></span>
+                        <h3 class="mt-3 text-lg font-bold text-white">3. AppSec & DevSecOps</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Analise código, segredos, containers e aplicações de treinamento com controles de prevenção no ciclo de desenvolvimento.</p>
+                        <button class="track-filter-btn mt-4 text-xs font-bold text-purple-300 hover:text-white" data-track="appsec">Ver ferramentas da trilha →</button>
+                    </article>
+                    <article class="p-5 rounded-xl bg-kali-bg/70 border border-kali-border">
+                        <span class="text-kali-green text-xl"><i class="fa-solid fa-layer-group"></i></span>
+                        <h3 class="mt-3 text-lg font-bold text-white">Catálogo Completo</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Acesse livremente todas as ferramentas e módulos, independentemente da trilha recomendada.</p>
+                        <button class="track-filter-btn mt-4 text-xs font-bold text-kali-green hover:text-white" data-track="all">Mostrar todas as ferramentas →</button>
+                    </article>
+                </div>
+
+                <!-- Legacy repeated shortcuts kept out of the visual flow; independent access lives in the catalog below. -->
+                <div class="hidden">
+                    <a href="terminal.html?tool=wireshark" data-defensive-module="wireshark" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-cyan-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-cyan-300 text-2xl"><i class="fa-solid fa-wave-square"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Wireshark</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Leia uma PCAP sintética, filtre DNS e HTTP e produza evidências de investigação.</p>
+                        <span class="mt-4 block text-xs font-bold text-cyan-300 group-hover:translate-x-1 transition-transform">Fundamentos · Análise de tráfego →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=trivy" data-defensive-module="trivy" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-orange-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-orange-300 text-2xl"><i class="fa-solid fa-box-open"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Trivy</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Priorize dependências vulneráveis de uma imagem de container fictícia e proponha correções.</p>
+                        <span class="mt-4 block text-xs font-bold text-orange-300 group-hover:translate-x-1 transition-transform">Fundamentos · Supply Chain →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=semgrep" data-defensive-module="semgrep" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-purple-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-purple-300 text-2xl"><i class="fa-solid fa-code"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Semgrep</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Faça SAST em uma API de treinamento e aprenda a diferenciar alerta de contexto real.</p>
+                        <span class="mt-4 block text-xs font-bold text-purple-300 group-hover:translate-x-1 transition-transform">Intermediário · Secure Code →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=gitleaks" data-defensive-module="gitleaks" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-rose-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-rose-300 text-2xl"><i class="fa-solid fa-key"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Gitleaks</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Identifique segredos sintéticos, documente a resposta e previna vazamentos no pipeline.</p>
+                        <span class="mt-4 block text-xs font-bold text-rose-300 group-hover:translate-x-1 transition-transform">Intermediário · DevSecOps →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=zeek" data-defensive-module="zeek" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-sky-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-sky-300 text-2xl"><i class="fa-solid fa-network-wired"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Zeek</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Correlacione logs DNS, HTTP e conexões para construir uma linha do tempo de investigação.</p>
+                        <span class="mt-4 block text-xs font-bold text-sky-300 group-hover:translate-x-1 transition-transform">Intermediário · SOC Telemetria →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=suricata" data-defensive-module="suricata" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-red-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-red-300 text-2xl"><i class="fa-solid fa-satellite-dish"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Suricata</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Faça triagem de alertas IDS sintéticos, correlacione evidências e valide regras antes da implantação.</p>
+                        <span class="mt-4 block text-xs font-bold text-red-300 group-hover:translate-x-1 transition-transform">Intermediário · IDS / SOC →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=yara" data-defensive-module="yara" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-yellow-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-yellow-300 text-2xl"><i class="fa-solid fa-fingerprint"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">YARA</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Classifique artefatos textuais inofensivos com regras, metadados e evidências de contexto.</p>
+                        <span class="mt-4 block text-xs font-bold text-yellow-300 group-hover:translate-x-1 transition-transform">Intermediário · Forense →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=osquery" data-defensive-module="osquery" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-blue-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-blue-300 text-2xl"><i class="fa-solid fa-table-list"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">osquery</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Investigue processos, usuários e serviços em um endpoint fictício utilizando consultas SQL.</p>
+                        <span class="mt-4 block text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">Fundamentos · Endpoint →</span>
+                    </a>
+
+                    <a href="terminal.html?tool=lynis" data-defensive-module="lynis" class="group block p-5 rounded-xl bg-kali-bg/70 border border-kali-border hover:border-green-400 transition-all">
+                        <div class="flex justify-between items-start gap-3"><span class="text-green-300 text-2xl"><i class="fa-solid fa-shield-halved"></i></span><span data-module-status class="text-[10px] px-2 py-1 rounded-full bg-gray-700 text-gray-300 border border-gray-600 font-bold">Disponível</span></div>
+                        <h3 class="mt-4 text-lg font-bold text-white">Lynis</h3>
+                        <p class="mt-2 text-xs text-gray-400 leading-relaxed">Audite a postura de um Linux sintético e transforme recomendações em plano de hardening.</p>
+                        <span class="mt-4 block text-xs font-bold text-green-300 group-hover:translate-x-1 transition-transform">Fundamentos · Hardening →</span>
+                    </a>
+                </div>
+            </section>
+
             <div class="p-8 rounded-2xl bg-white dark:bg-kali-card border border-gray-200 dark:border-kali-border">
                 <h2 class="text-3xl font-bold font-mono text-kali-blue dark:text-kali-green mb-8">root@kali:~#
                     ./executar-lab<span class="blinking-cursor">_</span></h2>
@@ -153,7 +262,7 @@
                             FERRAMENTAS DISPONÍVEIS
                         </h3>
 
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div id="tools-catalog" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                             <!-- Wiki Card -->
                             <a href="wiki.html" class="group block md:col-span-2 lg:col-span-3">
@@ -338,6 +447,51 @@
                                 </div>
                             </a>
 
+                            <!-- Zeek Card -->
+                            <a href="terminal.html?tool=zeek" class="group block">
+                                <div class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-sky-400 transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4 class="font-bold font-mono text-xl text-sky-600 dark:text-sky-300 mb-2 group-hover:translate-x-1 transition-transform">Zeek</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Telemetria estruturada para correlacionar logs DNS, HTTP e conexões em uma investigação.</p>
+                                    <span class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Suricata Card -->
+                            <a href="terminal.html?tool=suricata" class="group block">
+                                <div class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-red-400 transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4 class="font-bold font-mono text-xl text-red-600 dark:text-red-400 mb-2 group-hover:translate-x-1 transition-transform">Suricata</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">IDS para análise de alertas sintéticos, triagem de evidências e validação de regras.</p>
+                                    <span class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- YARA Card -->
+                            <a href="terminal.html?tool=yara" class="group block">
+                                <div class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-yellow-400 transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4 class="font-bold font-mono text-xl text-yellow-600 dark:text-yellow-300 mb-2 group-hover:translate-x-1 transition-transform">YARA</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Classificação de artefatos de treinamento por regras, strings e metadados de evidência.</p>
+                                    <span class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- osquery Card -->
+                            <a href="terminal.html?tool=osquery" class="group block">
+                                <div class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-blue-400 transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4 class="font-bold font-mono text-xl text-blue-600 dark:text-blue-300 mb-2 group-hover:translate-x-1 transition-transform">osquery</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Investigação de endpoint com consultas SQL sobre processos, usuários e serviços simulados.</p>
+                                    <span class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar Módulo &rarr;</span>
+                                </div>
+                            </a>
+
+                            <!-- Lynis Card -->
+                            <a href="terminal.html?tool=lynis" class="group block">
+                                <div class="h-full border border-gray-200 dark:border-kali-border rounded-xl p-6 bg-white dark:bg-kali-card hover:border-kali-green transition-all shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <h4 class="font-bold font-mono text-xl text-green-600 dark:text-kali-green mb-2 group-hover:translate-x-1 transition-transform">Lynis</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Auditoria de hardening Linux para transformar recomendações em um plano de remediação.</p>
+                                    <span class="inline-flex items-center text-xs font-bold text-kali-blue dark:text-white group-hover:underline">Iniciar Módulo &rarr;</span>
+                                </div>
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -365,6 +519,7 @@
     </footer>
 
     <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/labs-dashboard.js"></script>
 </body>
 
 </html>
