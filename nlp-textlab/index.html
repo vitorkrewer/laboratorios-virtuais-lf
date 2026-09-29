@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Laboratório híbrido de Processamento de Linguagem Natural: pré-processamento, vetorização e classificação de textos.">
+    <title>TextoLab | Fundamentos de PLN</title>
+    <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="hub-link" href="../" title="Voltar ao Hub de Laboratórios"><i class="fa-solid fa-arrow-left"></i><span>Hub</span></a>
+        <div class="brand"><img src="../assets/img/logo-learning-fly-simple.png" alt="Learning Fly"><div><strong>TextoLab</strong><span>Fundamentos de PLN</span></div></div>
+        <div class="local-status"><i class="fa-solid fa-shield-halved"></i> Sandbox local</div>
+    </header>
+
+    <main class="app-shell">
+        <section class="hero">
+            <div>
+                <span class="eyebrow"><i class="fa-solid fa-language"></i> Linguagem em experimentação</span>
+                <h1>Transforme texto em <em>evidência.</em></h1>
+                <p>Explore como escolhas de limpeza, vetorização e modelagem alteram o que uma máquina consegue aprender sobre a linguagem.</p>
+            </div>
+            <div class="hero-metrics" aria-label="Indicadores do laboratório">
+                <div><strong id="corpus-count">10</strong><span>documentos</span></div>
+                <div><strong id="vocabulary-count">0</strong><span>termos</span></div>
+                <div><strong id="accuracy-chip">--</strong><span>acurácia</span></div>
+            </div>
+        </section>
+
+        <nav class="module-tabs" aria-label="Módulos do laboratório">
+            <button class="module-tab active" data-module="pipeline"><i class="fa-solid fa-filter-circle-dollar"></i> Pipeline</button>
+            <button class="module-tab" data-module="vectors"><i class="fa-solid fa-table-cells-large"></i> Vetores</button>
+            <button class="module-tab" data-module="mission"><i class="fa-solid fa-bullseye"></i> Missão</button>
+        </nav>
+
+        <section id="pipeline" class="module active">
+            <div class="workbench-grid">
+                <aside class="panel corpus-panel">
+                    <div class="panel-title"><div><span class="kicker">Dados de entrada</span><h2>Mini corpus</h2></div><span class="count-badge" id="selected-label">sentimento</span></div>
+                    <p class="panel-copy">Selecione uma avaliação. O pipeline trabalha sobre o texto que você está vendo.</p>
+                    <div id="corpus-list" class="corpus-list" aria-label="Documentos do corpus"></div>
+                </aside>
+
+                <article class="panel pipeline-panel">
+                    <div class="panel-title"><div><span class="kicker">Experimento 01</span><h2>Oficina de pré-processamento</h2></div><span class="live-dot"><i></i> ao vivo</span></div>
+                    <div id="raw-text" class="raw-text"></div>
+                    <div class="pipeline-controls" aria-label="Controles do pipeline">
+                        <label class="switch"><input id="toggle-lower" type="checkbox" checked><span></span>Minúsculas</label>
+                        <label class="switch"><input id="toggle-accents" type="checkbox" checked><span></span>Normalizar acentos</label>
+                        <label class="switch"><input id="toggle-punctuation" type="checkbox" checked><span></span>Remover pontuação</label>
+                        <label class="switch"><input id="toggle-stops" type="checkbox" checked><span></span>Remover stop words</label>
+                        <label class="switch"><input id="toggle-lemma" type="checkbox"><span></span>Lematizar</label>
+                    </div>
+                    <div class="pipeline-flow" aria-live="polite">
+                        <div class="flow-step"><span>01</span><small>normalização</small><strong id="normalized-output">--</strong></div>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                        <div class="flow-step"><span>02</span><small>tokenização</small><strong id="token-output">--</strong></div>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                        <div class="flow-step accent-step"><span>03</span><small>tokens finais</small><div id="token-chips" class="token-chips"></div></div>
+                    </div>
+                    <div class="observation"><i class="fa-solid fa-lightbulb"></i><p id="pipeline-observation"></p></div>
+                </article>
+            </div>
+
+            <section class="code-bridge panel">
+                <div class="panel-title"><div><span class="kicker">Ponte para Python</span><h2>O mesmo experimento no seu notebook</h2></div><button id="copy-python" class="icon-button" title="Copiar código Python"><i class="fa-regular fa-copy"></i></button></div>
+                <p class="panel-copy">Altere os controles acima e compare a lógica didática com um pipeline reproduzível usando bibliotecas do ecossistema Python.</p>
+                <pre><code id="python-code"></code></pre>
+            </section>
+        </section>
+
+        <section id="vectors" class="module">
+            <section class="vector-toolbar panel">
+                <div><span class="kicker">Experimento 02</span><h2>Da palavra ao vetor</h2><p class="panel-copy">Compare frequência bruta com importância relativa no corpus.</p></div>
+                <div class="toolbar-controls"><label>N-gramas <select id="ngram-select"><option value="1">Unigramas</option><option value="2">Unigramas + bigramas</option></select></label><label>Documento <select id="vector-document"></select></label></div>
+            </section>
+            <div class="comparison-grid">
+                <article class="panel vector-card bow-card"><div class="panel-title"><div><span class="kicker">Representação esparsa</span><h2>Bag of Words</h2></div><i class="fa-solid fa-cubes-stacked"></i></div><p>Conta ocorrências. Palavras comuns podem dominar o vetor mesmo sem diferenciar documentos.</p><div id="bow-list" class="weight-list"></div></article>
+                <article class="panel vector-card tfidf-card"><div class="panel-title"><div><span class="kicker">Ponderação</span><h2>TF-IDF</h2></div><i class="fa-solid fa-scale-balanced"></i></div><p>Valoriza termos frequentes no documento, mas raros no corpus inteiro.</p><div id="tfidf-list" class="weight-list"></div></article>
+                <article class="panel vocabulary-card"><div class="panel-title"><div><span class="kicker">Matriz</span><h2>Vocabulário</h2></div><span id="sparsity-value" class="count-badge">--</span></div><div id="vocabulary-list" class="vocabulary-list"></div><p class="matrix-note" id="matrix-note"></p></article>
+            </div>
+        </section>
+
+        <section id="mission" class="module">
+            <section class="mission-hero panel">
+                <div><span class="kicker">Missão 01 · Classificação</span><h2>O feedback é positivo ou negativo?</h2><p>Treine um classificador Naive Bayes didático usando o mesmo pré-processamento que você configurou no Pipeline.</p></div>
+                <button id="train-model" class="primary-button"><i class="fa-solid fa-play"></i> Treinar modelo local</button>
+            </section>
+            <div class="mission-grid">
+                <article class="panel metrics-panel"><div class="panel-title"><div><span class="kicker">Avaliação</span><h2>Resultado no teste</h2></div><span id="model-status" class="count-badge muted">não treinado</span></div><div id="metrics" class="metrics-empty"><i class="fa-solid fa-chart-line"></i><p>Execute o treino para calcular métricas no conjunto de teste.</p></div><div id="confusion-matrix" class="confusion-matrix"></div></article>
+                <article class="panel prediction-panel"><div class="panel-title"><div><span class="kicker">Inferência</span><h2>Teste uma frase nova</h2></div></div><label for="prediction-input">Avaliação do cliente</label><textarea id="prediction-input" rows="4">A entrega foi rápida e o produto é excelente.</textarea><button id="predict-sentiment" class="secondary-button"><i class="fa-solid fa-wand-magic-sparkles"></i> Classificar texto</button><div id="prediction-result" class="prediction-result"><i class="fa-solid fa-arrow-up-right-dots"></i><span>Treine o modelo antes de fazer uma previsão.</span></div></article>
+            </div>
+            <section class="ethics-note"><i class="fa-solid fa-scale-balanced"></i><div><strong>Leitura crítica</strong><p>Este corpus é pequeno e intencionalmente simples. Em dados reais, variações culturais, ironia, negação e distribuição desigual de exemplos podem criar erros e vieses relevantes.</p></div></section>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

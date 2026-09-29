@@ -35,6 +35,15 @@ Laboratório didático de Bancos de Dados em Grafo, Cypher e Retrieval-Augmented
 - **Funcionalidades:** Grafo de conhecimento navegável, console Cypher simulado, inspeção de nós e relações, recuperação local de chunks com pontuação de relevância e geração de resposta contextual com fontes explícitas.
 - **Destaque:** Explica visualmente como GraphRAG combina relações estruturadas e contexto recuperado para responder perguntas multi-hop sem depender de APIs ou chaves externas.
 
+### 3. 🗣️ TextoLab: Fundamentos de PLN
+
+**Diretório:** `nlp-textlab`
+
+Laboratório híbrido para o ensino de Fundamentos de Processamento de Linguagem Natural.
+
+- **Funcionalidades:** Oficina visual de normalização, tokenização, stop words e lematização; comparador Bag of Words e TF-IDF com n-gramas; classificador local Naive Bayes de sentimentos com métricas; painel Python equivalente com `scikit-learn`.
+- **Destaque:** Conecta a experimentação imediata no navegador à implementação reproduzível em notebooks, ressaltando o efeito de cada decisão de pré-processamento sobre vetores e modelos.
+
 ### 3. 🧪 Tabela Periódica Interativa & Construtor Atômico
 
 **Diretório:** `tabela-periodica-interativa`

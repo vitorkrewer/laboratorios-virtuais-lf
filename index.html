@@ -141,7 +141,7 @@
             <!-- Stats Bar -->
             <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-center">
                 <div class="p-3 sm:p-4 rounded-xl bg-gray-900/50 border border-gray-800/80 backdrop-blur-sm">
-                    <span class="block text-2xl sm:text-3xl font-bold font-heading text-cyan-400" id="labCountBadge">9</span>
+                    <span class="block text-2xl sm:text-3xl font-bold font-heading text-cyan-400" id="labCountBadge">10</span>
                     <span class="text-xs text-gray-400 font-medium">Laboratórios Prontos</span>
                 </div>
                 <div class="p-3 sm:p-4 rounded-xl bg-gray-900/50 border border-gray-800/80 backdrop-blur-sm">
@@ -170,7 +170,7 @@
                 <i class="fa-solid fa-layer-group mr-1.5"></i> Todos (<span id="count-all">9</span>)
             </button>
             <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-gray-800/80 text-gray-300 hover:bg-gray-700 border border-gray-700" data-filter="tech">
-                <i class="fa-solid fa-code mr-1.5 text-cyan-400"></i> Tecnologia & Dados (<span id="count-tech">4</span>)
+                <i class="fa-solid fa-code mr-1.5 text-cyan-400"></i> Tecnologia & Dados (<span id="count-tech">5</span>)
             </button>
             <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-gray-800/80 text-gray-300 hover:bg-gray-700 border border-gray-700" data-filter="quimica">
                 <i class="fa-solid fa-flask mr-1.5 text-purple-400"></i> Ciências & Química (<span id="count-quimica">2</span>)
@@ -354,6 +354,40 @@
 
                 <div class="p-6 pt-0">
                     <a href="./tabela-periodica-interativa/" class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all shadow-md hover:shadow-purple-500/30">
+                        <span>Acessar Laboratório</span>
+                        <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card: TextoLab -->
+            <div class="lab-card group rounded-2xl bg-gray-900/90 border border-gray-800 hover:border-teal-500/50 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:-translate-y-1.5 card-glow" data-category="tech" data-keywords="pln processamento linguagem natural nlp texto tokenizacao lematizacao tfidf bag of words embeddings sentimento classificacao naive bayes machine learning python scikit learn">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white text-xl shadow-lg shadow-teal-500/20 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-language"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-teal-950/80 text-teal-300 border border-teal-800/60">
+                            Dados & IA
+                        </span>
+                    </div>
+
+                    <h3 class="font-heading text-xl font-bold text-white group-hover:text-teal-400 transition-colors mb-2">
+                        TextoLab: Fundamentos de PLN
+                    </h3>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
+                        Laboratório híbrido de Processamento de Linguagem Natural: explore pré-processamento, compare BoW e TF-IDF e treine um classificador local de sentimentos com ponte para Python.
+                    </p>
+
+                    <div class="flex flex-wrap gap-1.5 mb-2">
+                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-gray-800 text-gray-300 font-mono">TF-IDF & N-gramas</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-gray-800 text-gray-300 font-mono">Naive Bayes</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-gray-800 text-gray-300 font-mono">Python Bridge</span>
+                    </div>
+                </div>
+
+                <div class="p-6 pt-0">
+                    <a href="./nlp-textlab/index.html" class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-sm transition-all shadow-md hover:shadow-teal-500/30">
                         <span>Acessar Laboratório</span>
                         <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                     </a>
