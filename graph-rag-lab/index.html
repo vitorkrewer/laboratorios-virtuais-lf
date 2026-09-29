@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Laboratório interativo de Bancos de Dados em Grafo, Cypher e Retrieval-Augmented Generation (RAG).">
+    <title>Graph & RAG Lab | Learning Fly</title>
+    <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <a href="../" class="hub-link" title="Voltar ao Hub de Laboratórios"><i class="fa-solid fa-arrow-left"></i><span>Hub</span></a>
+        <div class="brand">
+            <img src="../assets/img/logo-learning-fly-simple.png" alt="Learning Fly">
+            <div>
+                <strong>Graph & RAG Lab</strong>
+                <span>Grafos, Cypher e IA com contexto</span>
+            </div>
+        </div>
+        <div class="top-status"><span class="status-dot"></span> Sandbox Local</div>
+    </header>
+
+    <main class="app-shell">
+        <section class="intro-panel">
+            <div>
+                <span class="eyebrow"><i class="fa-solid fa-circle-nodes"></i> Ciência de Dados & IA Aplicada</span>
+                <h1>Conecte dados.<br><span>Recupere contexto.</span> Gere respostas melhores.</h1>
+                <p>Explore como bancos orientados a grafos modelam relações e como um pipeline RAG transforma documentos relevantes em respostas fundamentadas.</p>
+            </div>
+            <div class="intro-stats">
+                <div><strong id="node-count">0</strong><span>Nós</span></div>
+                <div><strong id="edge-count">0</strong><span>Relações</span></div>
+                <div><strong>3</strong><span>Etapas RAG</span></div>
+            </div>
+        </section>
+
+        <nav class="lab-tabs" aria-label="Módulos do laboratório">
+            <button class="lab-tab active" data-panel="graph-panel"><i class="fa-solid fa-circle-nodes"></i> Grafo & Cypher</button>
+            <button class="lab-tab" data-panel="rag-panel"><i class="fa-solid fa-brain"></i> Pipeline RAG</button>
+            <button class="lab-tab" data-panel="learn-panel"><i class="fa-solid fa-graduation-cap"></i> Biblioteca Didática</button>
+        </nav>
+
+        <!-- GRAFO E CYPHER -->
+        <section id="graph-panel" class="module-panel active">
+            <div class="workspace-grid">
+                <article class="panel graph-panel-card">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">Explorador Visual</span>
+                            <h2>Grafo de Conhecimento: Ecossistema de Tecnologia</h2>
+                        </div>
+                        <div class="graph-legend"><span><i class="legend-dot person"></i>Pessoa</span><span><i class="legend-dot tech"></i>Tecnologia</span><span><i class="legend-dot concept"></i>Conceito</span></div>
+                    </div>
+                    <div id="graph-canvas" class="graph-canvas" aria-label="Visualização interativa do grafo"></div>
+                    <p class="canvas-hint"><i class="fa-solid fa-hand-pointer"></i> Clique em um nó para inspecionar seus dados e conexões.</p>
+                </article>
+
+                <aside class="panel inspector-card">
+                    <div class="panel-header small"><div><span class="panel-kicker">Inspeção</span><h2>Nó selecionado</h2></div></div>
+                    <div id="node-inspector" class="node-inspector empty-inspector">
+                        <i class="fa-solid fa-arrow-pointer"></i>
+                        <p>Selecione um nó no grafo para visualizar propriedades, rótulos e relacionamentos.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="query-layout">
+                <article class="panel cypher-card">
+                    <div class="panel-header small">
+                        <div><span class="panel-kicker">Consulta Declarativa</span><h2>Console Cypher Simulado</h2></div>
+                        <button id="format-cypher-btn" class="icon-button" title="Formatar consulta"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                    </div>
+                    <textarea id="cypher-editor" spellcheck="false">MATCH (p:Pessoa)-[:APRENDE]->(t:Tecnologia)
+RETURN p.nome, t.nome;</textarea>
+                    <div class="query-actions">
+                        <div class="preset-menu">
+                            <label for="cypher-preset">Exemplos:</label>
+                            <select id="cypher-preset">
+                                <option value="students">Quem aprende qual tecnologia?</option>
+                                <option value="neo4j">Quem usa Neo4j?</option>
+                                <option value="paths">Caminho entre pessoas e RAG</option>
+                                <option value="all">Todos os nós e rótulos</option>
+                            </select>
+                        </div>
+                        <button id="run-cypher-btn" class="primary-button"><i class="fa-solid fa-play"></i> Executar Cypher</button>
+                    </div>
+                </article>
+
+                <article class="panel query-result-card">
+                    <div class="panel-header small"><div><span class="panel-kicker">Resultado</span><h2>Linhas retornadas</h2></div><span id="cypher-result-count" class="count-pill">0 linhas</span></div>
+                    <div id="cypher-result" class="result-area"><p class="empty-copy">Execute uma consulta para visualizar os resultados.</p></div>
+                </article>
+            </div>
+
+            <!-- Oficina Cypher: aprendizado por blocos e explicação contextual -->
+            <section class="cypher-workshop panel">
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-kicker">Oficina Guiada</span>
+                        <h2>Construa consultas Cypher como um fluxo visual</h2>
+                    </div>
+                    <span class="workshop-status"><i class="fa-solid fa-puzzle-piece"></i> Scratch para Grafos</span>
+                </div>
+
+                <div class="workshop-grid">
+                    <aside class="tutorial-rail">
+                        <span class="rail-title">Trilha de aprendizagem</span>
+                        <button class="lesson-step active" data-lesson="match"><b>1</b><span><strong>MATCH</strong><small>Encontre padrões no grafo</small></span></button>
+                        <button class="lesson-step" data-lesson="relation"><b>2</b><span><strong>Relações</strong><small>Conecte nós por tipos</small></span></button>
+                        <button class="lesson-step" data-lesson="where"><b>3</b><span><strong>WHERE</strong><small>Filtre propriedades</small></span></button>
+                        <button class="lesson-step" data-lesson="return"><b>4</b><span><strong>RETURN</strong><small>Escolha o resultado</small></span></button>
+                    </aside>
+
+                    <article class="builder-board">
+                        <div id="lesson-explanation" class="lesson-explanation"></div>
+                        <div class="scratch-label">Monte seu padrão:</div>
+                        <div class="cypher-blocks">
+                            <div class="query-block match-block"><span>MATCH</span>
+                                <select id="builder-start-label" aria-label="Rótulo do nó inicial">
+                                    <option value="Pessoa">Pessoa</option>
+                                    <option value="Tecnologia">Tecnologia</option>
+                                    <option value="Conceito">Conceito</option>
+                                    <option value="Projeto">Projeto</option>
+                                </select>
+                            </div>
+                            <div class="connector-block">—</div>
+                            <div class="query-block relation-block"><span>[:</span>
+                                <select id="builder-relation" aria-label="Tipo da relação">
+                                    <option value="APRENDE">APRENDE</option>
+                                    <option value="USA">USA</option>
+                                    <option value="ESTUDA">ESTUDA</option>
+                                    <option value="CONSTRÓI">CONSTRÓI</option>
+                                    <option value="CONSULTADO_COM">CONSULTADO_COM</option>
+                                    <option value="COMPÕE">COMPÕE</option>
+                                    <option value="POTENCIALIZA">POTENCIALIZA</option>
+                                </select><span>]</span>
+                            </div>
+                            <div class="connector-block">→</div>
+                            <div class="query-block match-block"><span>:</span>
+                                <select id="builder-end-label" aria-label="Rótulo do nó final">
+                                    <option value="Tecnologia">Tecnologia</option>
+                                    <option value="Conceito">Conceito</option>
+                                    <option value="Projeto">Projeto</option>
+                                    <option value="Pessoa">Pessoa</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="builder-filter-row">
+                            <label><span>Filtro opcional</span><input id="builder-filter" type="text" placeholder="Ex: nome = Neo4j"></label>
+                            <label><span>Retornar</span><select id="builder-return"><option value="nomes">Nomes dos nós</option><option value="relacao">Tipo da relação</option><option value="caminho">Caminho completo</option></select></label>
+                        </div>
+                        <div class="builder-output">
+                            <code id="builder-query-preview">MATCH (a:Pessoa)-[:APRENDE]-&gt;(b:Tecnologia) RETURN a.nome, b.nome;</code>
+                            <div><button id="builder-to-editor-btn" class="secondary-button"><i class="fa-solid fa-pen"></i> Levar ao editor</button><button id="builder-run-btn" class="primary-button"><i class="fa-solid fa-play"></i> Executar padrão</button></div>
+                        </div>
+                    </article>
+
+                    <aside class="command-library">
+                        <div class="library-title"><i class="fa-solid fa-book-open"></i> Biblioteca Cypher</div>
+                        <input id="command-search" type="search" placeholder="Filtrar MATCH, CREATE...">
+                        <div id="command-library-list" class="command-library-list"></div>
+                    </aside>
+                </div>
+            </section>
+        </section>
+
+        <!-- RAG -->
+        <section id="rag-panel" class="module-panel">
+            <section class="rag-explainer panel">
+                <div class="panel-header"><div><span class="panel-kicker">Retrieval-Augmented Generation</span><h2>RAG não é “uma IA que sabe tudo”</h2></div></div>
+                <p>É uma arquitetura que primeiro <strong>recupera evidências relevantes</strong> em uma base de conhecimento e só depois monta uma resposta usando esse contexto. Isso reduz alucinações e torna a resposta verificável.</p>
+                <div class="pipeline-steps">
+                    <div class="pipeline-step"><span>1</span><div><strong>Consulta</strong><small>O aluno faz uma pergunta.</small></div></div>
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="pipeline-step"><span>2</span><div><strong>Recuperação</strong><small>Busca chunks mais relevantes.</small></div></div>
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="pipeline-step"><span>3</span><div><strong>Geração</strong><small>Resposta ancorada nas fontes.</small></div></div>
+                </div>
+            </section>
+
+            <div class="rag-workspace">
+                <article class="panel rag-query-card">
+                    <div class="panel-header small"><div><span class="panel-kicker">Etapa 1</span><h2>Pergunte à base de conhecimento</h2></div></div>
+                    <label for="rag-question">Pergunta do estudante</label>
+                    <textarea id="rag-question" rows="4" placeholder="Ex: Qual a diferença entre um banco de grafos e um banco relacional?">Como um grafo ajuda um sistema RAG?</textarea>
+                    <button id="run-rag-btn" class="primary-button wide"><i class="fa-solid fa-magnifying-glass"></i> Recuperar contexto e gerar resposta</button>
+                    <div class="rag-suggestions"><span>Experimente:</span><button data-question="O que é um nó e uma relação em bancos de grafo?">Nós e relações</button><button data-question="Por que o RAG reduz alucinações?">Alucinações</button><button data-question="Quando devo usar Neo4j?">Quando usar Neo4j?</button></div>
+                </article>
+
+                <article class="panel rag-sources-card">
+                    <div class="panel-header small"><div><span class="panel-kicker">Etapa 2</span><h2>Chunks recuperados</h2></div><span id="retrieval-status" class="count-pill muted">Aguardando</span></div>
+                    <div id="rag-sources" class="sources-area"><p class="empty-copy">Os documentos mais relevantes aparecerão aqui, junto da pontuação de similaridade simulada.</p></div>
+                </article>
+
+                <article class="panel rag-answer-card">
+                    <div class="panel-header small"><div><span class="panel-kicker">Etapa 3</span><h2>Resposta fundamentada</h2></div></div>
+                    <div id="rag-answer" class="answer-area"><p class="empty-copy">A resposta citará explicitamente os chunks usados como contexto.</p></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- BIBLIOTECA -->
+        <section id="learn-panel" class="module-panel">
+            <div class="learning-grid">
+                <article class="panel concept-card">
+                    <span class="concept-icon orange"><i class="fa-solid fa-circle-nodes"></i></span>
+                    <h2>Banco de Dados em Grafo</h2>
+                    <p>Armazena entidades como <strong>nós</strong> e conexões como <strong>relações</strong>. É ideal quando as conexões são tão importantes quanto os dados.</p>
+                    <ul><li>Recomendações e redes sociais</li><li>Detecção de fraude</li><li>Knowledge graphs e dependências</li></ul>
+                </article>
+                <article class="panel concept-card">
+                    <span class="concept-icon cyan"><i class="fa-solid fa-code"></i></span>
+                    <h2>Cypher</h2>
+                    <p>Linguagem declarativa popularizada pelo Neo4j. Seus padrões imitam visualmente o grafo.</p>
+                    <pre>MATCH (a:Pessoa)-[:APRENDE]-&gt;(t:Tecnologia)
+RETURN a, t;</pre>
+                </article>
+                <article class="panel concept-card">
+                    <span class="concept-icon purple"><i class="fa-solid fa-vector-square"></i></span>
+                    <h2>Embeddings & Busca Vetorial</h2>
+                    <p>Embeddings transformam texto em vetores numéricos. A recuperação encontra documentos semanticamente próximos à pergunta.</p>
+                    <ul><li>Chunks preservam trechos de contexto</li><li>Similaridade define relevância</li><li>Fontes permitem auditoria</li></ul>
+                </article>
+                <article class="panel concept-card full-card">
+                    <span class="concept-icon green"><i class="fa-solid fa-link"></i></span>
+                    <h2>GraphRAG: recuperação que entende relações</h2>
+                    <p>Enquanto o RAG vetorial recupera conteúdo por similaridade textual, o GraphRAG usa também relações estruturadas: pessoas, produtos, documentos, competências e dependências. Ele é especialmente útil para perguntas multi-hop, como “quais tecnologias são aprendidas por pessoas que trabalham no projeto X?”.</p>
+                    <div class="comparison-table">
+                        <div><strong>RAG Vetorial</strong><span>“Encontre texto parecido com a pergunta.”</span></div>
+                        <div><strong>GraphRAG</strong><span>“Encontre evidências e percorra relações relevantes.”</span></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer"><img src="../assets/img/logo-learning-fly-simple.png" alt="Learning Fly"><span>Graph & RAG Lab · Learning Fly · Execução 100% local no navegador</span></footer>
+    <script src="script.js"></script>
+</body>
+</html>

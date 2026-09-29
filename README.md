@@ -26,7 +26,16 @@ Um laboratório interativo avançado para prática de Banco de Dados Relacional 
 - **Funcionalidades:** Execução em tempo real via WebAssembly com suporte a 5 dialetos relacionais (**SQLite, MySQL, PostgreSQL, Microsoft SQL Server e Oracle Database**), pontos de restauração no tempo (**Time-Travel Snapshots**), datasets pré-carregados (E-Commerce, Universidade, RH), visualizador de plano de execução (**EXPLAIN Query Plan**), formatador de código, histórico de queries e trilha de desafios práticos com validação.
 - **Destaque:** Permite aos estudantes testar qualquer comando DDL e DML (como `DROP TABLE` e `DELETE`) com total segurança, revertendo o estado do banco instantaneamente com 1 clique.
 
-### 2. 🧪 Tabela Periódica Interativa & Construtor Atômico
+### 2. 🕸️ Graph & RAG Lab
+
+**Diretório:** `graph-rag-lab`
+
+Laboratório didático de Bancos de Dados em Grafo, Cypher e Retrieval-Augmented Generation (RAG).
+
+- **Funcionalidades:** Grafo de conhecimento navegável, console Cypher simulado, inspeção de nós e relações, recuperação local de chunks com pontuação de relevância e geração de resposta contextual com fontes explícitas.
+- **Destaque:** Explica visualmente como GraphRAG combina relações estruturadas e contexto recuperado para responder perguntas multi-hop sem depender de APIs ou chaves externas.
+
+### 3. 🧪 Tabela Periódica Interativa & Construtor Atômico
 
 **Diretório:** `tabela-periodica-interativa`
 
