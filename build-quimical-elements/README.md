@@ -14,6 +14,9 @@ Uma área de trabalho livre onde os alunos podem adicionar átomos clicando na T
 
 * Os átomos são renderizados como esferas coloridas que podem ser posicionadas aleatoriamente.
 * Suporte a todos os 118 elementos da tabela periódica, com categorização por cores (metais, não-metais, gases nobres, etc.).
+* **Bancada como Grafo Molecular:** cada átomo é um nó e cada ligação química formada é uma aresta visual, com métricas de nós e ligações em tempo real.
+* **Fórmula Instantânea:** contador de átomos e prévia da fórmula em subscritos enquanto a molécula é montada.
+* **Biblioteca Pesquisável:** filtro por nome, símbolo e categoria química para tornar a seleção dos 118 elementos prática em qualquer tela.
 
 ### 2. Motor de Combinação & Receitas
 
@@ -21,19 +24,32 @@ O núcleo do laboratório é um sistema inteligente que verifica se os átomos p
 
 * **Receitas Prontas:** Água (H₂O), Metano (CH₄), Dióxido de Carbono (CO₂), Glicose (C₆H₁₂O₆), Etanol (C₂H₆O), Cafeína e Dopamina.
 * **Validação em Tempo Real:** Ao clicar em "Combinar", o sistema conta os átomos e verifica se formam uma estrutura estável.
+* **Auditoria de Composição:** Na inicialização, cada receita é conferida contra a quantidade real de átomos da estrutura, evitando fórmulas inconsistentes. A estrutura da cafeína foi ajustada para C₈H₁₀N₄O₂.
 
 ### 3. Animações Procedurais (Anime.js)
 
 Se a combinação for válida, uma animação complexa é acionada:
 
 1. **Organização:** Os átomos se movem suavemente para suas posições corretas na estrutura molecular.
-2. **Ligação:** Linhas de ligação química "crescem" entre os átomos, conectando-os fisicamente.
-3. **Vida:** A molécula final fica pulsando levemente, dando uma sensação orgânica.
-4. **Feedback de Erro:** Se a combinação estiver errada, os átomos "tremem" em vermelho, indicando instabilidade.
+2. **Convergência Controlada:** Em receitas guiadas, os átomos surgem em uma nuvem central organizada, em vez de serem espalhados aleatoriamente pela tela.
+3. **Ligação:** Somente após os nós atingirem as coordenadas finais, as arestas químicas "crescem" entre eles, formando o grafo molecular.
+4. **Vida:** A molécula final fica pulsando levemente, dando uma sensação orgânica.
+5. **Feedback de Erro:** Se a combinação estiver errada, os átomos "tremem" em vermelho, indicando instabilidade.
+6. **Responsividade Estrutural:** ao mudar do desktop para o mobile, a geometria da molécula é recalculada para manter nós e ligações dentro da bancada.
+7. **Estabilidade da Geometria:** após formada, a molécula mantém os nós e arestas fixos; o feedback visual ocorre por brilho, sem deslocar ligações químicas.
+8. **Formação Atômica:** receitas ficam temporariamente bloqueadas durante a animação para impedir que duas estruturas se sobreponham na bancada.
 
 ### 4. Sugestões de Receitas
 
 Uma barra lateral oferece atalhos para moléculas complexas (como Cafeína e Dopamina). Ao clicar, o laboratório é preenchido automaticamente com os átomos necessários, servindo como uma demonstração visual da complexidade dessas estruturas.
+
+### 5. Interface Elementa Lab
+
+O laboratório foi redesenhado como uma bancada científica responsiva:
+
+* Cabeçalho compacto com acesso ao Hub e indicação de simulação segura.
+* Painéis organizados em **Biblioteca de Elementos**, **Bancada Molecular** e **Receitas Moleculares**.
+* Layout adaptativo: em tablets e desktops os painéis ficam lado a lado; em celulares passam a uma sequência vertical sem cortar a molécula.
 
 ## 🛠️ Tecnologias Utilizadas
 

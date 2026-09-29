@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     { symbol: "H", x: "45%", y: "25%" }, // 21
                     // Átomos Fictícios para Ligações Duplas (visuais)
                     { symbol: "C", x: "45%", y: "58%" }, // 22 (Ligação dupla C1-N6)
-                    { symbol: "C", x: "55%", y: "38%" }  // 23 (Ligação dupla C4-C5)
+                    { symbol: "N", x: "55%", y: "38%" }  // 23 (quarto nitrogênio da estrutura)
                 ],
                 bonds: [
                     // Anel de 6
@@ -429,18 +429,132 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('reset-btn');
     const resultDisplay = document.getElementById('result-display');
     const recipeSelector = document.getElementById('recipe-suggester'); 
+    const elementSearch = document.getElementById('element-search');
+    const elementCategoryFilter = document.getElementById('element-category-filter');
+    const atomCounter = document.getElementById('atom-counter');
+    const formulaPreview = document.getElementById('formula-preview');
+    const graphNodeCount = document.getElementById('graph-node-count');
+    const bondCounter = document.getElementById('bond-counter');
+    const formationStatus = document.getElementById('formation-status');
+    let activeRecipeKey = null;
+    let isForming = false;
+
+    const categoryColors = {
+        'nonmetal': '#1da67b',
+        'alkali-metal': '#dc6471',
+        'noble-gas': '#22a9bc',
+        'alkaline-earth-metal': '#d69a17',
+        'metalloid': '#9066c9',
+        'halogen': '#a254bb',
+        'transition-metal': '#d46b85',
+        'lanthanide': '#cd8642',
+        'actinide': '#6d75bc',
+        'default': '#6e8192'
+    };
+
+    const atomColors = {
+        'H': '#58b6d8', 'C': '#43566b', 'N': '#5969d4', 'O': '#e85c66',
+        'F': '#6ebc79', 'Cl': '#59aa6a', 'Br': '#b46646', 'I': '#8b659d',
+        'S': '#e0b636', 'P': '#df8738', 'Na': '#aa71cf', 'K': '#9b61bf',
+        'Ca': '#7195cf', 'Mg': '#4f8fc1', 'Fe': '#b8664b'
+    };
+
+    function emptyWorkspaceMarkup() {
+        return '<div class="graph-hud" aria-label="Métricas do grafo molecular"><span><i class="fa-solid fa-circle-nodes"></i> <b id="graph-node-count">0</b> nós</span><span><i class="fa-solid fa-link"></i> <b id="bond-counter">0</b> ligações</span><span id="formation-status" class="formation-status">Aguardando composição</span></div><div id="workspace-empty" class="workspace-empty"><i class="fa-solid fa-hand-pointer"></i><strong>Selecione elementos para iniciar</strong><span>Os átomos serão posicionados na bancada.</span></div>';
+    }
+
+    function getAtomColor(symbol, category) {
+        return atomColors[symbol] || categoryColors[category || 'default'];
+    }
+
+    function getStagingPosition(index) {
+        const rect = workspace.getBoundingClientRect();
+        const angle = index * 2.3999632297;
+        const radius = 12 + Math.floor(index / 5) * 12;
+        const x = Math.min(Math.max(rect.width / 2 + Math.cos(angle) * radius, 28), rect.width - 28);
+        const y = Math.min(Math.max(rect.height / 2 + Math.sin(angle) * radius, 42), rect.height - 28);
+        return { x, y };
+    }
+
+    function getRecipeLayout(atoms) {
+        const scale = atoms.length <= 5 ? 1.8 : atoms.length <= 12 ? 1.3 : 1;
+        return atoms.map(atom => {
+            const x = Math.min(90, Math.max(10, 50 + (parseFloat(atom.x) - 50) * scale));
+            const y = Math.min(90, Math.max(10, 50 + (parseFloat(atom.y) - 50) * scale));
+            return { ...atom, x: `${x}%`, y: `${y}%` };
+        });
+    }
+
+    function updateFormationStatus(text, state = 'waiting') {
+        const status = document.getElementById('formation-status');
+        if (!status) return;
+        status.textContent = text;
+        status.className = `formation-status status-${state}`;
+    }
+
+    function setRecipeButtonsDisabled(disabled) {
+        recipeSelector.querySelectorAll('button').forEach(button => {
+            button.disabled = disabled;
+        });
+    }
+
+    function toSubscript(value) {
+        const digits = { 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
+        return String(value).split('').map(digit => digits[digit] || digit).join('');
+    }
+
+    function getRecipeKey(atoms) {
+        const counts = {};
+        atoms.forEach(atom => {
+            counts[atom.symbol] = (counts[atom.symbol] || 0) + 1;
+        });
+        return Object.keys(counts).sort().map(symbol => `${symbol}${counts[symbol] > 1 ? counts[symbol] : ''}`).join('');
+    }
+
+    function validateRecipes() {
+        Object.entries(recipes_final).forEach(([key, recipe]) => {
+            const calculatedKey = getRecipeKey(recipe.structure.atoms);
+            if (key !== calculatedKey) {
+                console.warn(`Receita ${recipe.name} possui fórmula incompatível: esperada ${key}, encontrada ${calculatedKey}.`);
+            }
+        });
+    }
+
+    function refreshWorkspaceStatus() {
+        const atoms = [...workspace.querySelectorAll('.atom')];
+        const counts = {};
+        atoms.forEach(atom => {
+            const symbol = atom.dataset.symbol;
+            counts[symbol] = (counts[symbol] || 0) + 1;
+        });
+        const formula = Object.keys(counts).sort().map(symbol => `${symbol}${counts[symbol] > 1 ? toSubscript(counts[symbol]) : ''}`).join('');
+        atomCounter.textContent = atoms.length;
+        const currentGraphNodeCount = document.getElementById('graph-node-count');
+        const currentBondCounter = document.getElementById('bond-counter');
+        if (currentGraphNodeCount) currentGraphNodeCount.textContent = atoms.length;
+        if (currentBondCounter) currentBondCounter.textContent = workspace.querySelectorAll('.bond').length;
+        formulaPreview.textContent = formula || '∅';
+        if (atoms.length > 0) workspace.querySelector('#workspace-empty')?.remove();
+    }
     
     // --- 4. FUNÇÕES DE INICIALIZAÇÃO E EVENTOS (Inalteradas) ---
     function loadElements() {
         selector.innerHTML = '';
+        const searchTerm = elementSearch.value.trim().toLowerCase();
+        const category = elementCategoryFilter.value;
         for (const atomicNumber in elementsData) { 
             const element = elementsData[atomicNumber];
+            const matchesSearch = !searchTerm || element.name.toLowerCase().includes(searchTerm) || element.symbol.toLowerCase().includes(searchTerm);
+            const matchesCategory = category === 'all' || element.category === category;
+            if (!matchesSearch || !matchesCategory) continue;
             const tile = document.createElement('button');
             tile.className = 'btn element-tile';
             tile.classList.add(`element-${element.category || 'default'}`);
             tile.innerHTML = `<strong>${element.symbol}</strong><small>${element.name}</small>`;
             tile.dataset.symbol = element.symbol;
             tile.dataset.name = element.name;
+            tile.dataset.category = element.category || 'default';
+            tile.title = `${element.name} (${element.symbol})`;
             tile.addEventListener('click', addAtomToWorkspace);
             selector.appendChild(tile);
         }
@@ -451,8 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const key in recipes_final) {
             const recipe = recipes_final[key];
             const btn = document.createElement('button');
-            btn.className = 'btn btn-outline-primary w-100'; 
-            btn.innerHTML = `<strong>${recipe.name}</strong><br><small>${recipe.formula}</small>`;
+            btn.className = 'btn recipe-card'; 
+            btn.innerHTML = `<strong>${recipe.name}</strong><span class="recipe-formula">${recipe.formula}</span>`;
             btn.dataset.recipeKey = key;
             btn.addEventListener('click', handleRecipeClick);
             recipeSelector.appendChild(btn);
@@ -460,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleRecipeClick(event) {
+        if (isForming) return;
         const key = event.currentTarget.dataset.recipeKey;
         const recipe = recipes_final[key];
         if (!recipe) return;
@@ -467,21 +582,27 @@ document.addEventListener('DOMContentLoaded', () => {
         resetWorkspace();
         combineBtn.disabled = true;
         resetBtn.disabled = true;
+        setRecipeButtonsDisabled(true);
 
         const workspaceRect = workspace.getBoundingClientRect();
         
-        recipe.structure.atoms.forEach(templateAtom => {
+        recipe.structure.atoms.forEach((templateAtom, index) => {
             const atom = document.createElement('div');
             atom.className = 'atom';
             atom.textContent = templateAtom.symbol;
             atom.dataset.symbol = templateAtom.symbol;
-            atom.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
-            const x = Math.random() * (workspaceRect.width - 50);
-            const y = Math.random() * (workspaceRect.height - 50);
-            atom.style.left = `${x}px`;
-            atom.style.top = `${y}px`;
+            const elementInfo = Object.values(elementsData).find(item => item.symbol === templateAtom.symbol);
+            atom.style.setProperty('--atom-color', getAtomColor(templateAtom.symbol, elementInfo?.category));
+            const position = getStagingPosition(index);
+            atom.style.left = `${position.x}px`;
+            atom.style.top = `${position.y}px`;
+            atom.style.transform = 'translateX(-50%) translateY(-50%) scale(.72)';
+            atom.style.opacity = '0';
             workspace.appendChild(atom);
         });
+
+        refreshWorkspaceStatus();
+        updateFormationStatus('Organizando nós', 'building');
 
         await new Promise(resolve => setTimeout(resolve, 50)); 
         combineAtoms();
@@ -494,13 +615,13 @@ document.addEventListener('DOMContentLoaded', () => {
         atom.className = 'atom';
         atom.textContent = symbol;
         atom.dataset.symbol = symbol;
-        atom.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
-        const workspaceRect = workspace.getBoundingClientRect();
-        const x = Math.random() * (workspaceRect.width - 50);
-        const y = Math.random() * (workspaceRect.height - 50);
-        atom.style.left = `${x}px`;
-        atom.style.top = `${y}px`;
+        atom.style.setProperty('--atom-color', getAtomColor(symbol, event.currentTarget.dataset.category));
+        const position = getStagingPosition(workspace.querySelectorAll('.atom').length);
+        atom.style.left = `${position.x}px`;
+        atom.style.top = `${position.y}px`;
+        atom.style.transform = 'translateX(-50%) translateY(-50%)';
         workspace.appendChild(atom);
+        refreshWorkspaceStatus();
     }
 
     function resetWorkspace() {
@@ -508,41 +629,47 @@ document.addEventListener('DOMContentLoaded', () => {
         anime.remove('.atom');
         anime.remove('.bond');
 
-        workspace.innerHTML = '';
+        workspace.innerHTML = emptyWorkspaceMarkup();
+        workspace.classList.remove('molecule-stable', 'dense-molecule');
         resultDisplay.innerHTML = '';
+        updateFormationStatus('Aguardando composição', 'waiting');
+        activeRecipeKey = null;
+        isForming = false;
         combineBtn.disabled = false;
         resetBtn.disabled = false; 
+        setRecipeButtonsDisabled(false);
+        refreshWorkspaceStatus();
     }
 
     // --- 5. LÓGICA DE COMBINAÇÃO (TOTALMENTE REFEITA) ---
 
     async function combineAtoms() {
+        if (isForming) return;
         const atomsInWorkspace = workspace.querySelectorAll('.atom');
         if (atomsInWorkspace.length === 0) {
             resetBtn.disabled = false;
+            refreshWorkspaceStatus();
+            updateFormationStatus('Adicione nós', 'waiting');
             return; 
         }
         
         resultDisplay.innerHTML = ''; 
         combineBtn.disabled = true;
         resetBtn.disabled = true;
+        isForming = true;
+        setRecipeButtonsDisabled(true);
 
         // 1. Encontrar a receita (igual a antes)
-        let atomCounts = {};
-        atomsInWorkspace.forEach(atom => {
-            const symbol = atom.dataset.symbol;
-            atomCounts[symbol] = (atomCounts[symbol] || 0) + 1;
-        });
-        const recipeKey = Object.keys(atomCounts)
-            .sort()
-            .map(symbol => `${symbol}${atomCounts[symbol] > 1 ? atomCounts[symbol] : ''}`)
-            .join('');
+        const recipeKey = getRecipeKey([...atomsInWorkspace].map(atom => ({ symbol: atom.dataset.symbol })));
         
         const matchedMolecule = recipes_final[recipeKey]; 
 
         if (matchedMolecule) {
+            activeRecipeKey = recipeKey;
+            workspace.classList.toggle('dense-molecule', matchedMolecule.structure.atoms.length > 12);
             // SUCESSO!
             const structure = matchedMolecule.structure;
+            const layoutAtoms = getRecipeLayout(structure.atoms);
             const atomStock = {};
             atomsInWorkspace.forEach(atom => {
                 const symbol = atom.dataset.symbol;
@@ -564,72 +691,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 animatedAtoms.push(realAtom);
             });
 
-            // Pré-cria todas as ligações
+            // 3. Etapa A: organiza os nós do grafo antes de desenhar as arestas.
+            await anime({
+                targets: animatedAtoms,
+                left: (el, i) => layoutAtoms[i].x,
+                top: (el, i) => layoutAtoms[i].y,
+                translateX: '-50%',
+                translateY: '-50%',
+                opacity: 1,
+                scale: 1,
+                duration: 900,
+                easing: 'easeOutExpo',
+                delay: anime.stagger(35)
+            }).finished;
+
+            updateFormationStatus('Conectando ligações', 'building');
+
+            // Etapa B: cria e cresce cada aresta apenas depois que os nós estão organizados.
             structure.bonds.forEach(bondTemplate => {
-                const atom1 = animatedAtoms[bondTemplate.from];
-                const atom2 = animatedAtoms[bondTemplate.to];
-                const template1 = structure.atoms[bondTemplate.from];
-                const template2 = structure.atoms[bondTemplate.to];
-                
-                // Chama a nova função 'createBond'
-                const bond = createBond(atom1, atom2, template1, template2, workspaceRect);
+                const bond = createBond(
+                    animatedAtoms[bondTemplate.from],
+                    animatedAtoms[bondTemplate.to],
+                    layoutAtoms[bondTemplate.from],
+                    layoutAtoms[bondTemplate.to],
+                    workspaceRect
+                );
                 animatedBonds.push(bond);
-                // Adiciona a ligação ao 'workspace' (ainda invisível, com width: 0)
                 workspace.appendChild(bond);
             });
 
-            // 3. Criar a TIMELINE da animação!
-            const tl = anime.timeline({
-                duration: 1200, // Duração total
-                easing: 'easeOutExpo', // Uma animação mais "suave"
-            });
-
-            // Etapa A: Move os átomos
-            tl.add({
-                targets: animatedAtoms,
-                left: (el, i) => structure.atoms[i].x,
-                top: (el, i) => structure.atoms[i].y,
-                translateX: '-50%',
-                translateY: '-50%',
-                // Dê um pequeno delay escalonado para os átomos não se moverem
-                // exatamente ao mesmo tempo
-                delay: anime.stagger(20), 
-            });
-
-            // Etapa B: "Cresce" as ligações
-            tl.add({
+            await anime({
                 targets: animatedBonds,
-                // Pega o comprimento final que guardamos no 'dataset'
                 width: (el) => el.dataset.finalLength + 'px', 
-                // Faz as ligações crescerem em sequência
-                delay: anime.stagger(70), 
-                // '-=800' faz esta etapa começar 800ms ANTES
-                // da Etapa A (mover átomos) terminar.
-                // As ligações vão crescer ENQUANTO os átomos se movem!
-            }, '-=800'); 
-
-            // 4. Quando a timeline terminar
-            await tl.finished; // Espera a timeline acabar
+                duration: 420,
+                easing: 'easeOutQuad',
+                delay: anime.stagger(55)
+            }).finished;
 
             resultDisplay.innerHTML = `<h5 class="alert alert-success p-2 m-0">Formou ${matchedMolecule.name}!</h5>`;
             resetBtn.disabled = false; // Reativa SÓ o reset
-
-            // 5. (NOVO) Animação de "Vibração" em Loop
-            anime({
-                targets: [...animatedAtoms, ...animatedBonds],
-                scale: [
-                    { value: 1.015, duration: 600, easing: 'easeInOutSine' },
-                    { value: 1, duration: 600, easing: 'easeInOutSine' }
-                ],
-                translateY: [
-                    { value: -1, duration: 600, easing: 'easeInOutSine' },
-                    { value: 1, duration: 600, easing: 'easeInOutSine' }
-                ],
-                loop: true,
-                // Reduz o 'scale' das ligações para não parecerem "grossas"
-                scaleX: (el) => el.classList.contains('bond') ? 1 : 1.015,
-                scaleY: (el) => el.classList.contains('bond') ? 1 : 1.015,
-            });
+            isForming = false;
+            setRecipeButtonsDisabled(false);
+            refreshWorkspaceStatus();
+            updateFormationStatus('Molécula estável', 'complete');
+            workspace.classList.add('molecule-stable');
 
         } else {
             // FALHA! (Inalterado)
@@ -645,6 +750,10 @@ document.addEventListener('DOMContentLoaded', () => {
             resultDisplay.innerHTML = `<h5 class="alert alert-danger p-2 m-0">Combinação inválida!</h5>`;
             combineBtn.disabled = false;
             resetBtn.disabled = false;
+            isForming = false;
+            setRecipeButtonsDisabled(false);
+            refreshWorkspaceStatus();
+            updateFormationStatus('Fórmula não reconhecida', 'error');
         }
     }
 
@@ -696,11 +805,47 @@ document.addEventListener('DOMContentLoaded', () => {
         return bond;
     }
 
+    function reflowActiveMolecule() {
+        if (!activeRecipeKey || !recipes_final[activeRecipeKey]) return;
+        const recipe = recipes_final[activeRecipeKey];
+        const layoutAtoms = getRecipeLayout(recipe.structure.atoms);
+        const atoms = [...workspace.querySelectorAll('.atom')];
+        if (atoms.length !== recipe.structure.atoms.length) return;
+
+        anime.remove(atoms);
+        workspace.querySelectorAll('.bond').forEach(bond => bond.remove());
+
+        atoms.forEach((atom, index) => {
+            atom.style.left = layoutAtoms[index].x;
+            atom.style.top = layoutAtoms[index].y;
+            atom.style.transform = 'translateX(-50%) translateY(-50%)';
+        });
+
+        const workspaceRect = workspace.getBoundingClientRect();
+        recipe.structure.bonds.forEach(bondTemplate => {
+            const bond = createBond(
+                atoms[bondTemplate.from],
+                atoms[bondTemplate.to],
+                layoutAtoms[bondTemplate.from],
+                layoutAtoms[bondTemplate.to],
+                workspaceRect
+            );
+            bond.style.width = `${bond.dataset.finalLength}px`;
+            workspace.appendChild(bond);
+        });
+        refreshWorkspaceStatus();
+    }
+
     // --- 7. LIGA OS EVENTOS (Inalterado) ---
     combineBtn.addEventListener('click', combineAtoms);
     resetBtn.addEventListener('click', resetWorkspace);
+    elementSearch.addEventListener('input', loadElements);
+    elementCategoryFilter.addEventListener('change', loadElements);
+    window.addEventListener('resize', () => window.requestAnimationFrame(reflowActiveMolecule));
 
     // --- 8. INICIA A APLICAÇÃO (Inalterado) ---
     loadElements();
     loadRecipes(); 
+    validateRecipes();
+    refreshWorkspaceStatus();
 });
