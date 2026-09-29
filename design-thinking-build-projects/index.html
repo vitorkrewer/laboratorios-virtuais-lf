@@ -1,59 +1,938 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
-    <title>Laboratório de Design Thinking</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>Laboratório Virtual de Design Thinking | Learning Fly</title>
+    <meta name="description" content="Workshop digital interativo de Design Thinking com Mapa de Empatia, POV, Matriz de Priorização, Jornada do Usuário e Feedback Grid.">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#1e2957',
+                            'blue-light': '#2c3d7a',
+                            orange: '#f37021',
+                            'orange-hover': '#d8601a',
+                            cyan: '#0284c7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- jsPDF & html2canvas for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
-    <div id="info-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl transform scale-95 transition-transform duration-300">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 id="modal-title" class="text-2xl font-bold" style="color: var(--focus-blue);"></h3>
-                    <button id="modal-close" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
+    <!-- Top Global Bar -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
+            
+            <!-- Left: Back to Hub + Brand Logo -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="../" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all border border-slate-200" title="Voltar ao Portal de Laboratórios">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="hidden sm:inline">Hub</span>
+                </a>
+                <div class="h-6 w-[1px] bg-slate-200 hidden sm:block"></div>
+                <div class="flex items-center gap-2">
+                    <img src="../assets/img/logo-learning-fly-simple.png" alt="Learning Fly" class="h-8 w-auto">
+                    <span class="font-heading font-bold text-sm sm:text-base text-brand-blue hidden md:inline">Design Thinking Lab</span>
                 </div>
-                <div id="modal-content" class="text-gray-600 leading-relaxed space-y-4"></div>
+            </div>
+
+            <!-- Center: Project Info -->
+            <div class="flex-1 max-w-xs sm:max-w-md mx-2">
+                <input type="text" id="project-title-input" placeholder="Nome do Projeto (Ex: Inovação em Sala de Aula)"
+                       class="w-full text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-brand-orange focus:ring-1 focus:ring-brand-orange outline-none transition-all truncate"
+                       title="Clique para editar o título do seu projeto">
+            </div>
+
+            <!-- Right: Actions & Auto-Save -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <!-- Autosave indicator -->
+                <div id="save-status-badge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Salvo</span>
+                </div>
+
+                <!-- Case Studies Modal Trigger -->
+                <button id="open-cases-btn" class="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all flex items-center gap-1.5" title="Carregar Cenários de Exemplo">
+                    <i class="fa-solid fa-graduation-cap text-brand-blue"></i>
+                    <span class="hidden md:inline">Cenários</span>
+                </button>
+
+                <!-- Project Storage Options (JSON) -->
+                <button id="open-storage-btn" class="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all flex items-center gap-1.5" title="Exportar ou Importar Projeto (.json)">
+                    <i class="fa-solid fa-folder-open text-brand-orange"></i>
+                    <span class="hidden md:inline">Dados</span>
+                </button>
+
+                <!-- PDF Export Button -->
+                <button id="export-pdf-btn" class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-brand-orange hover:bg-brand-orange-hover text-white transition-all shadow-md shadow-orange-500/20 flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Exportar PDF</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dynamic Linear Progress Bar -->
+        <div class="w-full bg-slate-100 h-1.5 overflow-hidden">
+            <div id="global-progress-bar" class="h-full bg-gradient-to-r from-brand-blue via-brand-cyan to-brand-orange w-0 transition-all duration-500"></div>
+        </div>
+    </header>
+
+    <!-- App Main Body Layout -->
+    <div class="relative min-h-[calc(100vh-4rem)] md:flex max-w-7xl mx-auto w-full">
+        
+        <!-- Desktop Sticky Sidebar Navigation -->
+        <aside class="sidebar text-slate-100 w-72 space-y-6 py-6 px-4 hidden md:flex md:flex-col justify-between shrink-0 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar">
+            <div>
+                <!-- User & Project Author Info -->
+                <div class="bg-white/10 rounded-2xl p-3.5 border border-white/10 mb-6">
+                    <label for="project-author-input" class="text-[11px] font-semibold uppercase tracking-wider text-orange-300 block mb-1">Autor / Equipe</label>
+                    <input type="text" id="project-author-input" placeholder="Seu nome ou grupo..."
+                           class="w-full text-xs bg-white/10 border border-white/20 rounded-lg px-2.5 py-1.5 text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-orange">
+                </div>
+
+                <!-- Phase Navigation Steps -->
+                <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block px-2 mb-2">Trilha Metodológica</span>
+                <nav id="desktop-nav" class="space-y-1.5">
+                    <a href="#phase-1" class="nav-link flex items-center justify-between py-2.5 px-3 rounded-xl transition duration-200 hover:bg-white/10 text-sm font-medium">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-300 flex items-center justify-center text-xs font-bold font-heading">1</span>
+                            <span>Empatia</span>
+                        </div>
+                        <span class="check-icon hidden text-emerald-400 text-xs font-bold bg-emerald-400/20 px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i></span>
+                    </a>
+                    
+                    <a href="#phase-2" class="nav-link flex items-center justify-between py-2.5 px-3 rounded-xl transition duration-200 hover:bg-white/10 text-sm font-medium">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-300 flex items-center justify-center text-xs font-bold font-heading">2</span>
+                            <span>Definição (POV & HMW)</span>
+                        </div>
+                        <span class="check-icon hidden text-emerald-400 text-xs font-bold bg-emerald-400/20 px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i></span>
+                    </a>
+
+                    <a href="#phase-3" class="nav-link flex items-center justify-between py-2.5 px-3 rounded-xl transition duration-200 hover:bg-white/10 text-sm font-medium">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-300 flex items-center justify-center text-xs font-bold font-heading">3</span>
+                            <span>Ideação & Priorização</span>
+                        </div>
+                        <span class="check-icon hidden text-emerald-400 text-xs font-bold bg-emerald-400/20 px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i></span>
+                    </a>
+
+                    <a href="#phase-4" class="nav-link flex items-center justify-between py-2.5 px-3 rounded-xl transition duration-200 hover:bg-white/10 text-sm font-medium">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-300 flex items-center justify-center text-xs font-bold font-heading">4</span>
+                            <span>Prototipagem & Jornada</span>
+                        </div>
+                        <span class="check-icon hidden text-emerald-400 text-xs font-bold bg-emerald-400/20 px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i></span>
+                    </a>
+
+                    <a href="#phase-5" class="nav-link flex items-center justify-between py-2.5 px-3 rounded-xl transition duration-200 hover:bg-white/10 text-sm font-medium">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-300 flex items-center justify-center text-xs font-bold font-heading">5</span>
+                            <span>Teste & Feedback 360°</span>
+                        </div>
+                        <span class="check-icon hidden text-emerald-400 text-xs font-bold bg-emerald-400/20 px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i></span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Bottom Progress Box -->
+            <div class="bg-white/10 rounded-2xl p-4 border border-white/10 text-xs">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-slate-300 font-medium">Progresso Geral</span>
+                    <span id="progress-percentage-text" class="font-bold text-orange-400 font-heading">0%</span>
+                </div>
+                <div class="w-full bg-black/20 rounded-full h-2 overflow-hidden mb-3">
+                    <div id="sidebar-progress-bar" class="h-full bg-brand-orange w-0 transition-all duration-300"></div>
+                </div>
+                <button id="reset-project-btn" class="w-full text-center text-slate-400 hover:text-rose-400 text-[11px] font-semibold transition-colors py-1">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Limpar todo o projeto
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 max-w-5xl overflow-x-hidden" id="exportable-content">
+            
+            <!-- Hero Introduction -->
+            <section id="intro" class="mb-10 text-center md:text-left bg-gradient-to-br from-brand-blue to-brand-blue-light text-white p-6 sm:p-8 rounded-3xl shadow-xl shadow-brand-blue/10 relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/20 text-orange-300 border border-orange-400/30 mb-3">
+                        <i class="fa-solid fa-lightbulb"></i> Workshop Digital Interativo
+                    </span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold font-heading text-white tracking-tight">
+                        Laboratório Virtual de Design Thinking
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base mt-2 leading-relaxed">
+                        Construa soluções centradas no ser humano através das 5 etapas da inovação. Preencha as ferramentas práticas, receba orientações metodológicas e gere um relatório formal em PDF ao final.
+                    </p>
+                    <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-400"></i> Auto-save Ativo</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-400"></i> 100% Client-Side</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-400"></i> Exportação em PDF</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================== -->
+            <!-- FASE 1: EMPATIA                                                 -->
+            <!-- =============================================================== -->
+            <section id="phase-1" class="mb-12 scroll-mt-24">
+                <div class="phase-card bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
+                    <!-- Phase Header -->
+                    <div class="flex items-start justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-2xl bg-orange-500/10 text-brand-orange flex items-center justify-center font-heading font-extrabold text-2xl">01</span>
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-brand-orange block">Fase 1: Imersão</span>
+                                <h2 class="text-xl sm:text-2xl font-bold font-heading text-slate-900">Empatia & Persona</h2>
+                            </div>
+                        </div>
+                        <button class="info-btn w-9 h-9 rounded-full bg-slate-100 hover:bg-orange-100 hover:text-brand-orange text-slate-500 transition-all flex items-center justify-center font-bold text-sm shadow-sm" data-phase-id="1" title="Ver Teoria e Dicas de Empatia">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                        Entenda profundamente quem é o seu usuário final, suas necessidades reais, comportamentos, dores e aspirações.
+                    </p>
+
+                    <!-- Interactive Area 1: Persona + Empathy Map -->
+                    <div class="space-y-6">
+                        
+                        <!-- Persona Inputs -->
+                        <div class="bg-slate-50/80 p-5 rounded-2xl border border-slate-200/80">
+                            <h3 class="font-heading font-bold text-base text-slate-800 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-user-tag text-brand-blue"></i> Perfil da Persona
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nome da Persona</label>
+                                    <input type="text" id="persona-name" placeholder="Ex: Lucas Silva" class="form-input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Idade & Ocupação</label>
+                                    <input type="text" id="persona-role" placeholder="Ex: 21 anos, Estudante de Engenharia" class="form-input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Avatar / Arquétipo</label>
+                                    <select id="persona-avatar" class="form-input-field">
+                                        <option value="🎓">🎓 Estudante / Universitário</option>
+                                        <option value="💼">💼 Profissional / Gestor</option>
+                                        <option value="👩‍🏫">👩‍🏫 Educador / Professor</option>
+                                        <option value="💻">💻 Desenvolvedor / Técnico</option>
+                                        <option value="🎨">🎨 Criativo / Designer</option>
+                                        <option value="🛠️">🛠️ Engenheiro / Maker</option>
+                                        <option value="👵">👵 Idoso / Terceira Idade</option>
+                                        <option value="👶">👶 Criança / Jovem</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Empathy 4 Quadrants -->
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Mapa de Empatia 360°</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-3.5 bg-white rounded-xl border border-slate-200">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                                        <span class="text-base">💭</span> O que ela PENSA e SENTE? (Preocupações, valores)
+                                    </label>
+                                    <textarea id="empathy-thinks" rows="2" placeholder="O que passa na mente dela? Quais são suas principais preocupações?" class="form-input-field text-xs"></textarea>
+                                </div>
+                                <div class="p-3.5 bg-white rounded-xl border border-slate-200">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                                        <span class="text-base">👀</span> O que ela VÊ? (Ambiente, colegas, ofertas no mercado)
+                                    </label>
+                                    <textarea id="empathy-sees" rows="2" placeholder="O que está no ambiente ao redor dela? Quem a cerca?" class="form-input-field text-xs"></textarea>
+                                </div>
+                                <div class="p-3.5 bg-white rounded-xl border border-slate-200">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                                        <span class="text-base">💬</span> O que ela FALA e FAZ? (Comportamento em público)
+                                    </label>
+                                    <textarea id="empathy-does" rows="2" placeholder="Como ela se comporta? O que costuma expressar?" class="form-input-field text-xs"></textarea>
+                                </div>
+                                <div class="p-3.5 bg-white rounded-xl border border-slate-200">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                                        <span class="text-base">👂</span> O que ela OUVE? (Amigos, chefes, influenciadores)
+                                    </label>
+                                    <textarea id="empathy-hears" rows="2" placeholder="O que as pessoas que a influenciam dizem?" class="form-input-field text-xs"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Pains vs Gains -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div class="p-3.5 bg-rose-50/60 rounded-xl border border-rose-200/80">
+                                    <label class="block text-xs font-semibold text-rose-800 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> DORES & FRUSTRAÇÕES (Obstáculos)
+                                    </label>
+                                    <textarea id="persona-challenges" rows="2" placeholder="Quais são os maiores medos, frustrações e barreiras?" class="form-input-field text-xs bg-white"></textarea>
+                                </div>
+                                <div class="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200/80">
+                                    <label class="block text-xs font-semibold text-emerald-800 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-star"></i> GANHOS & DESEJOS (Objetivos e Sucesso)
+                                    </label>
+                                    <textarea id="persona-goals" rows="2" placeholder="O que ela quer conquistar? Como ela mede o sucesso?" class="form-input-field text-xs bg-white"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Visual Persona Card (Rendered for export) -->
+                        <div id="persona-card-export" class="p-6 bg-gradient-to-r from-slate-900 to-brand-blue text-white rounded-2xl shadow-lg border border-slate-700">
+                            <div class="flex items-center gap-4 border-b border-white/10 pb-4 mb-4">
+                                <div id="card-avatar-display" class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-3xl shadow-inner">🎓</div>
+                                <div>
+                                    <h4 id="card-persona-name" class="font-heading font-extrabold text-xl text-orange-400">Nome da Persona</h4>
+                                    <p id="card-persona-role" class="text-xs text-slate-300">Idade & Ocupação</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div>
+                                    <span class="font-bold text-orange-300 block mb-1">🎯 Ganhos & Objetivos:</span>
+                                    <p id="card-persona-goals" class="text-slate-300 italic">Nenhum objetivo cadastrado ainda...</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-rose-300 block mb-1">⚡ Dores & Frustrações:</span>
+                                    <p id="card-persona-challenges" class="text-slate-300 italic">Nenhuma dor cadastrada ainda...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================== -->
+            <!-- FASE 2: DEFINIÇÃO                                               -->
+            <!-- =============================================================== -->
+            <section id="phase-2" class="mb-12 scroll-mt-24">
+                <div class="phase-card bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
+                    <!-- Phase Header -->
+                    <div class="flex items-start justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-brand-cyan flex items-center justify-center font-heading font-extrabold text-2xl">02</span>
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-brand-cyan block">Fase 2: Síntese</span>
+                                <h2 class="text-xl sm:text-2xl font-bold font-heading text-slate-900">Definição do Desafio (POV & HMW)</h2>
+                            </div>
+                        </div>
+                        <button class="info-btn w-9 h-9 rounded-full bg-slate-100 hover:bg-cyan-100 hover:text-brand-cyan text-slate-500 transition-all flex items-center justify-center font-bold text-sm shadow-sm" data-phase-id="2" title="Ver Teoria de Definição">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                        Transforme os aprendizados de empatia em um ponto de vista claro (POV) e formule perguntas acionáveis no formato "Como Poderíamos..." (How Might We).
+                    </p>
+
+                    <!-- Interactive Area 2 -->
+                    <div class="space-y-6">
+                        
+                        <!-- POV Builder -->
+                        <div class="bg-slate-50/80 p-5 rounded-2xl border border-slate-200/80">
+                            <h3 class="font-heading font-bold text-base text-slate-800 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye text-brand-cyan"></i> Ponto de Vista Estruturado (Point of View - POV)
+                            </h3>
+                            <p class="text-xs text-slate-500 mb-4">Fórmula: [Usuário] precisa de [Necessidade] porque [Insight profundo].</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Usuário / Quem</label>
+                                    <input type="text" id="pov-user" placeholder="Ex: Estudantes calouros de exatas" class="form-input-field text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Necessidade Real</label>
+                                    <input type="text" id="pov-need" placeholder="Ex: visualizar conceitos teóricos na prática" class="form-input-field text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Porque (Insight)</label>
+                                    <input type="text" id="pov-insight" placeholder="Ex: métodos puramente expositivos geram frustração e desmotivação" class="form-input-field text-xs">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HMW Dynamic Builder -->
+                        <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-200/80">
+                            <h3 class="font-heading font-bold text-base text-amber-900 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i> Desafio Central: "Como Poderíamos...?" (HMW)
+                            </h3>
+                            <p class="text-xs text-amber-700 mb-4">Formule a pergunta provocativa que guiará a sessão de ideação.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 mb-1">1. Ajudar quem?</label>
+                                    <input type="text" id="hmw-who" placeholder="Ex: os estudantes com dificuldades" class="form-input-field text-xs bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 mb-1">2. A fazer o que?</label>
+                                    <input type="text" id="hmw-action" placeholder="Ex: a dominar matérias práticas" class="form-input-field text-xs bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 mb-1">3. Em qual contexto / resultado?</label>
+                                    <input type="text" id="hmw-context" placeholder="Ex: através de simuladores interativos e gamificados?" class="form-input-field text-xs bg-white">
+                                </div>
+                            </div>
+
+                            <!-- HMW Result Card (Exportable) -->
+                            <div id="cp-result-export" class="p-4 bg-white rounded-xl border border-amber-300 text-center shadow-sm">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 block mb-1">Declaração Oficial do Desafio</span>
+                                <p class="text-sm sm:text-base font-bold text-slate-800">
+                                    "Como poderíamos ajudar <span id="hmw-output" class="text-brand-orange underline decoration-wavy decoration-orange-400">...</span>"
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================== -->
+            <!-- FASE 3: IDEAÇÃO & PRIORIZAÇÃO                                  -->
+            <!-- =============================================================== -->
+            <section id="phase-3" class="mb-12 scroll-mt-24">
+                <div class="phase-card bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
+                    <!-- Phase Header -->
+                    <div class="flex items-start justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-heading font-extrabold text-2xl">03</span>
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-purple-600 block">Fase 3: Criatividade</span>
+                                <h2 class="text-xl sm:text-2xl font-bold font-heading text-slate-900">Ideação & Matriz de Priorização</h2>
+                            </div>
+                        </div>
+                        <button class="info-btn w-9 h-9 rounded-full bg-slate-100 hover:bg-purple-100 hover:text-purple-600 text-slate-500 transition-all flex items-center justify-center font-bold text-sm shadow-sm" data-phase-id="3" title="Ver Teoria de Ideação">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                        Gere o maior número de ideias possíveis para responder ao desafio. Adie o julgamento e depois categorize suas soluções pela Matriz Esforço x Impacto.
+                    </p>
+
+                    <!-- Interactive Area 3: Post-its + Creativity Sparks -->
+                    <div class="space-y-6">
+                        
+                        <!-- Idea Input Bar + Sparks Trigger -->
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                            <div class="flex flex-col sm:flex-row gap-2 mb-3">
+                                <input type="text" id="idea-input" placeholder="Digite sua ideia de solução inovadora..."
+                                       class="flex-1 form-input-field text-sm">
+                                <select id="idea-color-select" class="form-input-field sm:w-36 text-xs" title="Cor do Post-it">
+                                    <option value="yellow">🟡 Amarelo</option>
+                                    <option value="green">🟢 Verde</option>
+                                    <option value="blue">🔵 Azul</option>
+                                    <option value="pink">🌸 Rosa</option>
+                                    <option value="purple">🟣 Roxo</option>
+                                </select>
+                                <button id="add-idea-btn" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 shadow-md shadow-purple-600/20">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Adicionar</span>
+                                </button>
+                            </div>
+
+                            <!-- Creativity Prompts Trigger (Idea Spark) -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 text-xs">
+                                <span class="text-slate-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-bolt text-amber-500"></i> Bloqueio criativo? Use uma provocação:
+                                </span>
+                                <button id="spark-idea-btn" class="px-3 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 font-semibold transition-colors flex items-center gap-1">
+                                    <i class="fa-solid fa-dice"></i> Gerar Provocação Criativa (Idea Spark)
+                                </button>
+                            </div>
+                            <!-- Prompt message area -->
+                            <div id="spark-prompt-box" class="hidden mt-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 font-medium"></div>
+                        </div>
+
+                        <!-- Sticky Notes Board (Exportable) -->
+                        <div id="idea-board-wrapper">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Quadro de Post-its (<span id="idea-count">0</span> ideias)</span>
+                                <span class="text-[11px] text-slate-400">Clique nas tags para categorizar na matriz</span>
+                            </div>
+                            <div id="idea-board" class="min-h-[200px] bg-slate-100/80 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 border border-slate-200">
+                                <div id="empty-ideas-msg" class="col-span-full text-center py-10 text-slate-400 text-xs">
+                                    <i class="fa-regular fa-note-sticky text-3xl mb-2 block"></i>
+                                    Nenhuma ideia adicionada ainda. Digite sua primeira solução acima!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2x2 Prioritization Matrix -->
+                        <div id="matrix-wrapper" class="bg-white p-5 rounded-2xl border border-slate-200">
+                            <h3 class="font-heading font-bold text-base text-slate-800 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-table-cells-large text-purple-600"></i> Matriz de Decisão: Impacto vs. Esforço
+                            </h3>
+                            <p class="text-xs text-slate-500 mb-4">Classifique suas ideias para escolher a solução definitiva a ser prototipada.</p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <!-- Quadrant 1: Quick Wins -->
+                                <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-bold text-emerald-800">🚀 Alto Impacto / Baixo Esforço</span>
+                                        <span class="text-[10px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full font-bold">Fazer Primeiro</span>
+                                    </div>
+                                    <ul id="matrix-quick-wins" class="space-y-1.5 text-slate-700 min-h-[50px]">
+                                        <li class="text-slate-400 italic text-[11px]">Ideias marcadas como "Quick Wins" aparecerão aqui.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Quadrant 2: Strategic / Big Bets -->
+                                <div class="p-3.5 bg-blue-50 rounded-xl border border-blue-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-bold text-blue-800">⭐ Alto Impacto / Alto Esforço</span>
+                                        <span class="text-[10px] bg-blue-200 text-blue-900 px-2 py-0.5 rounded-full font-bold">Projetos Estratégicos</span>
+                                    </div>
+                                    <ul id="matrix-strategic" class="space-y-1.5 text-slate-700 min-h-[50px]">
+                                        <li class="text-slate-400 italic text-[11px]">Ideias complexas de alto valor aparecerão aqui.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================== -->
+            <!-- FASE 4: PROTOTIPAGEM & JORNADA                                  -->
+            <!-- =============================================================== -->
+            <section id="phase-4" class="mb-12 scroll-mt-24">
+                <div class="phase-card bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
+                    <!-- Phase Header -->
+                    <div class="flex items-start justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-heading font-extrabold text-2xl">04</span>
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 block">Fase 4: Materialização</span>
+                                <h2 class="text-xl sm:text-2xl font-bold font-heading text-slate-900">Prototipagem & Jornada da Solução</h2>
+                            </div>
+                        </div>
+                        <button class="info-btn w-9 h-9 rounded-full bg-slate-100 hover:bg-indigo-100 hover:text-indigo-600 text-slate-500 transition-all flex items-center justify-center font-bold text-sm shadow-sm" data-phase-id="4" title="Ver Teoria de Prototipagem">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                        <em>"Erre rápido para aprender antes"</em>. Escolha o formato do protótipo de baixa ou média fidelidade e desenhe a jornada de interação do usuário com a sua solução.
+                    </p>
+
+                    <!-- Interactive Area 4 -->
+                    <div class="space-y-6" id="prototype-export-area">
+                        
+                        <!-- Prototype Chooser -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Selecione o Modelo de Protótipo:</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                                <button data-type="storyboard" class="prototype-type-btn p-3 rounded-xl font-semibold text-xs border text-center transition-all flex flex-col items-center gap-1.5">
+                                    <i class="fa-solid fa-film text-lg text-indigo-500"></i>
+                                    <span>Storyboard Visual</span>
+                                </button>
+                                <button data-type="service" class="prototype-type-btn p-3 rounded-xl font-semibold text-xs border text-center transition-all flex flex-col items-center gap-1.5">
+                                    <i class="fa-solid fa-diagram-project text-lg text-indigo-500"></i>
+                                    <span>Jornada / Serviço</span>
+                                </button>
+                                <button data-type="mockup" class="prototype-type-btn p-3 rounded-xl font-semibold text-xs border text-center transition-all flex flex-col items-center gap-1.5">
+                                    <i class="fa-solid fa-cube text-lg text-indigo-500"></i>
+                                    <span>Maquete / Modelo</span>
+                                </button>
+                                <button data-type="roleplay" class="prototype-type-btn p-3 rounded-xl font-semibold text-xs border text-center transition-all flex flex-col items-center gap-1.5">
+                                    <i class="fa-solid fa-masks-theater text-lg text-indigo-500"></i>
+                                    <span>Role-Playing / Simulação</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Prototype Form Tools -->
+                        <div id="prototype-tools-container" class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                            
+                            <!-- Tool 1: Storyboard (3 Scenes) -->
+                            <div id="tool-storyboard" class="prototype-tool hidden space-y-4">
+                                <h4 class="font-heading font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-film text-indigo-500"></i> Storyboard em 3 Atos
+                                </h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                                    <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                        <span class="font-bold text-indigo-600 block mb-1">Cena 1: O Ponto de Partida</span>
+                                        <p class="text-[11px] text-slate-400 mb-2">Qual é o momento do problema?</p>
+                                        <textarea id="story-scene-1" rows="4" placeholder="Descreva o contexto onde a persona se depara com o problema..." class="form-input-field text-xs"></textarea>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                        <span class="font-bold text-indigo-600 block mb-1">Cena 2: O Encontro com a Solução</span>
+                                        <p class="text-[11px] text-slate-400 mb-2">Como ela usa o protótipo?</p>
+                                        <textarea id="story-scene-2" rows="4" placeholder="Descreva a interação prática com a solução proposta..." class="form-input-field text-xs"></textarea>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                        <span class="font-bold text-indigo-600 block mb-1">Cena 3: O Impacto / Final Feliz</span>
+                                        <p class="text-[11px] text-slate-400 mb-2">Qual foi a transformação?</p>
+                                        <textarea id="story-scene-3" rows="4" placeholder="Qual benefício foi gerado e como a dor foi eliminada?" class="form-input-field text-xs"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tool 2: Service Blueprint / Journey -->
+                            <div id="tool-service" class="prototype-tool hidden space-y-3">
+                                <h4 class="font-heading font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-diagram-project text-indigo-500"></i> Blueprint do Serviço / Pontos de Contato
+                                </h4>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">1. Pontos de Contato (Touchpoints)</label>
+                                        <input type="text" id="service-touchpoints" placeholder="Ex: Aplicativo mobile, totem presencial, suporte via WhatsApp" class="form-input-field text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">2. Jornada Passo a Passo</label>
+                                        <textarea id="service-journey" rows="3" placeholder="Descreva o que o usuário faz do início ao fim ao usar a solução..." class="form-input-field text-xs"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">3. Bastidores (O que precisa acontecer por trás?)</label>
+                                        <textarea id="service-backstage" rows="2" placeholder="Sistemas, pessoas ou processos necessários para o serviço rodar..." class="form-input-field text-xs"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tool 3: Mockup / Physical Model -->
+                            <div id="tool-mockup" class="prototype-tool hidden space-y-3">
+                                <h4 class="font-heading font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-cube text-indigo-500"></i> Modelo Físico ou Wireframe
+                                </h4>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Materiais / Ferramentas Utilizadas</label>
+                                        <input type="text" id="mockup-materials" placeholder="Ex: Papel cartão, Figma, papel sulfite, papelão, LEGO" class="form-input-field text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Descrição Funcional do Modelo</label>
+                                        <textarea id="mockup-desc" rows="4" placeholder="Descreva as dimensões, layout, botões, fluxo de telas ou estrutura da sua maquete..." class="form-input-field text-xs"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tool 4: Role-Playing -->
+                            <div id="tool-roleplay" class="prototype-tool hidden space-y-3">
+                                <h4 class="font-heading font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-masks-theater text-indigo-500"></i> Roteiro de Simulação (Role-Playing)
+                                </h4>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Atores & Papéis</label>
+                                        <input type="text" id="roleplay-actors" placeholder="Ex: Ator 1: Usuário novato | Ator 2: Atendente do laboratório" class="form-input-field text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Cenário e Diálogos-Chave</label>
+                                        <textarea id="roleplay-script" rows="4" placeholder="Descreva a dinâmica da encenação e as reações testadas..." class="form-input-field text-xs"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Hypothesis & Testing Plan -->
+                        <div id="prototype-feedback-reflection" class="p-5 bg-white rounded-2xl border border-slate-200">
+                            <h4 class="font-heading font-bold text-sm text-slate-800 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-question text-indigo-500"></i> Hipóteses a Validar no Teste
+                            </h4>
+                            <label for="feedback-plan" class="block text-xs text-slate-500 mb-2">
+                                Qual é a principal dúvida que esse protótipo precisa responder quando estiver na mão do usuário?
+                            </label>
+                            <textarea id="feedback-plan" rows="2" placeholder="Ex: Queremos validar se o usuário consegue entender a navegação sem precisar de um manual..." class="form-input-field text-xs"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================== -->
+            <!-- FASE 5: TESTE & FEEDBACK 360°                                   -->
+            <!-- =============================================================== -->
+            <section id="phase-5" class="mb-12 scroll-mt-24">
+                <div class="phase-card bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
+                    <!-- Phase Header -->
+                    <div class="flex items-start justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-heading font-extrabold text-2xl">05</span>
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-600 block">Fase 5: Validação</span>
+                                <h2 class="text-xl sm:text-2xl font-bold font-heading text-slate-900">Teste & Matriz de Feedback</h2>
+                            </div>
+                        </div>
+                        <button class="info-btn w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 hover:text-emerald-600 text-slate-500 transition-all flex items-center justify-center font-bold text-sm shadow-sm" data-phase-id="5" title="Ver Teoria de Teste">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                        Apresente o protótipo para usuários reais. Escute ativamente, registre as percepções na Matriz de Feedback e decida os próximos passos da solução.
+                    </p>
+
+                    <!-- Interactive Area 5: 4-Quadrant Feedback Grid + Metrics -->
+                    <div class="space-y-6">
+                        
+                        <!-- Quantitative Sliders -->
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200">
+                            <h4 class="font-heading font-bold text-sm text-slate-800 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-emerald-600"></i> Avaliação Quantitativa dos Usuários
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                                <div class="bg-white p-3 rounded-xl border border-slate-200">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-semibold text-slate-700">Facilidade de Uso</span>
+                                        <span id="val-ease" class="font-bold text-emerald-600">4 / 5</span>
+                                    </div>
+                                    <input id="feedback-ease" type="range" min="1" max="5" value="4" class="w-full accent-emerald-600">
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-semibold text-slate-700">Desejabilidade / Inovação</span>
+                                        <span id="val-innov" class="font-bold text-purple-600">4 / 5</span>
+                                    </div>
+                                    <input id="feedback-innovation" type="range" min="1" max="5" value="4" class="w-full accent-purple-600">
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-semibold text-slate-700">Viabilidade Técnica</span>
+                                        <span id="val-viab" class="font-bold text-blue-600">3 / 5</span>
+                                    </div>
+                                    <input id="feedback-viability" type="range" min="1" max="5" value="3" class="w-full accent-blue-600">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4-Quadrant Feedback Grid (Feedback Capture Grid) -->
+                        <div class="p-5 bg-white rounded-2xl border border-slate-200">
+                            <h4 class="font-heading font-bold text-sm text-slate-800 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-table-cells text-emerald-600"></i> Matriz de Feedback dos Usuários (Capture Grid)
+                            </h4>
+                            <p class="text-xs text-slate-500 mb-4">Sistematize tudo o que foi observado durante a sessão de teste.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                                <!-- + O que funcionou -->
+                                <div class="p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200">
+                                    <label class="block font-bold text-emerald-900 mb-1 flex items-center gap-1.5">
+                                        <span>➕</span> O que FUNCIONOU BEM? (Pontos fortes)
+                                    </label>
+                                    <textarea id="feedback-worked" rows="3" placeholder="Aspectos que os usuários elogiaram ou entenderam de primeira..." class="form-input-field text-xs bg-white"></textarea>
+                                </div>
+                                <!-- ⚠️ O que precisa mudar -->
+                                <div class="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200">
+                                    <label class="block font-bold text-amber-900 mb-1 flex items-center gap-1.5">
+                                        <span>⚠️</span> O que PODE MELHORAR? (Críticas construtivas)
+                                    </label>
+                                    <textarea id="feedback-change" rows="3" placeholder="Onde os usuários travaram ou expressaram confusão..." class="form-input-field text-xs bg-white"></textarea>
+                                </div>
+                                <!-- ❓ Dúvidas levantadas -->
+                                <div class="p-3.5 bg-blue-50/70 rounded-xl border border-blue-200">
+                                    <label class="block font-bold text-blue-900 mb-1 flex items-center gap-1.5">
+                                        <span>❓</span> DÚVIDAS & PERGUNTAS (Incertezas)
+                                    </label>
+                                    <textarea id="feedback-questions" rows="3" placeholder="Perguntas que os usuários fizeram sobre o funcionamento..." class="form-input-field text-xs bg-white"></textarea>
+                                </div>
+                                <!-- 💡 Novas Ideias -->
+                                <div class="p-3.5 bg-purple-50/70 rounded-xl border border-purple-200">
+                                    <label class="block font-bold text-purple-900 mb-1 flex items-center gap-1.5">
+                                        <span>💡</span> NOVAS IDEIAS & INSIGHTS (Próximas iterações)
+                                    </label>
+                                    <textarea id="feedback-ideas" rows="3" placeholder="Ideias novas que surgiram durante o teste para evoluir a solução..." class="form-input-field text-xs bg-white"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iteration Decision -->
+                        <div class="p-5 bg-gradient-to-r from-slate-900 to-brand-blue text-white rounded-2xl shadow-lg border border-slate-700">
+                            <h4 class="font-heading font-bold text-sm text-orange-400 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-arrows-spin"></i> Decisão de Iteração do Ciclo
+                            </h4>
+                            <p class="text-xs text-slate-300 mb-4">Com base no feedback coletado, qual o veredito da equipe para os próximos passos?</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs mb-4">
+                                <label class="p-3 rounded-xl bg-white/10 border border-white/20 cursor-pointer flex items-center gap-2 hover:bg-white/20 transition-all">
+                                    <input type="radio" name="iteration-decision" value="refine" checked class="accent-orange-500">
+                                    <div>
+                                        <span class="font-bold text-white block">🔁 Refinar Protótipo</span>
+                                        <span class="text-[10px] text-slate-300">Ajustar detalhes e testar novamente.</span>
+                                    </div>
+                                </label>
+                                <label class="p-3 rounded-xl bg-white/10 border border-white/20 cursor-pointer flex items-center gap-2 hover:bg-white/20 transition-all">
+                                    <input type="radio" name="iteration-decision" value="pivot" class="accent-orange-500">
+                                    <div>
+                                        <span class="font-bold text-white block">🔄 Pivotar Ideia</span>
+                                        <span class="text-[10px] text-slate-300">Voltar à ideação com novos insights.</span>
+                                    </div>
+                                </label>
+                                <label class="p-3 rounded-xl bg-white/10 border border-white/20 cursor-pointer flex items-center gap-2 hover:bg-white/20 transition-all">
+                                    <input type="radio" name="iteration-decision" value="implement" class="accent-orange-500">
+                                    <div>
+                                        <span class="font-bold text-white block">🚀 Avançar para MVP</span>
+                                        <span class="text-[10px] text-slate-300">Solução validada para produção.</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <button id="finalize-project-btn" class="w-full py-3 rounded-xl bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-sm transition-all shadow-md shadow-orange-500/30 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Concluir e Gerar Relatório PDF Completo</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL: TEORIA & METODOLOGIA (?)                                     -->
+    <!-- =================================================================== -->
+    <div id="info-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto transform scale-95 transition-transform duration-300 custom-scrollbar border border-slate-200">
+            <div class="p-6 sm:p-8">
+                <div class="flex justify-between items-center pb-4 border-b border-slate-200 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-brand-orange flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-semibold uppercase text-brand-orange tracking-wider">Fundamento Teórico</span>
+                            <h3 id="modal-title" class="text-xl font-bold font-heading text-slate-900"></h3>
+                        </div>
+                    </div>
+                    <button id="modal-close" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-lg transition-colors">&times;</button>
+                </div>
+                <div id="modal-content" class="text-slate-600 text-sm leading-relaxed space-y-4 prose prose-slate"></div>
             </div>
         </div>
     </div>
 
-    <div class="relative min-h-screen md:flex">
-        <aside class="sidebar text-gray-100 w-72 space-y-6 py-7 px-4 fixed inset-y-0 left-0 hidden md:block">
-            <div class="flex items-center justify-between pb-2 border-b border-white/10">
-                <a href="../" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition-colors" title="Voltar ao Hub de Laboratórios">
-                    ← Voltar ao Hub
-                </a>
-            </div>
-            <div class="flex items-center justify-center"><img src="../assets/img/logo-learning-fly-full.png" alt="Logo LearningFly" class="w-48"></div>
-            <nav id="desktop-nav" class="mt-10">
-                <a href="#phase-1" class="nav-link flex items-center justify-between py-3 px-4 rounded transition duration-200 hover:bg-white/10"><span>1. Empatia</span><span class="check-icon hidden">✓</span></a>
-                <a href="#phase-2" class="nav-link flex items-center justify-between py-3 px-4 rounded transition duration-200 hover:bg-white/10"><span>2. Definição</span><span class="check-icon hidden">✓</span></a>
-                <a href="#phase-3" class="nav-link flex items-center justify-between py-3 px-4 rounded transition duration-200 hover:bg-white/10"><span>3. Ideação</span><span class="check-icon hidden">✓</span></a>
-                <a href="#phase-4" class="nav-link flex items-center justify-between py-3 px-4 rounded transition duration-200 hover:bg-white/10"><span>4. Prototipagem</span><span class="check-icon hidden">✓</span></a>
-                <a href="#phase-5" class="nav-link flex items-center justify-between py-3 px-4 rounded transition duration-200 hover:bg-white/10"><span>5. Teste</span><span class="check-icon hidden">✓</span></a>
-            </nav>
-            <div class="absolute bottom-10 left-0 right-0 px-4"><button id="export-pdf" class="btn-primary w-full text-white font-bold py-3 px-4 rounded-lg transition duration-200">Exportar Projeto em PDF</button></div>
-        </aside>
+    <!-- =================================================================== -->
+    <!-- MODAL: CENÁRIOS / CASOS DE ESTUDO GUIADOS                           -->
+    <!-- =================================================================== -->
+    <div id="cases-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto transform scale-95 transition-transform duration-300 custom-scrollbar border border-slate-200">
+            <div class="p-6 sm:p-8">
+                <div class="flex justify-between items-center pb-4 border-b border-slate-200 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase text-brand-blue tracking-wider">Modo Prático Guiado</span>
+                        <h3 class="text-xl font-bold font-heading text-slate-900">Carregar Cenário de Estudo</h3>
+                    </div>
+                    <button id="cases-modal-close" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-lg transition-colors">&times;</button>
+                </div>
+                
+                <p class="text-xs text-slate-600 mb-6">Escolha um dos projetos pré-estruturados abaixo para entender na prática ou continue com seu projeto livre.</p>
 
-        <main class="flex-1 md:ml-72 p-6 md:p-10" id="exportable-content">
-            <section id="intro" class="text-center mb-16">
-                <h1 class="text-4xl md:text-5xl font-extrabold mb-4" style="color: var(--focus-blue);">Laboratório Virtual de Design Thinking</h1>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Siga a trilha de aprendizagem, complete os desafios em cada fase e exporte seu projeto ao final. Clique no ícone <span class="font-bold text-xl" style="color:var(--focus-orange)">?</span> para saber mais.</p>
-            </section>
-            <div id="phases-container"></div>
-        </main>
+                <div class="space-y-4">
+                    <!-- Case 1 -->
+                    <div class="p-4 rounded-2xl border border-slate-200 hover:border-brand-orange hover:shadow-md transition-all cursor-pointer case-select-card" data-case-id="universidade">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-sm text-brand-blue">🎓 Evasão e Desengajamento no Ensino Superior</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">Educação</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Focado em calouros de exatas com dificuldades em matérias abstratas e falta de aplicação prática.</p>
+                        <button class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-brand-orange hover:text-white text-xs font-semibold text-slate-700 transition-colors">Carregar este Caso</button>
+                    </div>
+
+                    <!-- Case 2 -->
+                    <div class="p-4 rounded-2xl border border-slate-200 hover:border-brand-orange hover:shadow-md transition-all cursor-pointer case-select-card" data-case-id="acessibilidade">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-sm text-brand-blue">♿ Acessibilidade e Mobilidade em Transporte Público</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Cidades Inteligentes</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Focado em pessoas com deficiência motora enfrentando falta de informação em tempo real sobre rampas e elevadores.</p>
+                        <button class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-brand-orange hover:text-white text-xs font-semibold text-slate-700 transition-colors">Carregar este Caso</button>
+                    </div>
+
+                    <!-- Case 3 -->
+                    <div class="p-4 rounded-2xl border border-slate-200 hover:border-brand-orange hover:shadow-md transition-all cursor-pointer case-select-card" data-case-id="sustentabilidade">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-sm text-brand-blue">♻️ Redução de Resíduos e Desperdício em Restaurantes</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Sustentabilidade</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Soluções para engajar clientes e cozinhas no aproveitamento integral de alimentos.</p>
+                        <button class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-brand-orange hover:text-white text-xs font-semibold text-slate-700 transition-colors">Carregar este Caso</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-<script src="script.js"></script>
+    <!-- =================================================================== -->
+    <!-- MODAL: DADOS & IMPORTAÇÃO / EXPORTAÇÃO JSON                         -->
+    <!-- =================================================================== -->
+    <div id="storage-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-y-auto transform scale-95 transition-transform duration-300 border border-slate-200">
+            <div class="p-6 sm:p-8">
+                <div class="flex justify-between items-center pb-4 border-b border-slate-200 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase text-brand-orange tracking-wider">Gerenciamento de Projeto</span>
+                        <h3 class="text-xl font-bold font-heading text-slate-900">Salvar / Carregar Dados (.json)</h3>
+                    </div>
+                    <button id="storage-modal-close" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-lg transition-colors">&times;</button>
+                </div>
+
+                <div class="space-y-4 text-xs">
+                    <p class="text-slate-600">Exporte seu projeto para enviar ao professor ou importe um arquivo JSON para continuar seu trabalho em outro computador.</p>
+                    
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                        <button id="export-json-btn" class="w-full py-2.5 rounded-xl bg-brand-blue hover:bg-brand-blue-light text-white font-bold transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> Baixar Arquivo do Projeto (.json)
+                        </button>
+                        
+                        <div class="relative flex items-center justify-center py-2">
+                            <div class="border-t border-slate-200 w-full"></div>
+                            <span class="bg-slate-50 px-2 text-slate-400 text-[11px] uppercase">ou</span>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1.5">Importar Projeto (.json):</label>
+                            <input type="file" id="import-json-input" accept=".json" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-orange file:text-white hover:file:bg-brand-orange-hover cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-6 text-slate-400 text-xs mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <img src="../assets/img/logo-learning-fly-simple.png" alt="Learning Fly" class="h-5 w-auto">
+                <span>Laboratório de Design Thinking &bull; <strong>Learning Fly</strong></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="../" class="hover:text-brand-orange transition-colors">Hub de Laboratórios</a>
+                <a href="https://github.com/vitorkrewer/laboratorios-virtuais-lf" target="_blank" class="hover:text-brand-orange transition-colors">GitHub</a>
+                <a href="#intro" class="hover:text-brand-orange transition-colors">Topo ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- App Scripts -->
+    <script src="script.js"></script>
 </body>
 </html>

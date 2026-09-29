@@ -1,71 +1,69 @@
 # Laboratório Virtual de Design Thinking 💡
 
-Este projeto é uma ferramenta educacional interativa projetada para guiar estudantes e profissionais através das 5 fases clássicas do **Design Thinking**: Empatia, Definição, Ideação, Prototipagem e Teste.
+O **Laboratório Virtual de Design Thinking** é uma ferramenta educacional imersiva e interativa projetada para guiar estudantes, professores e profissionais através das 5 etapas da inovação centrada no ser humano: **Empatia**, **Definição**, **Ideação**, **Prototipagem** e **Teste**.
 
-A aplicação funciona como um **workshop digital**, onde o usuário aprende fazendo, preenchendo atividades práticas em cada etapa e exportando um relatório completo do seu projeto ao final.
+A aplicação funciona como um **workshop digital completo**, permitindo preencher atividades práticas em cada etapa, salvar o progresso localmente (`localStorage`), importar/exportar dados (`.json`) e gerar um relatório profissional formal em PDF.
 
 [🔗 Acessar Laboratório Online](https://vitorkrewer.github.io/laboratorios-virtuais-lf/design-thinking-build-projects/)
 
-## 🎯 Funcionalidades e Fases
+---
 
-O laboratório guia o usuário através de uma trilha linear, onde cada fase possui:
+## 🎯 Funcionalidades e Metodologia por Fase
 
-* **Conteúdo Teórico:** Explicações claras e diretas sobre o objetivo de cada etapa (acessíveis via ícone `?`).
-* **Atividade Prática:** Ferramentas interativas para aplicar o conhecimento imediatamente.
-* **Validação de Progresso:** Um indicador visual ("check") aparece na navegação lateral quando a atividade da fase é concluída.
+O laboratório guia o usuário através de uma trilha estruturada e interativa:
 
-### As 5 Fases
+### 1. 👥 Fase 1: Empatia & Pesquisa do Usuário
+- **Perfil da Persona:** Definição de Nome, Idade, Ocupação e Seletor de Arquétipo/Avatar com sincronização em tempo real.
+- **Mapa de Empatia 360°:** 4 quadrantes clássicos (*O que Pensa/Sente*, *O que Vê*, *O que Fala/Faz*, *O que Ouve*).
+- **Dores vs. Ganhos:** Mapeamento explícito de barreiras e objetivos de sucesso.
+- **Card Visual da Persona:** Renderização imediata de um cartão de síntese visual.
 
-1. **Empatia:**
-    * *Atividade:* Criação de uma **Persona** detalhada.
-    * *Ferramentas:* Formulário para definir Nome, Objetivos e Dificuldades, gerando um "Card de Persona" visual.
+### 2. 🎯 Fase 2: Definição (POV & HMW)
+- **Ponto de Vista Estruturado (POV):** Enquadramento com a fórmula `[Usuário] precisa de [Necessidade] porque [Insight]`.
+- **Construtor "Como Poderíamos...?" (HMW):** Perguntas orientadas à ação que abrem espaço para soluções inovadoras.
+- **Declaração Oficial do Desafio:** Destaque dinâmico do desafio central do projeto.
 
-2. **Definição:**
-    * *Atividade:* Construção da frase do desafio ("Como poderíamos...").
-    * *Ferramentas:* Coletores drop-down para montar a frase estruturada focada no usuário, ação e contexto.
+### 3. 💡 Fase 3: Ideação & Matriz de Decisão
+- **Quadro de Post-its Coloridos:** Adicione ideias livres com cores customizadas, contador de curtidas/votos e botão de exclusão.
+- **Provocações Criativas (*Idea Sparks*):** Gerador aleatório de perguntas inspiradoras para destravar bloqueios criativos.
+- **Matriz de Priorização (Impacto vs. Esforço):** Categorização das ideias em *Quick Wins (Fazer Primeiro)* e *Projetos Estratégicos*.
 
-3. **Ideação:**
-    * *Atividade:* Brainstorming virtual.
-    * *Ferramentas:* Um quadro de post-its digital onde o usuário pode adicionar suas ideias coloridas livremente.
+### 4. 🛠️ Fase 4: Prototipagem & Jornada da Solução
+- **4 Modelos de Protótipos Selecionáveis:**
+  - 🎬 **Storyboard Visual:** Narrativa em 3 atos (Ponto de Partida, Uso da Solução, Transformação/Final Feliz).
+  - 🗺️ **Blueprint do Serviço:** Mapeamento de Pontos de Contato (*Touchpoints*), Jornada e Bastidores.
+  - 📦 **Maquete / Wireframe:** Descrição física/digital de materiais e estrutura funcional.
+  - 🎭 **Role-Playing:** Roteiro teatral de simulação com atores e diálogos-chave.
+- **Plano de Teste & Hipóteses:** Definição clara do que o protótipo precisa validar.
 
-4. **Prototipagem:**
-    * *Atividade:* Escolha e planejamento do protótipo.
-    * *Ferramentas:* Seletor de tipo de protótipo (Storyboard, Role-playing, Maquete, Modelo de Serviço) com áreas de texto específicas para descrever a solução. Inclui também um campo para planejar a coleta de feedback.
+### 5. 🔬 Fase 5: Teste & Feedback 360°
+- **Sliders Quantitativos:** Avaliação de Facilidade de Uso, Inovação e Viabilidade Técnica (notas de 1 a 5).
+- **Matriz de Feedback dos Usuários (*Capture Grid*):**
+  - ➕ *O que funcionou bem*
+  - ⚠️ *O que pode melhorar*
+  - ❓ *Dúvidas e perguntas surgidas*
+  - 💡 *Novas ideias e próximas iterações*
+- **Decisão do Ciclo:** Escolha estratégica da equipe (*Refinar Protótipo*, *Pivotar Ideia* ou *Avançar para MVP*).
 
-5. **Teste:**
-    * *Atividade:* Simulação de coleta de feedback.
-    * *Ferramentas:* Formulário de avaliação com sliders para "Facilidade de Uso" e "Inovação", gerando um resumo final.
+---
 
-### 📄 Exportação em PDF
+## ⚡ Recursos Adicionais de UX & Produtividade
 
-Ao final da jornada, o usuário pode clicar em **"Exportar Projeto em PDF"**. A aplicação utiliza `html2canvas` e `jspdf` para capturar todas as atividades preenchidas e gerar um relatório profissional, pronto para ser entregue como trabalho ou documentação.
+- **💾 Auto-Save no Navegador (`localStorage`):** Seu trabalho é salvo a cada caractere digitado; feche a aba e continue quando quiser.
+- **🎓 Cenários Práticos Prontos:** Carregue exemplos completos com 1 clique (*Evasão no Ensino Superior*, *Acessibilidade Urbana*, *Zero Desperdício em Restaurantes*).
+- **📂 Importar / Exportar JSON:** Salve o arquivo bruto do projeto para backup ou para compartilhar com colegas e professores.
+- **📄 Exportação em PDF Formatada:** Gera automaticamente um relatório diagramado com capa institucional, dados do autor e todas as seções preenchidas.
+- **📊 Indicador de Progresso:** Barra linear no topo e checklist visual na barra lateral.
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **HTML5 & CSS3**
-* **TailwindCSS (via CDN):** Para estilização moderna e responsiva.
-* **JavaScript (Vanilla JS):** Lógica da aplicação, manipulação do DOM e controle de estado.
-* **Bibliotecas Externas:**
-  * `jsPDF`: Geração do arquivo PDF final.
-  * `html2canvas`: Captura de screenshots dos elementos HTML (cards, quadros) para inserção no PDF.
-  * `Google Fonts (Inter)`: Tipografia.
-
-## 📦 Como Usar
-
-1. Clone o repositório.
-2. Abra o arquivo `index.html` em qualquer navegador moderno.
-3. Navegue pelas fases usando a barra lateral ou rolando a página.
-4. Pressione o botão `?` em cada título para ler a teoria.
-5. Preencha os campos interativos.
-6. Gere o PDF do seu projeto.
-
-## 🎨 Design System
-
-O projeto utiliza uma paleta de cores sóbria mas focada em ação, com destaque para:
-
-* **Azul Foco:** Para títulos e elementos principais.
-* **Laranja:** Para pontos de atenção e ajuda.
-* **Design Clean:** Foco total no conteúdo e nas atividades.
+- **HTML5 Semântico & CSS3 Moderno**
+- **TailwindCSS (via CDN)**
+- **JavaScript Moderno (ES6+)**
+- **jsPDF & html2canvas:** Processamento vetorial e renderização de relatórios.
+- **Font Awesome 6 & Google Fonts (Outfit / Plus Jakarta Sans)**
 
 ---
 
