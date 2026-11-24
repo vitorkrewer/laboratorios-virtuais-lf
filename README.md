@@ -44,7 +44,16 @@ Laboratório híbrido para o ensino de Fundamentos de Processamento de Linguagem
 - **Funcionalidades:** Oficina visual de normalização, tokenização, stop words e lematização; comparador Bag of Words e TF-IDF com n-gramas; classificador local Naive Bayes de sentimentos com métricas; painel Python equivalente com `scikit-learn`.
 - **Destaque:** Conecta a experimentação imediata no navegador à implementação reproduzível em notebooks, ressaltando o efeito de cada decisão de pré-processamento sobre vetores e modelos.
 
-### 3. 🧪 Tabela Periódica Interativa & Construtor Atômico
+### 4. ♾️ Cálculo I Lab: Cálculo Diferencial e Integral I
+
+**Diretório:** `calculo-1-lab`
+
+Laboratório para estudantes que precisam aprender Cálculo I com urgência, em formato de landing page + wiki.
+
+- **Funcionalidades:** diagnóstico e 4 trilhas de aprendizagem (7, 10, 14 e 30 dias) com progresso salvo; 14 capítulos de teoria em Markdown com fórmulas KaTeX, busca e exercícios com gabarito; simuladores de limites, derivada (secante → tangente) e somas de Riemann.
+- **Destaque:** conteúdo 100% editável em arquivos `.md` (um por capítulo), sem build, publicável direto no GitHub Pages.
+
+### 5. 🧪 Tabela Periódica Interativa & Construtor Atômico
 
 **Diretório:** `tabela-periodica-interativa`
 
@@ -53,7 +62,7 @@ Ferramenta visual para o ensino de Química.
 - **Funcionalidades:** Tabela periódica completa e clicável com detalhes dos elementos.
 - **Destaque:** **Construtor de Átomos** onde alunos podem adicionar prótons/nêutrons e ver o elemento e massa resultante em tempo real.
 
-### 3. ✒️ Gerador de Prompt para Material Didático
+### 6. ✒️ Gerador de Prompt para Material Didático
 
 **Diretório:** `build-prompter-writer`
 
@@ -62,7 +71,7 @@ Uma ferramenta otimizada para educadores criarem prompts estruturados para IAs G
 - **Funcionalidades:** Templates prontos para Apostilas, Livros Didáticos, Fichamentos e Questões de Concurso.
 - **Destaque:** Interface guiada que ajuda o professor a definir público-alvo, taxonomia de Bloom e formato pedagógico antes de gerar o prompt.
 
-### 4. 📐 Desenho Universal para Engenharias
+### 7. 📐 Desenho Universal para Engenharias
 
 **Diretório:** `desenho-universal-engenharias`
 
@@ -71,7 +80,7 @@ Um material rico e interativo sobre Desenho Técnico e Acessibilidade.
 - **Funcionalidades:** Infográficos sobre instrumentos de desenho, gráficos interativos de normas ABNT (papel, linhas) e calculadora visual de inclinação de rampas (NBR 9050).
 - **Destaque:** Comparativo visual dos "7 Princípios do Desenho Universal" aplicados à engenharia.
 
-### 5. 💡 Laboratório de Design Thinking
+### 8. 💡 Laboratório de Design Thinking
 
 **Diretório:** `design-thinking-build-projects`
 
@@ -80,7 +89,7 @@ Um guia passo a passo para desenvolver projetos seguindo a metodologia de Design
 - **Funcionalidades:** Trilho interativo passando pelas 5 fases (Empatia, Definição, Ideação, Prototipagem, Teste).
 - **Destaque:** Permite exportar o projeto desenvolvido como um relatório PDF completo ao final do processo.
 
-### 6. ⚗️ Laboratório de Química Virtual (Combinador)
+### 9. ⚗️ Laboratório de Química Virtual (Combinador)
 
 **Diretório:** `build-quimical-elements`
 
@@ -88,7 +97,7 @@ Um ambiente gamificado para experimentação química.
 
 - **Funcionalidades:** Workspace para arrastar e combinar elementos, sugestões de "Receitas" e visualização de resultados.
 
-### 7. 🛡️ Laboratório Virtual - Kali Linux (Iniciante)
+### 10. 🛡️ Laboratório Virtual - Kali Linux (Iniciante)
 
 **Diretório:** `kali-linux-labs-beginner`
 
@@ -97,7 +106,7 @@ Uma interface interativa simulando o Kali Linux para ensino de cibersegurança e
 - **Funcionalidades:** Terminal simulado (Xterm.js), missões práticas (Nmap, SQLMap), guias de instalação e vídeos integrados.
 - **Destaque:** Ambiente seguro (sandbox) no navegador que recria a experiência de uso das ferramentas reais sem riscos.
 
-### 8. 🌿 Laboratório Virtual de Git & Controle de Versão (DAG Simulator)
+### 11. 🌿 Laboratório Virtual de Git & Controle de Versão (DAG Simulator)
 
 **Diretório:** `git-labs-simulator`
 
