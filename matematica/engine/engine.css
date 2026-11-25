@@ -320,8 +320,8 @@ kbd { font-family: var(--mono); font-size: .7rem; padding: 1px 6px; color: var(-
 @media (max-width: 720px) { .qz-opts { grid-template-columns: 1fr; } .resume { flex-wrap: wrap; } .resume .go { margin-left: 0; } }
 
 /* ---------- cores extras ---------- */
-:root { --violet: #a78bfa; --teal: #2dd4bf; }
-.c-rose > i { color: var(--rose); } .c-violet > i { color: var(--violet); } .c-teal > i { color: var(--teal); }
+:root { --violet: #a78bfa; --teal: #2dd4bf; --orange: #fb923c; }
+.c-rose > i { color: var(--rose); } .c-violet > i { color: var(--violet); } .c-teal > i { color: var(--teal); } .c-orange > i { color: var(--orange); }
 
 /* ---------- ecossistema (bloco "onde este livro se encaixa") ---------- */
 .eco-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
@@ -331,7 +331,7 @@ a.eco-card:hover { text-decoration: none; border-color: var(--accent); transform
 .eco-card > i { font-size: 1.3rem; width: 26px; text-align: center; }
 .eco-card b { display: block; font-family: var(--head); } .eco-card small { color: var(--muted); font-size: .8rem; }
 .eco-card.soon { opacity: .55; border-style: dashed; }
-.c-sky.eco-card > i { color: var(--sky); } .c-indigo.eco-card > i { color: var(--accent); } .c-emerald.eco-card > i { color: var(--green); } .c-amber.eco-card > i { color: var(--amber); }
+.c-sky.eco-card > i { color: var(--sky); } .c-indigo.eco-card > i { color: var(--accent); } .c-emerald.eco-card > i { color: var(--green); } .c-amber.eco-card > i { color: var(--amber); } .c-orange.eco-card > i { color: var(--orange); }
 
 /* ---------- simuladores do livro Fundamentos ---------- */
 .venn-sets { display: grid; gap: 8px; }
@@ -365,11 +365,11 @@ a.eco-card:hover { text-decoration: none; border-color: var(--accent); transform
 
 /* ---------- hub da Matemática ---------- */
 .hub-hero { grid-template-columns: 1fr; max-width: 860px; }
-.routes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.routes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 .route-card { padding: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
 .route-card > i { font-size: 1.4rem; margin-bottom: 8px; }
 .route-card h3 { font-family: var(--head); font-size: 1.15rem; margin: 0 0 6px; } .route-card p { margin: 0 0 12px; color: var(--muted); font-size: .9rem; }
-.route-card.c-amber > i { color: var(--amber); } .route-card.c-sky > i { color: var(--sky); } .route-card.c-indigo > i { color: var(--accent); }
+.route-card.c-amber > i { color: var(--amber); } .route-card.c-sky > i { color: var(--sky); } .route-card.c-indigo > i { color: var(--accent); } .route-card.c-orange > i { color: var(--orange); }
 .route-steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: .9rem; }
 .route-steps li::marker { color: var(--accent); font-weight: 700; } .route-steps li a { font-weight: 700; }
 .route-steps li.soon span { color: var(--faint); }
@@ -382,13 +382,14 @@ a.book-card:hover { text-decoration: none; transform: translateY(-3px); border-c
 .book-card.c-emerald .bk-top > i, .map-node.c-emerald > i { color: var(--green); } .book-card.c-amber .bk-top > i, .map-node.c-amber > i { color: var(--amber); }
 .book-card.c-rose .bk-top > i, .map-node.c-rose > i { color: var(--rose); } .book-card.c-violet .bk-top > i, .map-node.c-violet > i { color: var(--violet); }
 .book-card.c-teal .bk-top > i, .map-node.c-teal > i { color: var(--teal); }
+.book-card.c-orange .bk-top > i, .map-node.c-orange > i { color: var(--orange); }
 .st { font-size: .7rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; }
 .st-disponivel { color: var(--green); background: rgba(52,211,153,.14); } .st-em-breve { color: var(--amber); background: rgba(251,191,36,.12); } .st-planejado { color: var(--muted); background: var(--bg2); }
 .book-card h3 { font-family: var(--head); font-size: 1.3rem; margin: 0; } .book-card p { margin: 0; color: var(--muted); font-size: .88rem; flex: 1; }
 .chips { display: flex; flex-wrap: wrap; gap: 5px; } .chips span { font-size: .72rem; padding: 2px 8px; color: #cbd5e1; background: var(--bg2); border: 1px solid var(--line2); border-radius: 6px; }
 .req { color: var(--faint); font-size: .78rem; } .req i { margin-right: 4px; }
 .bk-prog { display: flex; align-items: center; gap: 10px; font-size: .75rem; color: var(--muted); } .bk-prog .bar { flex: 1; }
-.eco-map { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, auto); gap: 26px 70px; padding: 26px; background: var(--bg2); border: 1px solid var(--line); border-radius: 18px; }
+.eco-map { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(3, auto); gap: 26px 46px; padding: 26px; background: var(--bg2); border: 1px solid var(--line); border-radius: 18px; }
 .eco-edges { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 .map-node { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; padding: 14px 16px; color: var(--text); background: var(--card); border: 1px solid var(--line2); border-radius: 14px; transition: .18s; }
 a.map-node:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }

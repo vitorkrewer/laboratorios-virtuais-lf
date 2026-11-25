@@ -125,7 +125,8 @@ MATH.book = {
     recommend(score, total, needs) {
         const base = ['logica', 'conjuntos', 'operacoes-conjuntos'];
         const calc = ['conjuntos-numericos', 'reais-intervalos', 'inequacoes', 'modulo'];
-        if (score <= 3) return { path: 'completo-14', msg: 'Vale construir a base com calma, na ordem do livro.' };
+        if (score <= 3) return { path: 'completo-14', msg: 'Vale construir a base com calma, na ordem do livro.',
+            extra: '<p class="small">Se as contas (sinais, frações, equações) também estão travando, comece pela <a href="../algebra/#/trilhas">Álgebra elementar →</a></p>' };
         if (needs.length && needs.every(n => base.includes(n))) return { path: 'conjuntos-4', msg: 'Sua dificuldade está na linguagem de conjuntos e lógica. Foque nela.' };
         if (needs.some(n => calc.includes(n))) return { path: 'ponte-calculo', msg: 'Você tem boa base, mas números reais, inequações ou módulo ainda pesam. São exatamente os pré-requisitos do Cálculo.' };
         return { path: 'ponte-calculo', msg: 'Ótimo! Você está pronto. Revise rapidamente a ponte e siga para o Cálculo I.',

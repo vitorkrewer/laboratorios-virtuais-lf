@@ -24,9 +24,12 @@
 
     /* ---- rotas por objetivo (atravessam livros) ---- */
     const ROUTES = [
+        { icon: 'fa-hourglass-half', color: 'orange', title: 'Faz tempo que saí da escola',
+          text: 'Comece pela Álgebra elementar: sinais, frações, equações e porcentagem, do começo e sem pressa. Faça o diagnóstico de 8 questões para saber o ritmo.',
+          steps: [{ b: 'algebra', label: 'Diagnóstico de Álgebra', href: 'algebra/#/trilhas' }, { b: 'algebra', label: 'Álgebra do zero (21 dias)', href: 'algebra/#/trilhas/do-zero-21' }, { b: 'fundamentos', label: 'Depois: Fundamentos completo', href: 'fundamentos/#/trilhas/completo-14' }] },
         { icon: 'fa-bolt', color: 'amber', title: 'Tenho prova de Cálculo I em breve',
-          text: 'Vá direto ao livro de Cálculo, faça o diagnóstico e use a trilha de resgate. Volte aos Fundamentos só quando travar.',
-          steps: [{ b: 'calculo-1', label: 'Diagnóstico de Cálculo I', href: 'calculo-1/#/trilhas' }, { b: 'fundamentos', label: 'Ponte para o Cálculo (se precisar)', href: 'fundamentos/#/trilhas/ponte-calculo' }, { b: 'funcoes', label: 'Funções para o Cálculo (se precisar)', href: 'funcoes/#/trilhas/ponte-calculo' }] },
+          text: 'Vá direto ao livro de Cálculo, faça o diagnóstico e use a trilha de resgate. Volte à Álgebra ou aos Fundamentos só quando travar.',
+          steps: [{ b: 'calculo-1', label: 'Diagnóstico de Cálculo I', href: 'calculo-1/#/trilhas' }, { b: 'algebra', label: 'Álgebra para o Cálculo (se as contas travarem)', href: 'algebra/#/trilhas/para-calculo-5' }, { b: 'fundamentos', label: 'Ponte para o Cálculo (se precisar)', href: 'fundamentos/#/trilhas/ponte-calculo' }, { b: 'funcoes', label: 'Funções para o Cálculo (se precisar)', href: 'funcoes/#/trilhas/ponte-calculo' }] },
         { icon: 'fa-graduation-cap', color: 'sky', title: 'Estou começando a graduação',
           text: 'Construa a base na ordem certa: linguagem e números reais, depois funções, depois Cálculo.',
           steps: [{ b: 'fundamentos', label: 'Fundamentos completo', href: 'fundamentos/#/trilhas/completo-14' }, { b: 'funcoes', label: 'Funções completo', href: 'funcoes/#/trilhas/completo-14' }, { b: 'calculo-1', label: 'Cálculo I', href: 'calculo-1/#/trilhas/base-30' }] },
