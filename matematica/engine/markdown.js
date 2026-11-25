@@ -1,7 +1,7 @@
 /* Pipeline Markdown + KaTeX: protege a matemática antes do marked e restaura depois. */
-window.CALC = window.CALC || {};
+window.MATH = window.MATH || {};
 
-CALC.md = (function () {
+MATH.md = (function () {
     'use strict';
 
     const textCache = {};

@@ -1,5 +1,44 @@
-/* Dados do currículo, trilhas e diagnóstico do Cálculo I Lab */
-window.CALC = window.CALC || {};
+/* Livro Cálculo I: configuração, capítulos, trilhas e diagnóstico (lido por engine/app.js). */
+window.MATH = window.MATH || {};
+const CALC = MATH.book = {
+    id: 'calculo-1',
+    title: 'Cálculo I',
+    subtitle: 'Diferencial e Integral',
+    icon: 'fa-infinity',
+    storage: 'calc1lab',
+    wikiTitle: 'Wiki de Cálculo I',
+    labs: [
+        { id: 'limites', label: 'Limites', icon: 'fa-arrows-to-dot', name: 'Simulador de limites' },
+        { id: 'derivada', label: 'Derivada', icon: 'fa-chart-line', name: 'Simulador de derivada' },
+        { id: 'integral', label: 'Integral', icon: 'fa-chart-area', name: 'Simulador de integral' }
+    ],
+    labsIntro: { title: 'Veja o Cálculo acontecer', text: 'Três simuladores para transformar definições abstratas em algo que você pode mexer.' },
+    home: {
+        eyebrow: 'Cálculo Diferencial e Integral I',
+        titleHtml: 'Prova chegando? Aprenda Cálculo I <em>do jeito que funciona.</em>',
+        lead: 'Trilhas de estudo objetivas, teoria gratuita em formato wiki e simuladores interativos para <strong>enxergar</strong> limites, derivadas e integrais. Tudo no navegador, sem cadastro.',
+        labPitch: 'Veja a secante virar tangente, a soma virar integral, e teste as funções da sua lista.',
+        formulas: [
+            { label: 'LIMITE', tex: '\\lim_{x\\to a} f(x)=L' },
+            { label: 'DERIVADA', tex: "f'(x)=\\lim_{h\\to 0}\\frac{f(x+h)-f(x)}{h}" },
+            { label: 'INTEGRAL', tex: '\\int_a^b f(x)\\,dx = F(b)-F(a)' }
+        ],
+        mapKicker: 'O mapa do curso',
+        mapTitle: 'As quatro grandes ideias de Cálculo I',
+        map: [
+            { color: 'sky', icon: 'fa-arrows-to-dot', title: 'Limites', text: 'Para onde a função vai quando $x$ se aproxima de um ponto.', tex: '\\lim_{x\\to 0}\\frac{\\sin x}{x}=1', href: '#/teoria/limites' },
+            { color: 'indigo', icon: 'fa-chart-line', title: 'Derivadas', text: 'A taxa de variação instantânea e a inclinação da tangente.', tex: '(x^n)\'=n\\,x^{n-1}', href: '#/teoria/derivada-definicao' },
+            { color: 'emerald', icon: 'fa-mountain', title: 'Aplicações', text: 'Máximos, mínimos, otimização e esboço de gráficos.', tex: "f'(c)=0", href: '#/teoria/aplicacoes-derivadas' },
+            { color: 'amber', icon: 'fa-chart-area', title: 'Integrais', text: 'Acumulação, área sob a curva e o elo com a derivada.', tex: "\\int_a^b f'(x)\\,dx=f(b)-f(a)", href: '#/teoria/integral-definida' }
+        ]
+    },
+    recommend(score, total, needs) {
+        if (score <= 3) return { path: 'base-30', msg: 'Sua base ainda precisa de reforço. Comece com calma pela trilha de 30 dias.',
+            extra: '<p class="small">Se a base pesar, estude antes os livros <a href="../fundamentos/">Fundamentos</a> (intervalos, inequações, módulo) e <a href="../funcoes/">Funções</a> (gráficos, exponencial, log, trigonometria).</p>' };
+        if (score <= 5) return { path: needs.includes('integral-definida') && needs.length === 1 ? 'p2-10' : 'resgate-7', msg: 'Você tem uma boa base, mas há lacunas importantes para fechar.' };
+        return { path: needs.includes('integral-definida') ? 'p2-10' : 'resgate-7', msg: 'Ótimo desempenho! Foque nos pontos que ainda escaparam e treine bastante.' };
+    }
+};
 
 CALC.groups = [
     { id: 'base',      title: 'Base',                   icon: 'fa-seedling' },

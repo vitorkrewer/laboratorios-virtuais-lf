@@ -4,6 +4,8 @@ Quase todo erro em Cálculo I é, na verdade, um erro de **álgebra, fatoração
 
 > [!DICA] Se você tem pouco tempo, leia as seções 2 e 3 com atenção e passe os olhos nas demais. Volte aqui sempre que travar em um exercício.
 
+> [!DICA] Este capítulo é um resumo. Para estudar a fundo, há dois livros com mais exemplos e simuladores: [Fundamentos](../fundamentos/) (conjuntos, intervalos, inequações e módulo) e [Funções](../funcoes/) (gráficos, transformações, exponencial, logaritmo e trigonométricas). Os dois têm uma trilha curta voltada ao Cálculo.
+
 ## 1. Funções
 
 Uma **função** $f$ associa a cada $x$ do **domínio** exatamente um valor $f(x)$ da **imagem**.

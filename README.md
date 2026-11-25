@@ -44,14 +44,16 @@ Laboratório híbrido para o ensino de Fundamentos de Processamento de Linguagem
 - **Funcionalidades:** Oficina visual de normalização, tokenização, stop words e lematização; comparador Bag of Words e TF-IDF com n-gramas; classificador local Naive Bayes de sentimentos com métricas; painel Python equivalente com `scikit-learn`.
 - **Destaque:** Conecta a experimentação imediata no navegador à implementação reproduzível em notebooks, ressaltando o efeito de cada decisão de pré-processamento sobre vetores e modelos.
 
-### 4. ♾️ Cálculo I Lab: Cálculo Diferencial e Integral I
+### 4. ♾️ Ecossistema de Matemática
 
-**Diretório:** `calculo-1-lab`
+**Diretório:** `matematica`
 
-Laboratório para estudantes que precisam aprender Cálculo I com urgência, em formato de landing page + wiki.
+Conjunto de livros interativos de Matemática do ensino superior, conectados por pré-requisitos e construídos sobre um motor compartilhado (`matematica/engine`).
 
-- **Funcionalidades:** diagnóstico e 4 trilhas de aprendizagem (7, 10, 14 e 30 dias) com progresso salvo; 14 capítulos de teoria em Markdown com fórmulas KaTeX, busca e exercícios com gabarito; simuladores de limites, derivada (secante → tangente) e somas de Riemann.
-- **Destaque:** conteúdo 100% editável em arquivos `.md` (um por capítulo), sem build, publicável direto no GitHub Pages.
+- **Livros disponíveis:** **Fundamentos** (lógica, conjuntos, produto cartesiano, conjuntos numéricos, intervalos, inequações e módulo), **Funções** (conceito, transformações, afim, quadrática, composta e inversa, exponencial, logaritmo e trigonométricas) e **Cálculo I** (limites, derivadas, integrais e aplicações). Planejados: Cálculo II, Geometria Analítica, Álgebra Linear e Probabilidade.
+- **Funcionalidades:** hub com rotas por objetivo e mapa de pré-requisitos; em cada livro, diagnóstico, trilhas, teoria em Markdown com KaTeX, testes rápidos com correção imediata, progresso salvo no navegador e simuladores (Venn, intervalos, inequações, transformações de gráficos, afim e quadrática, composta e inversa, limites, derivada e integral).
+- **Glossário:** 136 verbetes de símbolos, termos e fórmulas (aritmética, lógica, conjuntos, funções, exponencial e logaritmo, trigonometria, cálculo e alfabeto grego), cada um com como se lê (com áudio), significado, exemplo, como lembrar, erro comum e onde estudar. Tem cartões com repetição espaçada, teste e folha para imprimir. Cada capítulo dos livros mostra automaticamente os símbolos que usa.
+- **Destaque:** adicionar um livro exige só conteúdo (`book.js` + arquivos `.md`), sem duplicar código. O antigo endereço `calculo-1-lab/` redireciona para `matematica/calculo-1/`.
 
 ### 5. 🧪 Tabela Periódica Interativa & Construtor Atômico
 
