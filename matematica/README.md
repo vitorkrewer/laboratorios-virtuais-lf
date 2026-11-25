@@ -12,11 +12,12 @@ Livros interativos de Matemática do ensino superior, conectados por pré-requis
 | Fundamentos | `fundamentos/` | Disponível (9 capítulos) | Conjuntos (Venn), Intervalos, Inequações |
 | Funções | `funcoes/` | Disponível (9 capítulos) | Transformações, Afim e quadrática, Composta e inversa |
 | Cálculo I | `calculo-1/` | Disponível (14 capítulos) | Limites, Derivada, Integral |
-| Cálculo II, Geometria Analítica, Álgebra Linear, Probabilidade e Estatística | — | Planejados | — |
+| Álgebra Linear | `algebra-linear/` | Disponível (12 capítulos) | Transformações 2D, Escalonamento, Caçador de autovetores |
+| Cálculo II, Geometria Analítica, Probabilidade e Estatística | — | Planejados | — |
 
 ## Glossário
 
-`glossario/` reúne 146 verbetes (símbolos, termos e fórmulas) em 8 categorias. Cada verbete traz **como se lê** (com botão de áudio via síntese de voz do navegador), o que significa, exemplo, **como lembrar**, o erro mais comum, onde estudar (links para os capítulos) e verbetes relacionados. A página tem quatro modos:
+`glossario/` reúne 170 verbetes (símbolos, termos e fórmulas) em 9 categorias. Cada verbete traz **como se lê** (com botão de áudio via síntese de voz do navegador), o que significa, exemplo, **como lembrar**, o erro mais comum, onde estudar (links para os capítulos) e verbetes relacionados. A página tem quatro modos:
 
 - **Consultar:** busca sem acento, inclusive colando o próprio símbolo (∈, ≤, ∫), filtro por categoria, favoritos e link direto (`glossario/#pertence`).
 - **Memorizar:** cartões com repetição espaçada (caixas de Leitner: 1, 2, 4, 8 e 16 dias), por categoria, por livro ou só favoritos. Teclado: espaço vira, 1/2/3 avalia.
@@ -41,6 +42,7 @@ matematica/
 │   ├── app.js            # monta o livro a partir do book.js: roteador, trilhas, wiki, quizzes, progresso
 │   ├── markdown.js       # Markdown + KaTeX + callouts + quizzes
 │   ├── plot.js           # gráficos em canvas, parser de expressões (sem eval), Simpson, derivada numérica
+│   ├── frac.js           # frações exatas (simuladores de Álgebra e Álgebra Linear)
 │   ├── hub.js            # lógica do hub
 │   ├── glossary.js       # verbetes do glossário (dados)
 │   ├── glossary-ui.js    # verbete, janela de explicação, áudio, detecção de símbolos
@@ -54,6 +56,7 @@ matematica/
 │   ├── labs.js           # simuladores do livro
 │   └── content/*.md
 ├── funcoes/              # mesma estrutura
+├── algebra-linear/       # mesma estrutura
 └── calculo-1/            # mesma estrutura
 ```
 
@@ -67,7 +70,7 @@ matematica/
 
 ## Sintaxe dos capítulos
 
-- Fórmulas: `$ ... $` (inline) e `$$ ... $$` (bloco), renderizadas com KaTeX. Dentro de callouts (`>`), fórmulas em bloco ficam em uma única linha. Em tabelas, use `\lvert x\rvert` em vez de `|x|`.
+- Fórmulas: `$ ... $` (inline) e `$$ ... $$` (bloco), renderizadas com KaTeX. Dentro de callouts (`>`), fórmulas em bloco ficam em uma única linha. Em tabelas, use `\lvert x\rvert` em vez de `|x|`. Matrizes aumentadas: `\left[\begin{array}{cc:c} … \end{array}\right]` (o `:` desenha o traço tracejado; evite `|`, que o glossário lê como módulo).
 - Callouts: `> [!DEFINIÇÃO]`, `> [!TEOREMA]`, `> [!EXEMPLO]`, `> [!DICA]`, `> [!ATENÇÃO]`, `> [!INTUIÇÃO]`.
 - Soluções recolhíveis: `<details><summary>Ver solução</summary>`, com linha em branco antes e depois do conteúdo.
 - Teste rápido: bloco de código com a linguagem `quiz`. `?` inicia a questão, `+` marca a correta, `-` as erradas e `>` a explicação; linha em branco separa questões. Com 70% de acerto, o capítulo é marcado como concluído.

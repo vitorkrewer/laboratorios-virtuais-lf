@@ -35,6 +35,13 @@ MATH.catalog = [
         topics: ['Limites', 'Continuidade', 'Derivadas', 'Otimização', 'Integrais', 'TFC']
     },
     {
+        id: 'algebra-linear', path: 'algebra-linear/', status: 'disponivel', storage: 'mat.al', chapters: 12,
+        title: 'Álgebra Linear', short: 'Vetores, matrizes, transformações e autovalores',
+        icon: 'fa-table-cells', color: 'rose', requires: ['fundamentos'], col: 2, row: 0,
+        desc: 'Vetores, sistemas e escalonamento, matrizes e determinantes, espaços vetoriais, base e dimensão, transformações lineares, autovalores e mínimos quadrados, sempre com a geometria por trás.',
+        topics: ['Vetores', 'Escalonamento', 'Matrizes', 'Determinantes', 'Base e dimensão', 'Transformações', 'Autovalores']
+    },
+    {
         id: 'calculo-2', path: 'calculo-2/', status: 'planejado', storage: 'mat.calc2', chapters: 0,
         title: 'Cálculo II', short: 'Séries, várias variáveis e integrais múltiplas',
         icon: 'fa-cube', color: 'violet', requires: ['calculo-1'], col: 4, row: 1,
@@ -44,21 +51,14 @@ MATH.catalog = [
     {
         id: 'geometria-analitica', path: 'geometria-analitica/', status: 'planejado', storage: 'mat.ga', chapters: 0,
         title: 'Geometria Analítica', short: 'Vetores, retas, planos e cônicas',
-        icon: 'fa-draw-polygon', color: 'amber', requires: ['fundamentos'], col: 2, row: 0,
+        icon: 'fa-draw-polygon', color: 'amber', requires: ['fundamentos'], col: 2, row: 2,
         desc: 'Vetores no plano e no espaço, produto escalar e vetorial, retas, planos e cônicas.',
         topics: ['Vetores', 'Retas e planos', 'Cônicas']
     },
     {
-        id: 'algebra-linear', path: 'algebra-linear/', status: 'planejado', storage: 'mat.al', chapters: 0,
-        title: 'Álgebra Linear', short: 'Matrizes, sistemas e transformações lineares',
-        icon: 'fa-table-cells', color: 'rose', requires: ['geometria-analitica'], col: 3, row: 0,
-        desc: 'Matrizes e sistemas lineares, espaços vetoriais, transformações lineares, autovalores e autovetores.',
-        topics: ['Matrizes', 'Sistemas', 'Espaços vetoriais', 'Autovalores']
-    },
-    {
         id: 'probabilidade', path: 'probabilidade/', status: 'planejado', storage: 'mat.prob', chapters: 0,
         title: 'Probabilidade e Estatística', short: 'Contagem, probabilidade e distribuições',
-        icon: 'fa-dice', color: 'teal', requires: ['fundamentos'], col: 2, row: 2,
+        icon: 'fa-dice', color: 'teal', requires: ['fundamentos'], col: 2, row: 3,
         desc: 'Análise combinatória, probabilidade, variáveis aleatórias, distribuições e estatística descritiva.',
         topics: ['Contagem', 'Probabilidade', 'Distribuições']
     }

@@ -389,7 +389,7 @@ a.book-card:hover { text-decoration: none; transform: translateY(-3px); border-c
 .chips { display: flex; flex-wrap: wrap; gap: 5px; } .chips span { font-size: .72rem; padding: 2px 8px; color: #cbd5e1; background: var(--bg2); border: 1px solid var(--line2); border-radius: 6px; }
 .req { color: var(--faint); font-size: .78rem; } .req i { margin-right: 4px; }
 .bk-prog { display: flex; align-items: center; gap: 10px; font-size: .75rem; color: var(--muted); } .bk-prog .bar { flex: 1; }
-.eco-map { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(3, auto); gap: 26px 46px; padding: 26px; background: var(--bg2); border: 1px solid var(--line); border-radius: 18px; }
+.eco-map { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(4, auto); gap: 26px 46px; padding: 26px; background: var(--bg2); border: 1px solid var(--line); border-radius: 18px; }
 .eco-edges { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 .map-node { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; padding: 14px 16px; color: var(--text); background: var(--card); border: 1px solid var(--line2); border-radius: 14px; transition: .18s; }
 a.map-node:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }

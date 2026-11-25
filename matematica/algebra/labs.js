@@ -24,52 +24,8 @@ MATH.labs = (function () {
         c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
     }
 
-    /* =========================================================
-       Frações exatas
-       ========================================================= */
-    function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { const t = a % b; a = b; b = t; } return a || 1; }
-    function lcm(a, b) { return Math.abs(a * b) / gcd(a, b); }
-    class Fr {
-        constructor(n, d) {
-            d = d === undefined ? 1 : d;
-            if (d === 0) throw new Error('divisão por zero');
-            if (d < 0) { n = -n; d = -d; }
-            const g = gcd(n, d);
-            this.n = n / g || 0; this.d = d / g;
-        }
-        add(o) { o = F(o); return new Fr(this.n * o.d + o.n * this.d, this.d * o.d); }
-        sub(o) { o = F(o); return new Fr(this.n * o.d - o.n * this.d, this.d * o.d); }
-        mul(o) { o = F(o); return new Fr(this.n * o.n, this.d * o.d); }
-        div(o) { o = F(o); return new Fr(this.n * o.d, this.d * o.n); }
-        neg() { return new Fr(-this.n, this.d); }
-        pow(k) { let r = F(1); for (let i = 0; i < Math.abs(k); i++) r = r.mul(this); return k < 0 ? F(1).div(r) : r; }
-        isZero() { return this.n === 0; }
-        isInt() { return this.d === 1; }
-        eq(o) { o = F(o); return this.n === o.n && this.d === o.d; }
-        val() { return this.n / this.d; }
-        tex() { return this.d === 1 ? String(this.n) : (this.n < 0 ? '-' : '') + '\\frac{' + Math.abs(this.n) + '}{' + this.d + '}'; }
-        ptex() { return this.n < 0 ? '\\left(' + this.tex() + '\\right)' : this.tex(); }   /* com parênteses se negativo */
-        txt() { return (this.n < 0 ? '−' : '') + Math.abs(this.n) + (this.d === 1 ? '' : '/' + this.d); }
-        dec() { return String(+this.val().toFixed(4)).replace('.', '{,}'); }
-    }
-    function F(n, d) { return n instanceof Fr ? n : new Fr(n, d); }
-    function fromNumber(x) {
-        if (!Number.isFinite(x)) return null;
-        for (let d = 1; d <= 1000; d++) { const n = Math.round(x * d); if (Math.abs(n / d - x) < 1e-9) return F(n, d); }
-        return null;
-    }
-    /* "3", "-2,5", "3/4", "−1/2", "R$ 12,50", "15%" → Fr (ou null) */
-    function parseNum(s) {
-        s = String(s).replace(/[−–]/g, '-').replace(/R\$|%|\s/gi, '');
-        let m = s.match(/^([-+]?)(\d+)\/(\d+)$/);
-        if (m) return +m[3] === 0 ? null : F((m[1] === '-' ? -1 : 1) * +m[2], +m[3]);
-        m = s.match(/^([-+]?)(\d*)[.,]?(\d*)$/);
-        if (m && (m[2] || m[3])) {
-            const dec = m[3] || '', den = Math.pow(10, dec.length);
-            return F((m[1] === '-' ? -1 : 1) * (+(m[2] || 0) * den + +(dec || 0)), den);
-        }
-        return null;
-    }
+    /* frações exatas: engine/frac.js */
+    const { Fr, F, gcd, lcm, fromNumber, parseNum } = MATH.frac;
     /* lista de respostas: separadas por ";", " e " ou ", " (vírgula seguida de espaço) */
     function parseList(s) {
         const parts = String(s).replace(/[−–]/g, '-').split(/;|\s+e\s+|,\s+|\s*\bou\b\s*/i).map(p => p.replace(/^x\s*=\s*/i, '').trim()).filter(Boolean);
