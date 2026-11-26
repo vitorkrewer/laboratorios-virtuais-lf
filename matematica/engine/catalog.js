@@ -42,25 +42,25 @@ MATH.catalog = [
         topics: ['Vetores', 'Escalonamento', 'Matrizes', 'Determinantes', 'Base e dimensão', 'Transformações', 'Autovalores']
     },
     {
+        id: 'geometria-analitica', path: 'geometria-analitica/', status: 'disponivel', storage: 'mat.ga', chapters: 11,
+        title: 'Geometria Analítica', short: 'Vetores, retas, planos e cônicas',
+        icon: 'fa-draw-polygon', color: 'amber', requires: ['fundamentos'], col: 2, row: 2,
+        desc: 'Plano cartesiano, vetores e os produtos escalar, vetorial e misto, retas, circunferência, parábola, elipse e hipérbole, retas e planos no espaço.',
+        topics: ['Vetores', 'Produto vetorial', 'Retas', 'Circunferência', 'Cônicas', 'Planos']
+    },
+    {
+        id: 'probabilidade', path: 'probabilidade/', status: 'disponivel', storage: 'mat.prob', chapters: 13,
+        title: 'Probabilidade e Estatística', short: 'Dados, probabilidade, distribuições e inferência',
+        icon: 'fa-dice', color: 'teal', requires: ['fundamentos'], col: 2, row: 3,
+        desc: 'Estatística descritiva, análise combinatória, probabilidade condicional e Bayes, distribuições binomial, Poisson e normal, Teorema Central do Limite, intervalos de confiança, testes de hipóteses e regressão.',
+        topics: ['Descritiva', 'Contagem', 'Bayes', 'Binomial', 'Normal', 'Intervalos', 'Testes', 'Regressão']
+    },
+    {
         id: 'calculo-2', path: 'calculo-2/', status: 'planejado', storage: 'mat.calc2', chapters: 0,
         title: 'Cálculo II', short: 'Séries, várias variáveis e integrais múltiplas',
         icon: 'fa-cube', color: 'violet', requires: ['calculo-1'], col: 4, row: 1,
         desc: 'Integrais impróprias, sequências e séries, funções de várias variáveis, derivadas parciais e integrais múltiplas.',
         topics: ['Séries', 'Derivadas parciais', 'Integrais múltiplas']
-    },
-    {
-        id: 'geometria-analitica', path: 'geometria-analitica/', status: 'planejado', storage: 'mat.ga', chapters: 0,
-        title: 'Geometria Analítica', short: 'Vetores, retas, planos e cônicas',
-        icon: 'fa-draw-polygon', color: 'amber', requires: ['fundamentos'], col: 2, row: 2,
-        desc: 'Vetores no plano e no espaço, produto escalar e vetorial, retas, planos e cônicas.',
-        topics: ['Vetores', 'Retas e planos', 'Cônicas']
-    },
-    {
-        id: 'probabilidade', path: 'probabilidade/', status: 'planejado', storage: 'mat.prob', chapters: 0,
-        title: 'Probabilidade e Estatística', short: 'Contagem, probabilidade e distribuições',
-        icon: 'fa-dice', color: 'teal', requires: ['fundamentos'], col: 2, row: 3,
-        desc: 'Análise combinatória, probabilidade, variáveis aleatórias, distribuições e estatística descritiva.',
-        topics: ['Contagem', 'Probabilidade', 'Distribuições']
     }
 ];
 

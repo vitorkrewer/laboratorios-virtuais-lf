@@ -2,7 +2,7 @@
 
 Álgebra Linear é o estudo de **vetores** e das operações que os transformam. Antes das definições formais, fique com a imagem: um vetor é uma **seta** (tem tamanho e direção) e, ao mesmo tempo, uma **lista de números**. As duas visões são a mesma coisa, e o curso inteiro alterna entre elas.
 
-> [!DICA] Se faz tempo que você não vê sistemas de equações, revise o capítulo de sistemas no livro [Álgebra elementar](../algebra/#/teoria/sistemas) antes do capítulo 2.
+> [!DICA] Se faz tempo que você não vê sistemas de equações, revise o capítulo de sistemas no livro [Álgebra elementar](../algebra/#/teoria/sistemas) antes do capítulo 2. O **produto vetorial**, que só existe em três dimensões, está no livro [Geometria Analítica](../geometria-analitica/#/teoria/produto-vetorial).
 
 ## 1. O que é um vetor
 

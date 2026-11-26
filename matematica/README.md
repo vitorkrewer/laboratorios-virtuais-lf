@@ -13,11 +13,13 @@ Livros interativos de Matemática do ensino superior, conectados por pré-requis
 | Funções | `funcoes/` | Disponível (9 capítulos) | Transformações, Afim e quadrática, Composta e inversa |
 | Cálculo I | `calculo-1/` | Disponível (14 capítulos) | Limites, Derivada, Integral |
 | Álgebra Linear | `algebra-linear/` | Disponível (12 capítulos) | Transformações 2D, Escalonamento, Caçador de autovetores |
-| Cálculo II, Geometria Analítica, Probabilidade e Estatística | — | Planejados | — |
+| Geometria Analítica | `geometria-analitica/` | Disponível (11 capítulos) | Retas e distâncias, Cônicas, Vetores no espaço |
+| Probabilidade e Estatística | `probabilidade/` | Disponível (13 capítulos) | Estatística descritiva, Binomial e Poisson, Normal e TCL, Bayes |
+| Cálculo II | — | Planejado | — |
 
 ## Glossário
 
-`glossario/` reúne 170 verbetes (símbolos, termos e fórmulas) em 9 categorias. Cada verbete traz **como se lê** (com botão de áudio via síntese de voz do navegador), o que significa, exemplo, **como lembrar**, o erro mais comum, onde estudar (links para os capítulos) e verbetes relacionados. A página tem quatro modos:
+`glossario/` reúne 200 verbetes (símbolos, termos e fórmulas) em 11 categorias. Cada verbete traz **como se lê** (com botão de áudio via síntese de voz do navegador), o que significa, exemplo, **como lembrar**, o erro mais comum, onde estudar (links para os capítulos) e verbetes relacionados. A página tem quatro modos:
 
 - **Consultar:** busca sem acento, inclusive colando o próprio símbolo (∈, ≤, ∫), filtro por categoria, favoritos e link direto (`glossario/#pertence`).
 - **Memorizar:** cartões com repetição espaçada (caixas de Leitner: 1, 2, 4, 8 e 16 dias), por categoria, por livro ou só favoritos. Teclado: espaço vira, 1/2/3 avalia.
@@ -42,7 +44,7 @@ matematica/
 │   ├── app.js            # monta o livro a partir do book.js: roteador, trilhas, wiki, quizzes, progresso
 │   ├── markdown.js       # Markdown + KaTeX + callouts + quizzes
 │   ├── plot.js           # gráficos em canvas, parser de expressões (sem eval), Simpson, derivada numérica
-│   ├── frac.js           # frações exatas (simuladores de Álgebra e Álgebra Linear)
+│   ├── frac.js           # frações exatas (simuladores de Álgebra, Álgebra Linear e Geometria Analítica)
 │   ├── hub.js            # lógica do hub
 │   ├── glossary.js       # verbetes do glossário (dados)
 │   ├── glossary-ui.js    # verbete, janela de explicação, áudio, detecção de símbolos
@@ -57,6 +59,8 @@ matematica/
 │   └── content/*.md
 ├── funcoes/              # mesma estrutura
 ├── algebra-linear/       # mesma estrutura
+├── geometria-analitica/  # mesma estrutura
+├── probabilidade/        # mesma estrutura
 └── calculo-1/            # mesma estrutura
 ```
 

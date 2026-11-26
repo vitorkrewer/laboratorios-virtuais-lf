@@ -11,7 +11,7 @@ MATH.gloss = (function () {
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const tex = (s, d) => MATH.md ? MATH.md.tex(s, d) : esc(s);
     const inl = s => MATH.md ? MATH.md.inlineMd(s || '') : esc(s || '');
-    const BOOK = { 'algebra': 'Álgebra', 'fundamentos': 'Fundamentos', 'funcoes': 'Funções', 'calculo-1': 'Cálculo I', 'algebra-linear': 'Álgebra Linear' };
+    const BOOK = { 'algebra': 'Álgebra', 'fundamentos': 'Fundamentos', 'funcoes': 'Funções', 'calculo-1': 'Cálculo I', 'algebra-linear': 'Álgebra Linear', 'geometria-analitica': 'Geometria Analítica', 'probabilidade': 'Probabilidade' };
 
     /* raiz do ecossistema relativa à página atual: ".../matematica/" */
     function root() {
