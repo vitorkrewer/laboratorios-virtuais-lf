@@ -56,11 +56,11 @@ MATH.catalog = [
         topics: ['Descritiva', 'Contagem', 'Bayes', 'Binomial', 'Normal', 'Intervalos', 'Testes', 'Regressão']
     },
     {
-        id: 'calculo-2', path: 'calculo-2/', status: 'planejado', storage: 'mat.calc2', chapters: 0,
+        id: 'calculo-2', path: 'calculo-2/', status: 'disponivel', storage: 'mat.calc2', chapters: 13,
         title: 'Cálculo II', short: 'Séries, várias variáveis e integrais múltiplas',
         icon: 'fa-cube', color: 'violet', requires: ['calculo-1'], col: 4, row: 1,
-        desc: 'Integrais impróprias, sequências e séries, funções de várias variáveis, derivadas parciais e integrais múltiplas.',
-        topics: ['Séries', 'Derivadas parciais', 'Integrais múltiplas']
+        desc: 'Frações parciais e integrais impróprias, sequências, séries e Taylor, funções de várias variáveis, derivadas parciais, gradiente, máximos e mínimos com Lagrange e integrais duplas e triplas.',
+        topics: ['Integrais impróprias', 'Séries', 'Taylor', 'Derivadas parciais', 'Gradiente', 'Lagrange', 'Integrais duplas', 'Integrais triplas']
     }
 ];
 

@@ -37,7 +37,8 @@ MATH.plot = (function () {
         acos: [Math.acos, '\\arccos'], arccos: [Math.acos, '\\arccos'],
         atan: [Math.atan, '\\arctan'], arctg: [Math.atan, '\\arctan'], arctan: [Math.atan, '\\arctan']
     };
-    function parseExpr(src) {
+    /* opts.y = true aceita também a variável y (funções de duas variáveis) */
+    function parseExpr(src, opts) {
         const toks = [];
         const s = src.replace(/\s+/g, ' ').replace(/[·×]/g, '*').replace(/[−–]/g, '-').replace(/²/g, '^2').replace(/³/g, '^3').replace(/π/g, 'pi').replace(/√/g, 'sqrt').toLowerCase();
         let i = 0;
@@ -50,7 +51,7 @@ MATH.plot = (function () {
                 let w = m[0];
                 // separa palavras coladas: "xsenx", "2pix" → reconhece prefixos conhecidos
                 while (w.length) {
-                    const names = Object.keys(FUNCS).concat(['pi', 'x', 'e']).sort((a, b) => b.length - a.length);
+                    const names = Object.keys(FUNCS).concat(['pi', 'x', 'e'], opts && opts.y ? ['y'] : []).sort((a, b) => b.length - a.length);
                     const n = names.find(k => w.startsWith(k));
                     if (!n) throw new Error('Nome desconhecido: "' + w + '"');
                     toks.push(FUNCS[n] ? { t: 'fn', v: n } : { t: 'id', v: n });
@@ -109,23 +110,25 @@ MATH.plot = (function () {
         if (p < toks.length) throw new Error('Símbolo inesperado: "' + (toks[p].v || toks[p].t) + '"');
         return tree;
     }
+    /* compila para f(x) ou, se a expressão usar y, f(x, y) */
     function compile(n) {
         switch (n.op) {
             case 'num': { const v = n.v; return () => v; }
             case 'x': return x => x;
+            case 'y': return (x, y) => y;
             case 'pi': return () => Math.PI;
             case 'e': return () => Math.E;
             case 'par': return compile(n.a);
-            case 'neg': { const a = compile(n.a); return x => -a(x); }
-            case 'fn': { const f = FUNCS[n.f][0], a = compile(n.a); return x => f(a(x)); }
+            case 'neg': { const a = compile(n.a); return (x, y) => -a(x, y); }
+            case 'fn': { const f = FUNCS[n.f][0], a = compile(n.a); return (x, y) => f(a(x, y)); }
         }
         const a = compile(n.a), b = compile(n.b);
-        if (n.op === '+') return x => a(x) + b(x);
-        if (n.op === '-') return x => a(x) - b(x);
-        if (n.op === '*') return x => a(x) * b(x);
-        if (n.op === '/') return x => a(x) / b(x);
-        return x => {
-            const u = a(x), v = b(x);
+        if (n.op === '+') return (x, y) => a(x, y) + b(x, y);
+        if (n.op === '-') return (x, y) => a(x, y) - b(x, y);
+        if (n.op === '*') return (x, y) => a(x, y) * b(x, y);
+        if (n.op === '/') return (x, y) => a(x, y) / b(x, y);
+        return (x, y) => {
+            const u = a(x, y), v = b(x, y);
             if (u < 0 && !Number.isInteger(v)) { // raízes ímpares de negativos: x^(1/3)
                 const inv = 1 / v, k = Math.round(inv);
                 if (Math.abs(inv - k) < 1e-9 && k % 2) return -Math.pow(-u, v);
@@ -137,6 +140,7 @@ MATH.plot = (function () {
         switch (n.op) {
             case 'num': return String(n.v).replace('.', '{,}');
             case 'x': return 'x';
+            case 'y': return 'y';
             case 'pi': return '\\pi';
             case 'e': return 'e';
             case 'par': return '\\left(' + toTex(n.a) + '\\right)';

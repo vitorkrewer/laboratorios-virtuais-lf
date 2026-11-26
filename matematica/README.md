@@ -15,11 +15,11 @@ Livros interativos de Matemática do ensino superior, conectados por pré-requis
 | Álgebra Linear | `algebra-linear/` | Disponível (12 capítulos) | Transformações 2D, Escalonamento, Caçador de autovetores |
 | Geometria Analítica | `geometria-analitica/` | Disponível (11 capítulos) | Retas e distâncias, Cônicas, Vetores no espaço |
 | Probabilidade e Estatística | `probabilidade/` | Disponível (13 capítulos) | Estatística descritiva, Binomial e Poisson, Normal e TCL, Bayes |
-| Cálculo II | — | Planejado | — |
+| Cálculo II | `calculo-2/` | Disponível (13 capítulos) | Séries e Taylor, Superfícies (curvas de nível e gradiente), Integrais duplas |
 
 ## Glossário
 
-`glossario/` reúne 200 verbetes (símbolos, termos e fórmulas) em 11 categorias. Cada verbete traz **como se lê** (com botão de áudio via síntese de voz do navegador), o que significa, exemplo, **como lembrar**, o erro mais comum, onde estudar (links para os capítulos) e verbetes relacionados. A página tem quatro modos:
+`glossario/` reúne 216 verbetes (símbolos, termos e fórmulas) em 12 categorias. Cada verbete traz **como se lê** (com botão de áudio via síntese de voz do navegador), o que significa, exemplo, **como lembrar**, o erro mais comum, onde estudar (links para os capítulos) e verbetes relacionados. A página tem quatro modos:
 
 - **Consultar:** busca sem acento, inclusive colando o próprio símbolo (∈, ≤, ∫), filtro por categoria, favoritos e link direto (`glossario/#pertence`).
 - **Memorizar:** cartões com repetição espaçada (caixas de Leitner: 1, 2, 4, 8 e 16 dias), por categoria, por livro ou só favoritos. Teclado: espaço vira, 1/2/3 avalia.

@@ -36,7 +36,8 @@ const CALC = MATH.book = {
         if (score <= 3) return { path: 'base-30', msg: 'Sua base ainda precisa de reforço. Comece com calma pela trilha de 30 dias.',
             extra: '<p class="small">Se a base pesar, estude antes os livros <a href="../algebra/">Álgebra elementar</a> (sinais, frações, fatoração, equações), <a href="../fundamentos/">Fundamentos</a> (intervalos, inequações, módulo) e <a href="../funcoes/">Funções</a> (gráficos, exponencial, log, trigonometria).</p>' };
         if (score <= 5) return { path: needs.includes('integral-definida') && needs.length === 1 ? 'p2-10' : 'resgate-7', msg: 'Você tem uma boa base, mas há lacunas importantes para fechar.' };
-        return { path: needs.includes('integral-definida') ? 'p2-10' : 'resgate-7', msg: 'Ótimo desempenho! Foque nos pontos que ainda escaparam e treine bastante.' };
+        return { path: needs.includes('integral-definida') ? 'p2-10' : 'resgate-7', msg: 'Ótimo desempenho! Foque nos pontos que ainda escaparam e treine bastante.',
+            extra: '<p class="small">Já fechou o Cálculo I? O próximo passo é o <a href="../calculo-2/">Cálculo II →</a> (séries, várias variáveis e integrais múltiplas).</p>' };
     }
 };
 

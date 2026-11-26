@@ -113,7 +113,7 @@
     function memorizar() {
         const S = srs();
         const opts = '<option value="all">Todos os verbetes</option><option value="fav">Meus favoritos</option>' +
-            '<optgroup label="Por livro"><option value="book:algebra">Usados em Álgebra</option><option value="book:fundamentos">Usados em Fundamentos</option><option value="book:funcoes">Usados em Funções</option><option value="book:calculo-1">Usados em Cálculo I</option><option value="book:algebra-linear">Usados em Álgebra Linear</option><option value="book:geometria-analitica">Usados em Geometria Analítica</option><option value="book:probabilidade">Usados em Probabilidade e Estatística</option></optgroup>' +
+            '<optgroup label="Por livro"><option value="book:algebra">Usados em Álgebra</option><option value="book:fundamentos">Usados em Fundamentos</option><option value="book:funcoes">Usados em Funções</option><option value="book:calculo-1">Usados em Cálculo I</option><option value="book:algebra-linear">Usados em Álgebra Linear</option><option value="book:geometria-analitica">Usados em Geometria Analítica</option><option value="book:probabilidade">Usados em Probabilidade e Estatística</option><option value="book:calculo-2">Usados em Cálculo II</option></optgroup>' +
             '<optgroup label="Por categoria">' + CATS.map(c => '<option value="' + c.id + '">' + esc(c.title) + '</option>').join('') + '</optgroup>';
         const list = deckList(), n = { novo: 0, aprendendo: 0, dominado: 0 };
         list.forEach(e => n[status(e.id, S)]++);

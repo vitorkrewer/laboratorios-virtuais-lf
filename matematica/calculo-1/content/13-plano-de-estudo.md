@@ -61,3 +61,7 @@ Se o tempo é curto, **garanta primeiro as questões mecânicas** (limites, deri
 5. Durma bem. A consolidação da memória acontece durante o sono, e uma noite maldormida custa mais do que duas horas extras de estudo.
 
 > [!DICA] Na prova, comece pelas questões que você tem certeza que sabe. Marque as difíceis, volte depois e, se travar, **deixe registrado o raciocínio parcial**: muitos professores dão crédito parcial.
+
+## 7. Depois do Cálculo I
+
+O livro [Cálculo II](../calculo-2/) continua daqui: frações parciais e integrais impróprias, séries e polinômios de Taylor, funções de várias variáveis com gradiente e otimização, e integrais duplas e triplas. Antes de começar, garanta [substituição](#/teoria/primitivas-substituicao) e [integração por partes](#/teoria/integracao-por-partes): o primeiro capítulo de Cálculo II parte delas.
