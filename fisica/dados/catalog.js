@@ -47,11 +47,12 @@ MATH.catalog = [
         topics: ['Refração', 'Lentes', 'Interferência', 'Difração']
     },
     {
-        id: 'moderna', path: 'moderna/', status: 'planejado', storage: 'fis.mod', chapters: 0,
-        title: 'Física moderna', short: 'Relatividade e física quântica',
+        id: 'moderna', path: 'moderna/', status: 'disponivel', storage: 'fis.mod', chapters: 14,
+        title: 'Física Moderna', short: 'Relatividade, física quântica, núcleo e partículas',
         icon: 'fa-atom', color: 'indigo', requires: ['eletromagnetismo', 'optica'], col: 3, row: 1,
-        desc: 'Relatividade especial, fótons, modelo atômico, dualidade onda-partícula e introdução à mecânica quântica e à física nuclear.',
-        topics: ['Relatividade', 'Fótons', 'Átomo', 'Quântica', 'Núcleo']
+        ext: [{ title: 'Funções', href: '../matematica/funcoes/', icon: 'fa-chart-line', color: 'emerald', short: 'Exponenciais e logaritmos (meia-vida)' }, { title: 'Cálculo I', href: '../matematica/calculo-1/', icon: 'fa-chart-area', color: 'indigo', short: 'Derivadas e integrais na equação de Schrödinger' }],
+        desc: 'Relatividade especial e geral, E = mc², corpo negro, efeito fotoelétrico, átomo de Bohr e espectros, dualidade onda-partícula, princípio da incerteza, equação de Schrödinger e tunelamento, radioatividade, fissão, fusão e o Modelo Padrão. Com seis simuladores.',
+        topics: ['Relatividade', 'E = mc²', 'Fótons', 'Átomo de Bohr', 'Dupla fenda', 'Tunelamento', 'Radioatividade', 'Modelo Padrão']
     },
     {
         id: 'astronomia', path: 'astronomia/', status: 'disponivel', storage: 'fis.astro', chapters: 13,
@@ -79,6 +80,9 @@ MATH.routes = [
     { icon: 'fa-star', color: 'violet', title: 'Quero entender o céu',
       text: 'Comece pela Astronomia: o planetário mostra o céu de qualquer lugar e data, e os capítulos explicam o que você está vendo. Nenhum pré-requisito além de contas básicas.',
       steps: [{ b: 'astronomia', label: 'Diagnóstico de Astronomia', href: 'astronomia/#/trilhas' }, { b: 'astronomia', label: 'Planetário', href: 'astronomia/#/lab/planetario' }, { b: 'cosmologia', label: 'Depois: Astrofísica e Cosmologia', href: 'cosmologia/' }] },
+    { icon: 'fa-atom', color: 'indigo', title: 'Relatividade e física quântica',
+      text: 'Einstein, Planck, Bohr e Schrödinger: tempo que dilata, luz em pacotes, elétrons que interferem consigo mesmos e o núcleo atômico. Os simuladores resolvem as equações ao vivo.',
+      steps: [{ b: 'moderna', label: 'Diagnóstico de Física Moderna', href: 'moderna/#/trilhas' }, { b: 'moderna', label: 'Gêmeos e espaço-tempo', href: 'moderna/#/lab/relatividade' }, { b: 'moderna', label: 'Dupla fenda', href: 'moderna/#/lab/fenda' }, { b: 'moderna', label: 'Tunelamento', href: 'moderna/#/lab/quantica' }] },
     { icon: 'fa-circle', color: 'rose', title: 'Pulsares, buracos negros e o Big Bang',
       text: 'Direto aos objetos extremos: a morte das estrelas, pulsares e magnetares, buracos negros, quasares e a história do universo. Os simuladores mostram cada um em movimento.',
       steps: [{ b: 'cosmologia', label: 'Diagnóstico de Astrofísica e Cosmologia', href: 'cosmologia/#/trilhas' }, { b: 'cosmologia', label: 'Pulsar', href: 'cosmologia/#/lab/pulsar' }, { b: 'cosmologia', label: 'Buraco negro', href: 'cosmologia/#/lab/buraco' }, { b: 'cosmologia', label: 'Universo em expansão', href: 'cosmologia/#/lab/expansao' }] },
