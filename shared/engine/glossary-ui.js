@@ -11,12 +11,13 @@ MATH.gloss = (function () {
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const tex = (s, d) => MATH.md ? MATH.md.tex(s, d) : esc(s);
     const inl = s => MATH.md ? MATH.md.inlineMd(s || '') : esc(s || '');
-    const BOOK = { 'algebra': 'Álgebra', 'fundamentos': 'Fundamentos', 'funcoes': 'Funções', 'calculo-1': 'Cálculo I', 'algebra-linear': 'Álgebra Linear', 'geometria-analitica': 'Geometria Analítica', 'probabilidade': 'Probabilidade', 'calculo-2': 'Cálculo II' };
+    const AREA = MATH.area || { id: 'matematica', key: 'mat' };
+    const BOOK = {}; (MATH.catalog || []).forEach(b => { BOOK[b.id] = b.abbr || b.title; });
 
-    /* raiz do ecossistema relativa à página atual: ".../matematica/" */
+    /* raiz da área relativa à página atual: ".../matematica/" ou ".../fisica/" */
     function root() {
-        const p = location.pathname, i = p.indexOf('/matematica/');
-        return i >= 0 ? p.slice(0, i + 12) : '../';
+        const seg = '/' + AREA.id + '/', p = location.pathname, i = p.indexOf(seg);
+        return i >= 0 ? p.slice(0, i + seg.length) : '../';
     }
     function chapterLink(l) {
         const [b, c] = l.split('/');
@@ -29,7 +30,7 @@ MATH.gloss = (function () {
     }
 
     /* ---------- favoritos ---------- */
-    const FKEY = 'mat.gloss.fav.v1';
+    const FKEY = AREA.key + '.gloss.fav.v1';
     function favs() { try { return JSON.parse(localStorage.getItem(FKEY)) || {}; } catch (e) { return {}; } }
     function toggleFav(id) { const f = favs(); if (f[id]) delete f[id]; else f[id] = 1; try { localStorage.setItem(FKEY, JSON.stringify(f)); } catch (e) { /* */ } return !!f[id]; }
 
@@ -86,6 +87,8 @@ MATH.gloss = (function () {
               (e.w ? '<div class="g-row g-warn"><span class="g-lbl"><i class="fa-solid fa-triangle-exclamation"></i> Cuidado</span><div>' + inl(e.w) + '</div></div>' : '') +
               ((e.l || []).length ? '<div class="g-row"><span class="g-lbl"><i class="fa-solid fa-book-open"></i> Onde estudar</span><div class="g-links">' +
                 e.l.map(l => '<a href="' + chapterLink(l) + '">' + esc(chapterTitle(l)) + '</a>').join('') + '</div></div>' : '') +
+              (e.mm ? '<div class="g-row"><span class="g-lbl"><i class="fa-solid fa-square-root-variable"></i> Na Matemática</span><div class="g-links">' +
+                Object.keys(e.mm).map(id => '<a href="' + root() + '../matematica/glossario/#' + id + '">' + esc(e.mm[id]) + '</a>').join('') + '</div></div>' : '') +
               (rel.length ? '<div class="g-row"><span class="g-lbl"><i class="fa-solid fa-link"></i> Veja também</span><div class="g-rel">' +
                 rel.map(r => '<button type="button" class="g-chip" data-goto="' + r.id + '">' + (r.s ? tex(r.s) + ' ' : '') + esc(r.t) + '</button>').join('') + '</div></div>' : '') +
             '</div></div>';

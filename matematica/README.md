@@ -30,30 +30,32 @@ Nos livros, cada capítulo mostra automaticamente a caixa **Símbolos deste cap�
 
 ### Como adicionar um verbete
 
-Edite `engine/glossary.js` e acrescente um objeto ao `G.push(...)` da categoria: `id`, `c` (categoria), `s` (símbolo em TeX), `t` (nome), `r` (como se lê), `d` (significado), `e` (exemplo), `m` (como lembrar), `w` (cuidado, opcional), `l` (capítulos `'livro/capitulo'`), `k` (ids relacionados) e `x` (expressão regular que detecta o símbolo no TeX dos capítulos, opcional). Os textos usam `String.raw`, então o TeX vai com uma barra só (`\in`). Se criar ou renomear capítulos, atualize também `MATH.chapterTitles` no mesmo arquivo. Em textos com dinheiro, escreva `R\$` para o cifrão não abrir uma fórmula.
+Edite `dados/glossary.js` e acrescente um objeto ao `G.push(...)` da categoria: `id`, `c` (categoria), `s` (símbolo em TeX), `t` (nome), `r` (como se lê), `d` (significado), `e` (exemplo), `m` (como lembrar), `w` (cuidado, opcional), `l` (capítulos `'livro/capitulo'`), `k` (ids relacionados) e `x` (expressão regular que detecta o símbolo no TeX dos capítulos, opcional). Os textos usam `String.raw`, então o TeX vai com uma barra só (`\in`). Se criar ou renomear capítulos, atualize também `MATH.chapterTitles` no mesmo arquivo. Em textos com dinheiro, escreva `R\$` para o cifrão não abrir uma fórmula.
 
 O hub (`index.html`) mostra rotas por objetivo ("faz tempo que saí da escola", "tenho prova de Cálculo", "estou começando a graduação", "meu curso começa por conjuntos"), os livros com o progresso do aluno e o mapa de pré-requisitos.
 
 ## Estrutura
 
 ```
+shared/engine/            # motor compartilhado com as outras áreas (Física, ...)
+├── app.js                # monta o livro a partir do book.js: roteador, trilhas, wiki, quizzes, progresso
+├── markdown.js           # Markdown + KaTeX + callouts + quizzes
+├── plot.js               # gráficos em canvas, parser de expressões (sem eval), Simpson, derivada numérica
+├── frac.js               # frações exatas
+├── hub.js                # lógica do hub (rotas, livros, mapa)
+├── glossary-ui.js        # verbete, janela de explicação, áudio, detecção de símbolos
+├── glossary-page.js      # página do glossário: consultar, memorizar, testar, folha
+└── engine.css
+
 matematica/
 ├── index.html            # hub: rotas, livros, mapa de pré-requisitos
-├── engine/               # motor compartilhado por todos os livros
-│   ├── catalog.js        # catálogo de livros (status, pré-requisitos, posição no mapa)
-│   ├── app.js            # monta o livro a partir do book.js: roteador, trilhas, wiki, quizzes, progresso
-│   ├── markdown.js       # Markdown + KaTeX + callouts + quizzes
-│   ├── plot.js           # gráficos em canvas, parser de expressões (sem eval), Simpson, derivada numérica
-│   ├── frac.js           # frações exatas (simuladores de Álgebra, Álgebra Linear e Geometria Analítica)
-│   ├── hub.js            # lógica do hub
-│   ├── glossary.js       # verbetes do glossário (dados)
-│   ├── glossary-ui.js    # verbete, janela de explicação, áudio, detecção de símbolos
-│   ├── glossary-page.js  # página do glossário: consultar, memorizar, testar, folha
-│   └── engine.css
+├── dados/                # dados da área, lidos pelo motor
+│   ├── catalog.js        # MATH.area, catálogo de livros (status, pré-requisitos, posição no mapa) e rotas do hub
+│   └── glossary.js       # verbetes do glossário
 ├── glossario/index.html  # página do glossário
 ├── algebra/              # Álgebra elementar (antes de Fundamentos)
 ├── fundamentos/
-│   ├── index.html        # casca mínima (carrega o motor)
+│   ├── index.html        # casca mínima (carrega o motor e os dados)
 │   ├── book.js           # capítulos, trilhas, diagnóstico, textos da home
 │   ├── labs.js           # simuladores do livro
 │   └── content/*.md
@@ -61,7 +63,8 @@ matematica/
 ├── algebra-linear/       # mesma estrutura
 ├── geometria-analitica/  # mesma estrutura
 ├── probabilidade/        # mesma estrutura
-└── calculo-1/            # mesma estrutura
+├── calculo-1/            # mesma estrutura
+└── calculo-2/            # mesma estrutura
 ```
 
 ## Como criar um livro novo
@@ -70,7 +73,7 @@ matematica/
 2. Edite `book.js`: `id`, `title`, `storage` (prefixo único do progresso), `home`, `groups`, `chapters`, `paths`, `diagnostic` e `recommend`.
 3. Escreva os capítulos em `content/`.
 4. Em `labs.js`, exporte `MATH.labs = { init: { idDoLab: function (root) { … return draw; } } }` e liste os simuladores em `book.labs`. Um livro sem simuladores pode usar `labs: []` e um `labs.js` com `init: {}`.
-5. Registre o livro em `engine/catalog.js` com `status: 'disponivel'`, `requires` (pré-requisitos) e a posição `col`/`row` no mapa. Os blocos "antes/depois" de cada livro e o mapa do hub se atualizam sozinhos.
+5. Registre o livro em `dados/catalog.js` com `status: 'disponivel'`, `requires` (pré-requisitos) e a posição `col`/`row` no mapa. Os blocos "antes/depois" de cada livro e o mapa do hub se atualizam sozinhos.
 
 ## Sintaxe dos capítulos
 

@@ -141,7 +141,7 @@
             <!-- Stats Bar -->
             <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-center">
                 <div class="p-3 sm:p-4 rounded-xl bg-gray-900/50 border border-gray-800/80 backdrop-blur-sm">
-                    <span class="block text-2xl sm:text-3xl font-bold font-heading text-cyan-400" id="labCountBadge">11</span>
+                    <span class="block text-2xl sm:text-3xl font-bold font-heading text-cyan-400" id="labCountBadge">12</span>
                     <span class="text-xs text-gray-400 font-medium">Laboratórios Prontos</span>
                 </div>
                 <div class="p-3 sm:p-4 rounded-xl bg-gray-900/50 border border-gray-800/80 backdrop-blur-sm">
@@ -165,9 +165,9 @@
     <main id="laboratorios" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         
         <!-- Category Filter Tabs -->
-        <div id="areas" class="flex items-center justify-start sm:justify-center gap-2 pb-2 overflow-x-auto no-scrollbar mb-10">
+        <div id="areas" class="flex flex-wrap items-center justify-center gap-2 pb-2 mb-10">
             <button class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap bg-cyan-600 text-white shadow-lg shadow-cyan-600/30" data-filter="all">
-                <i class="fa-solid fa-layer-group mr-1.5"></i> Todos (<span id="count-all">11</span>)
+                <i class="fa-solid fa-layer-group mr-1.5"></i> Todos (<span id="count-all">12</span>)
             </button>
             <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-gray-800/80 text-gray-300 hover:bg-gray-700 border border-gray-700" data-filter="tech">
                 <i class="fa-solid fa-code mr-1.5 text-cyan-400"></i> Tecnologia & Dados (<span id="count-tech">5</span>)
@@ -177,6 +177,9 @@
             </button>
             <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-gray-800/80 text-gray-300 hover:bg-gray-700 border border-gray-700" data-filter="matematica">
                 <i class="fa-solid fa-infinity mr-1.5 text-indigo-400"></i> Matemática (<span id="count-matematica">1</span>)
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-gray-800/80 text-gray-300 hover:bg-gray-700 border border-gray-700" data-filter="fisica">
+                <i class="fa-solid fa-atom mr-1.5 text-violet-400"></i> Física (<span id="count-fisica">1</span>)
             </button>
             <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-gray-800/80 text-gray-300 hover:bg-gray-700 border border-gray-700" data-filter="engenharia">
                 <i class="fa-solid fa-compass-drafting mr-1.5 text-blue-400"></i> Engenharia & Normas (<span id="count-engenharia">1</span>)
@@ -425,6 +428,40 @@
 
                 <div class="p-6 pt-0">
                     <a href="./matematica/" class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all shadow-md hover:shadow-indigo-500/30">
+                        <span>Acessar Laboratório</span>
+                        <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card: Ecossistema de Física -->
+            <div class="lab-card group rounded-2xl bg-gray-900/90 border border-gray-800 hover:border-violet-500/50 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:-translate-y-1.5 card-glow" data-category="fisica" data-keywords="fisica física astronomia planetario planetário estrelas constelacoes constelações ceu céu lua fases eclipse eclipses planetas sistema solar kepler newton gravitacao gravitação orbitas órbitas exoplanetas telescopio paralaxe cosmologia buracos negros pulsares quasares">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white text-xl shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-violet-950/80 text-violet-300 border border-violet-800/60">
+                            Física
+                        </span>
+                    </div>
+
+                    <h3 class="font-heading text-xl font-bold text-white group-hover:text-violet-400 transition-colors mb-2">
+                        Ecossistema de Física
+                    </h3>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
+                        Livros interativos ligados à Matemática. Primeiro livro: Astronomia, com planetário de cerca de 5 000 estrelas reais e planetas, Sol e Lua nas posições calculadas para qualquer data e lugar, Sistema Solar animado, leis de Kepler e eclipses.
+                    </p>
+
+                    <div class="flex flex-wrap gap-1.5 mb-2">
+                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-gray-800 text-gray-300 font-mono">Astronomia · 13 Capítulos</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-gray-800 text-gray-300 font-mono">Planetário</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-gray-800 text-gray-300 font-mono">4 Simuladores</span>
+                    </div>
+                </div>
+
+                <div class="p-6 pt-0">
+                    <a href="./fisica/" class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-all shadow-md hover:shadow-violet-500/30">
                         <span>Acessar Laboratório</span>
                         <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                     </a>
@@ -692,7 +729,7 @@
 
             function updateCounts() {
                 const total = labCards.length;
-                let tech = 0, quimica = 0, engenharia = 0, educacao = 0, matematica = 0;
+                let tech = 0, quimica = 0, engenharia = 0, educacao = 0, matematica = 0, fisica = 0;
 
                 labCards.forEach(card => {
                     const cat = card.getAttribute('data-category');
@@ -701,6 +738,7 @@
                     if (cat === 'engenharia') engenharia++;
                     if (cat === 'educacao') educacao++;
                     if (cat === 'matematica') matematica++;
+                    if (cat === 'fisica') fisica++;
                 });
 
                 document.getElementById('count-all').textContent = total;
@@ -709,6 +747,7 @@
                 document.getElementById('count-engenharia').textContent = engenharia;
                 document.getElementById('count-educacao').textContent = educacao;
                 document.getElementById('count-matematica').textContent = matematica;
+                document.getElementById('count-fisica').textContent = fisica;
             }
 
             function filterCards() {

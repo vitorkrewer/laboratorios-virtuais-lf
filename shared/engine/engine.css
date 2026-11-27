@@ -407,6 +407,10 @@ a.map-node:hover { text-decoration: none; border-color: var(--accent); transform
 .lab-grid { align-items: start; }
 .lab-stage { height: clamp(360px, 62vh, 560px); }
 @media (max-width: 560px) { .lab-stage { height: 340px; } }
+.lab-stage.tall { height: clamp(420px, 74vh, 700px); }
+@media (max-width: 560px) { .lab-stage.tall { height: 420px; } }
+.lab-stage .stage-ui { position: absolute; z-index: 2; display: flex; gap: 6px; flex-wrap: wrap; }
+.lab-stage .stage-ui .btn { backdrop-filter: blur(4px); }
 
 .plain-in { width: 100%; padding: 8px 10px; font-family: var(--mono); font-size: .88rem; color: var(--text); background: var(--bg2); border: 1px solid var(--line2); border-radius: 9px; }
 

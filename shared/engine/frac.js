@@ -1,4 +1,4 @@
-/* Frações exatas do ecossistema de Matemática (usado pelos simuladores de Álgebra e Álgebra Linear).
+/* Frações exatas compartilhado (Matemática, Física, ...) (usado pelos simuladores de Álgebra e Álgebra Linear).
    Expõe MATH.frac: Fr, F, gcd, lcm, fromNumber, parseNum. */
 window.MATH = window.MATH || {};
 

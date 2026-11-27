@@ -1,4 +1,5 @@
-/* Motor dos livros do ecossistema de Matemática.
+/* Motor dos livros dos ecossistemas (Matemática, Física, ...). Compartilhado: shared/engine/.
+   A área vem de MATH.area (definida no catalog.js de cada área).
    Monta o layout a partir de MATH.book (book.js de cada livro) e cuida de:
    roteador por hash, início, trilhas + diagnóstico, wiki em Markdown com busca,
    quizzes, progresso (localStorage) e abas dos simuladores (MATH.labs.init). */
@@ -6,6 +7,7 @@
     'use strict';
     const B = window.MATH.book, MD = window.MATH.md, LABS = (window.MATH.labs && window.MATH.labs.init) || {};
     const CAT = window.MATH.catalog || [];
+    const AREA = window.MATH.area || { name: 'Matemática', eco: 'Ecossistema de Matemática' };
     const $ = (s, r) => (r || document).querySelector(s);
     const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
     const chapter = id => B.chapters.find(c => c.id === id);
@@ -22,7 +24,7 @@
         const hasLabs = (B.labs || []).length > 0;
         document.body.innerHTML =
             '<header class="topbar">' +
-              '<a class="hub-link" href="../" title="Voltar à Matemática"><i class="fa-solid fa-arrow-left"></i><span>Matemática</span></a>' +
+              '<a class="hub-link" href="../" title="Voltar à ' + esc(AREA.name) + '"><i class="fa-solid fa-arrow-left"></i><span>' + esc(AREA.name) + '</span></a>' +
               '<a class="brand" href="#/"><img src="../../assets/img/logo-learning-fly-simple.png" alt="Learning Fly"><div><strong>' + esc(B.title) + '</strong><span>' + esc(B.subtitle) + '</span></div></a>' +
               '<nav class="main-nav" id="mainNav" aria-label="Seções">' +
                 '<a href="#/" data-view="home"><i class="fa-solid fa-house"></i><span>Início</span></a>' +
@@ -83,7 +85,7 @@
                 B.labs.map(l => '<div class="lab-panel" id="lab-' + l.id + '"></div>').join('') +
               '</section>' : '') +
             '</main>' +
-            '<footer class="foot"><span>' + esc(B.title) + ' · <a href="../">Ecossistema de Matemática</a> · <a href="../../">Learning Fly</a></span><span>Conteúdo aberto e gratuito. Fórmulas renderizadas com KaTeX.</span></footer>';
+            '<footer class="foot"><span>' + esc(B.title) + ' · <a href="../">' + esc(AREA.eco) + '</a> · <a href="../../">Learning Fly</a></span><span>Conteúdo aberto e gratuito. Fórmulas renderizadas com KaTeX.</span></footer>';
         renderTexIn($('#view-home'));
         renderEco();
         $$('#labTabs button').forEach(b => b.addEventListener('click', () => { location.hash = '#/lab/' + b.dataset.lab; }));
@@ -100,10 +102,12 @@
         };
         const pre = (me.requires || []).map(id => CAT.find(b => b.id === id)).filter(Boolean);
         const nxt = CAT.filter(b => (b.requires || []).includes(B.id));
-        if (!pre.length && !nxt.length) return;
-        $('#ecoBlock').innerHTML = '<div class="block-head"><span class="kicker">Ecossistema de Matemática</span><h2>Onde este livro se encaixa</h2></div><div class="eco-row">' +
+        const ext = me.ext || [];
+        if (!pre.length && !nxt.length && !ext.length) return;
+        $('#ecoBlock').innerHTML = '<div class="block-head"><span class="kicker">' + esc(AREA.eco) + '</span><h2>Onde este livro se encaixa</h2></div><div class="eco-row">' +
             (pre.length ? '<div class="eco-col"><h3><i class="fa-solid fa-arrow-turn-up"></i> Antes deste livro</h3>' + pre.map(card).join('') + '</div>' : '') +
             (nxt.length ? '<div class="eco-col"><h3><i class="fa-solid fa-arrow-turn-down"></i> Depois deste livro</h3>' + nxt.map(card).join('') + '</div>' : '') +
+            (ext.length ? '<div class="eco-col"><h3><i class="fa-solid fa-square-root-variable"></i> Matemática que ajuda</h3>' + ext.map(x => '<a href="../' + x.href + '" class="eco-card c-' + (x.color || 'sky') + '"><i class="fa-solid ' + (x.icon || 'fa-book') + '"></i><div><b>' + esc(x.title) + '</b><small>' + esc(x.short || '') + '</small></div></a>').join('') + '</div>' : '') +
             '<div class="eco-col"><h3><i class="fa-solid fa-diagram-project"></i> Mapa completo</h3><a class="eco-card c-indigo" href="../#mapa"><i class="fa-solid fa-map"></i><div><b>Mapa de pré-requisitos</b><small>Todos os livros e rotas</small></div></a></div></div>';
     }
 

@@ -13,7 +13,8 @@
     const firstSentence = md => { const s = String(md || ''); const i = s.search(/\.\s/); return i > 0 ? s.slice(0, i + 1) : s; };
 
     /* ---------------- repetição espaçada (caixas de Leitner) ---------------- */
-    const SKEY = 'mat.gloss.srs.v1';
+    const AREA = MATH.area || { key: 'mat', eco: 'Ecossistema de Matemática' };
+    const SKEY = AREA.key + '.gloss.srs.v1';
     const DAYS = [0, 1, 2, 4, 8, 16];          // intervalo por caixa (dias)
     function srs() { try { return JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (e) { return {}; } }
     function saveSrs(s) { try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) { /* */ } }
@@ -46,7 +47,7 @@
             const S = srs(), dom = G.filter(e => status(e.id, S) === 'dominado').length;
             view.innerHTML =
                 '<div class="page-head"><span class="kicker">Glossário do ecossistema</span><h1>Todo símbolo tem um nome, um jeito de ler e um significado</h1>' +
-                '<p>' + G.length + ' verbetes com <strong>como se lê</strong>, o que significa em palavras simples, um exemplo, <strong>como lembrar</strong>, o erro mais comum e onde estudar. Busque pelo nome, pelo jeito de ler ou cole o próprio símbolo (como ∈, ≤ ou ∫).</p></div>' +
+                '<p>' + G.length + ' verbetes com <strong>como se lê</strong>, o que significa em palavras simples, um exemplo, <strong>como lembrar</strong>, o erro mais comum e onde estudar. Busque pelo nome, pelo jeito de ler ou cole o próprio símbolo (como ' + esc(AREA.searchEx || '∈, ≤ ou ∫') + ').</p></div>' +
                 '<details class="g-howto"><summary><i class="fa-solid fa-brain"></i> Faz tempo que você saiu da escola? Veja como memorizar de verdade</summary><div class="g-howto-body">' +
                   '<div><b>1. Leia em voz alta.</b> Símbolo que você não sabe pronunciar, você não consegue pensar. Use o botão <i class="fa-solid fa-volume-high"></i> de cada verbete.</div>' +
                   '<div><b>2. Escreva à mão.</b> Copie o símbolo três vezes dizendo o nome. A mão ajuda a memória.</div>' +
@@ -56,7 +57,7 @@
                   '<div><b>6. Estude no contexto.</b> Cada verbete leva ao capítulo onde o símbolo é usado, e cada capítulo mostra os símbolos que usa.</div>' +
                 '</div></details>' +
                 '<div class="g-toolbar">' +
-                  '<div class="search-box g-search"><i class="fa-solid fa-magnifying-glass"></i><input id="glQ" type="search" placeholder="Buscar: pertence, delta, ∫, “lê-se”…" autocomplete="off" aria-label="Buscar no glossário"><kbd>/</kbd></div>' +
+                  '<div class="search-box g-search"><i class="fa-solid fa-magnifying-glass"></i><input id="glQ" type="search" placeholder="Buscar: ' + esc(AREA.searchHint || 'pertence, delta, ∫, “lê-se”') + '…" autocomplete="off" aria-label="Buscar no glossário"><kbd>/</kbd></div>' +
                   '<label class="g-favtoggle"><input type="checkbox" id="glFav"> <i class="fa-solid fa-star"></i> Só favoritos</label>' +
                   '<span class="g-stat"><i class="fa-solid fa-trophy"></i> ' + dom + ' de ' + G.length + ' dominados</span>' +
                 '</div>' +
@@ -74,6 +75,7 @@
         renderList(target);
     }
     function renderList(target) {
+        if (!$('#glCount')) return; /* a busca atrasada pode chegar depois de trocar de modo */
         const raw = state.q.trim(), q = norm(raw), F = U.favs();
         let list = G.filter(e => (state.cat === 'all' || e.c === state.cat) && (!state.fav || F[e.id]));
         if (q) {
@@ -113,7 +115,7 @@
     function memorizar() {
         const S = srs();
         const opts = '<option value="all">Todos os verbetes</option><option value="fav">Meus favoritos</option>' +
-            '<optgroup label="Por livro"><option value="book:algebra">Usados em Álgebra</option><option value="book:fundamentos">Usados em Fundamentos</option><option value="book:funcoes">Usados em Funções</option><option value="book:calculo-1">Usados em Cálculo I</option><option value="book:algebra-linear">Usados em Álgebra Linear</option><option value="book:geometria-analitica">Usados em Geometria Analítica</option><option value="book:probabilidade">Usados em Probabilidade e Estatística</option><option value="book:calculo-2">Usados em Cálculo II</option></optgroup>' +
+            '<optgroup label="Por livro">' + (MATH.catalog || []).filter(b => b.status === 'disponivel').map(b => '<option value="book:' + b.id + '">Usados em ' + esc(b.title) + '</option>').join('') + '</optgroup>' +
             '<optgroup label="Por categoria">' + CATS.map(c => '<option value="' + c.id + '">' + esc(c.title) + '</option>').join('') + '</optgroup>';
         const list = deckList(), n = { novo: 0, aprendendo: 0, dominado: 0 };
         list.forEach(e => n[status(e.id, S)]++);
@@ -236,7 +238,7 @@
             '<div class="page-head no-print"><span class="kicker">Folha de consulta</span><h1>Todos os símbolos em uma folha</h1>' +
             '<p>Imprima ou salve em PDF e cole perto de onde você estuda. A folha traz só os verbetes com símbolo; os termos completos estão na aba Consultar.</p>' +
             '<div class="cta-row"><button type="button" class="btn primary" id="glPrint"><i class="fa-solid fa-print"></i> Imprimir / salvar PDF</button></div></div>' +
-            '<div class="g-sheet"><h1 class="print-only">Glossário de símbolos · Ecossistema de Matemática</h1>' +
+            '<div class="g-sheet"><h1 class="print-only">Glossário de símbolos · ' + esc(AREA.eco) + '</h1>' +
             CATS.map(c => {
                 const list = G.filter(e => e.c === c.id && e.s && e.id !== 'pi-letra');
                 return list.length ? '<section><h2>' + esc(c.title) + '</h2><table><thead><tr><th>Símbolo</th><th>Nome</th><th>Lê-se</th><th>Significado</th></tr></thead><tbody>' +

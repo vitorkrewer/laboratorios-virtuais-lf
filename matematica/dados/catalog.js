@@ -5,10 +5,13 @@
    storage: prefixo das chaves de progresso no localStorage (igual ao book.js). */
 window.MATH = window.MATH || {};
 
+/* identidade da área (lida pelo motor compartilhado em shared/engine/) */
+MATH.area = { id: 'matematica', key: 'mat', name: 'Matemática', eco: 'Ecossistema de Matemática' };
+
 MATH.catalog = [
     {
         id: 'algebra', path: 'algebra/', status: 'disponivel', storage: 'mat.alg', chapters: 11,
-        title: 'Álgebra elementar', short: 'Sinais, frações, fatoração e equações',
+        title: 'Álgebra elementar', abbr: 'Álgebra', short: 'Sinais, frações, fatoração e equações',
         icon: 'fa-scale-balanced', color: 'orange', requires: [], col: 0, row: 1,
         desc: 'Para quem está longe da escola: números e sinais, frações, potências, produtos notáveis, fatoração, equações do 1º e 2º grau, sistemas, proporção e porcentagem.',
         topics: ['Sinais e frações', 'MMC e MDC', 'Potências e raízes', 'Fatoração', 'Equações', 'Sistemas', 'Porcentagem']
@@ -50,7 +53,7 @@ MATH.catalog = [
     },
     {
         id: 'probabilidade', path: 'probabilidade/', status: 'disponivel', storage: 'mat.prob', chapters: 13,
-        title: 'Probabilidade e Estatística', short: 'Dados, probabilidade, distribuições e inferência',
+        title: 'Probabilidade e Estatística', abbr: 'Probabilidade', short: 'Dados, probabilidade, distribuições e inferência',
         icon: 'fa-dice', color: 'teal', requires: ['fundamentos'], col: 2, row: 3,
         desc: 'Estatística descritiva, análise combinatória, probabilidade condicional e Bayes, distribuições binomial, Poisson e normal, Teorema Central do Limite, intervalos de confiança, testes de hipóteses e regressão.',
         topics: ['Descritiva', 'Contagem', 'Bayes', 'Binomial', 'Normal', 'Intervalos', 'Testes', 'Regressão']
@@ -65,3 +68,19 @@ MATH.catalog = [
 ];
 
 MATH.statusLabel = { 'disponivel': 'Disponível', 'em-breve': 'Em breve', 'planejado': 'Planejado' };
+
+/* rotas por objetivo, exibidas no hub */
+MATH.routes = [
+    { icon: 'fa-hourglass-half', color: 'orange', title: 'Faz tempo que saí da escola',
+      text: 'Comece pela Álgebra elementar: sinais, frações, equações e porcentagem, do começo e sem pressa. Faça o diagnóstico de 8 questões para saber o ritmo.',
+      steps: [{ b: 'algebra', label: 'Diagnóstico de Álgebra', href: 'algebra/#/trilhas' }, { b: 'algebra', label: 'Álgebra do zero (21 dias)', href: 'algebra/#/trilhas/do-zero-21' }, { b: 'fundamentos', label: 'Depois: Fundamentos completo', href: 'fundamentos/#/trilhas/completo-14' }] },
+    { icon: 'fa-bolt', color: 'amber', title: 'Tenho prova de Cálculo I em breve',
+      text: 'Vá direto ao livro de Cálculo, faça o diagnóstico e use a trilha de resgate. Volte à Álgebra ou aos Fundamentos só quando travar.',
+      steps: [{ b: 'calculo-1', label: 'Diagnóstico de Cálculo I', href: 'calculo-1/#/trilhas' }, { b: 'algebra', label: 'Álgebra para o Cálculo (se as contas travarem)', href: 'algebra/#/trilhas/para-calculo-5' }, { b: 'fundamentos', label: 'Ponte para o Cálculo (se precisar)', href: 'fundamentos/#/trilhas/ponte-calculo' }, { b: 'funcoes', label: 'Funções para o Cálculo (se precisar)', href: 'funcoes/#/trilhas/ponte-calculo' }] },
+    { icon: 'fa-graduation-cap', color: 'sky', title: 'Estou começando a graduação',
+      text: 'Construa a base na ordem certa: linguagem e números reais, depois funções e Cálculo. Geometria Analítica e Álgebra Linear podem correr em paralelo.',
+      steps: [{ b: 'fundamentos', label: 'Fundamentos completo', href: 'fundamentos/#/trilhas/completo-14' }, { b: 'funcoes', label: 'Funções completo', href: 'funcoes/#/trilhas/completo-14' }, { b: 'calculo-1', label: 'Cálculo I', href: 'calculo-1/#/trilhas/base-30' }, { b: 'calculo-2', label: 'Depois: Cálculo II', href: 'calculo-2/#/trilhas/completo-26' }, { b: 'geometria-analitica', label: 'Geometria Analítica (em paralelo com o Cálculo)', href: 'geometria-analitica/#/trilhas/completa-18' }, { b: 'algebra-linear', label: 'Álgebra Linear (em paralelo com o Cálculo)', href: 'algebra-linear/#/trilhas/completo-24' }] },
+    { icon: 'fa-circle-nodes', color: 'indigo', title: 'Meu curso começa por Teoria dos Conjuntos',
+      text: 'Lógica, conjuntos, operações e produto cartesiano em quatro dias, com simulador de diagramas de Venn.',
+      steps: [{ b: 'fundamentos', label: 'Trilha Teoria dos Conjuntos', href: 'fundamentos/#/trilhas/conjuntos-4' }, { b: 'fundamentos', label: 'Desafios no simulador', href: 'fundamentos/#/lab/venn' }] }
+];

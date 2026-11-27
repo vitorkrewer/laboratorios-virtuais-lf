@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecossistema de Física | Learning Fly</title>
+    <meta name="description" content="Ecossistema gratuito de ensino de Física: livros interativos com trilhas, teoria em formato wiki, testes rápidos, simuladores, planetário e mapa de pré-requisitos ligado à Matemática.">
+    <link rel="icon" href="../assets/img/logo-learning-fly-simple.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../shared/engine/engine.css">
+    <style>
+        .hub-hero.fis-hero { grid-template-columns: 1.1fr .9fr; max-width: none; }
+        .fis-hero .hero-art { position: relative; height: 420px; }
+        .fis-hero .hero-art canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        @media (max-width: 900px) { .hub-hero.fis-hero { grid-template-columns: 1fr; } .fis-hero .hero-art { height: 240px; order: -1; } }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="hub-link" href="../" title="Voltar ao Hub de Laboratórios"><i class="fa-solid fa-arrow-left"></i><span>Hub</span></a>
+        <a class="brand" href="./"><img src="../assets/img/logo-learning-fly-simple.png" alt="Learning Fly"><div><strong>Física</strong><span>Ecossistema de ensino</span></div></a>
+        <nav class="main-nav" aria-label="Seções">
+            <a href="#comecar"><i class="fa-solid fa-signs-post"></i><span>Por onde começar</span></a>
+            <a href="#livros"><i class="fa-solid fa-book"></i><span>Livros</span></a>
+            <a href="#mapa"><i class="fa-solid fa-diagram-project"></i><span>Mapa</span></a>
+            <a href="glossario/"><i class="fa-solid fa-spell-check"></i><span>Glossário</span></a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="view">
+            <div class="hero hub-hero fis-hero">
+                <div class="hero-copy">
+                    <span class="eyebrow"><i class="fa-solid fa-atom"></i> Ecossistema de Física</span>
+                    <h1>Do céu noturno às leis da natureza, <em>vendo a física acontecer.</em></h1>
+                    <p>Livros interativos que se conectam por pré-requisitos e à Matemática de que cada assunto precisa. Cada um tem trilhas por objetivo, teoria gratuita em formato wiki, testes rápidos com correção imediata, simuladores e animações. Seu progresso fica salvo neste navegador.</p>
+                    <div class="cta-row">
+                        <a class="btn primary" href="#comecar"><i class="fa-solid fa-signs-post"></i> Por onde começar</a>
+                        <a class="btn ghost" href="#mapa"><i class="fa-solid fa-diagram-project"></i> Ver o mapa</a>
+                    </div>
+                    <div class="stats" id="hubStats"></div>
+                </div>
+                <div class="hero-art" aria-hidden="true"><canvas id="heroOrbits"></canvas></div>
+            </div>
+
+            <section class="block" id="comecar">
+                <div class="block-head"><span class="kicker">Rotas por objetivo</span><h2>Por onde começar?</h2></div>
+                <div class="routes" id="routes"></div>
+            </section>
+
+            <section class="block">
+                <a class="gloss-banner" href="glossario/">
+                    <div class="gb-syms" aria-hidden="true"><span>λ</span><span>☉</span><span>G</span><span>c</span><span>Å</span><span>pc</span></div>
+                    <div class="gb-text"><span class="kicker">Glossário do ecossistema</span><h2>Esqueceu o que é um símbolo?</h2>
+                        <p>47 símbolos, termos e fórmulas com <strong>como se lê</strong> (com áudio), o que significa, exemplo, <strong>como lembrar</strong> e onde estudar. Tem cartões de memorização com repetição espaçada, teste e uma folha para imprimir. Cada verbete aponta para a Matemática que ele usa.</p></div>
+                    <span class="btn primary"><i class="fa-solid fa-spell-check"></i> Abrir o glossário</span>
+                </a>
+            </section>
+
+            <section class="block" id="livros">
+                <div class="block-head"><span class="kicker">Biblioteca</span><h2>Livros do ecossistema</h2></div>
+                <div class="book-grid" id="books"></div>
+            </section>
+
+            <section class="block" id="mapa">
+                <div class="block-head"><span class="kicker">Pré-requisitos</span><h2>Mapa do ecossistema</h2>
+                    <p class="muted-p">Cada seta indica "estude antes". A Astronomia não depende de outros livros de Física: é uma ótima porta de entrada.</p></div>
+                <div class="eco-map" id="ecoMap"><svg class="eco-edges" id="ecoEdges" aria-hidden="true"></svg></div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <span>Ecossistema de Física · <a href="../">Learning Fly · Laboratórios Virtuais</a></span>
+        <span>Conteúdo aberto e gratuito.</span>
+    </footer>
+
+    <script src="dados/catalog.js"></script>
+    <script src="../shared/engine/hub.js"></script>
+    <script src="hub-art.js"></script>
+</body>
+</html>

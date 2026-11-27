@@ -1,4 +1,4 @@
-/* Motor de gráficos e expressões do ecossistema de Matemática.
+/* Motor de gráficos e expressões compartilhado (Matemática, Física, ...).
    Expõe MATH.plot: Plot (canvas), COLORS, fmt (pt-BR), parseExpr/compile/toTex
    (parser seguro, sem eval), numDeriv, simpson, makeCustom, customBox, wireCustom. */
 window.MATH = window.MATH || {};
