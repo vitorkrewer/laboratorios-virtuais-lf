@@ -449,6 +449,14 @@ a.map-node:hover { text-decoration: none; border-color: var(--accent); transform
 .g-cats button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; color: var(--muted); background: var(--card); border: 1px solid var(--line2); border-radius: 99px; font-size: .82rem; font-weight: 600; }
 .g-cats button small { color: var(--faint); font-weight: 500; } .g-cats button:hover { color: #fff; } .g-cats button.active { color: #fff; background: rgba(99,102,241,.22); border-color: var(--accent); }
 .g-empty { padding: 40px; text-align: center; color: var(--muted); } .g-empty i { font-size: 1.6rem; }
+.g-pager { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 18px 0; }
+.g-pager button { min-width: 36px; height: 36px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line2); background: var(--card); color: var(--text); font-weight: 600; font-size: .9rem; font-family: inherit; cursor: pointer; }
+.g-pager button:hover:not(:disabled) { border-color: var(--accent); }
+.g-pager button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.g-pager button:disabled { opacity: .35; cursor: default; }
+.g-pager-gap { color: var(--muted); padding: 0 2px; }
+.g-pager-info { margin-left: auto; color: var(--muted); font-size: .85rem; }
+@media (max-width: 520px) { .g-pager { gap: 4px; } .g-pager button { min-width: 32px; height: 34px; padding: 0 6px; } .g-pager-info { width: 100%; margin-left: 0; } }
 .g-howto { margin: 10px 0 6px; background: rgba(192,132,252,.06); border: 1px solid rgba(192,132,252,.3); border-radius: 14px; }
 .g-howto summary { cursor: pointer; padding: 13px 16px; font-weight: 700; color: #e9d5ff; } .g-howto summary i { color: #c084fc; margin-right: 6px; }
 .g-howto-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px 20px; padding: 4px 16px 16px; font-size: .9rem; color: #d1d5db; }

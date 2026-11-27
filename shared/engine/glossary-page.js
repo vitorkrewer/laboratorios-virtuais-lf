@@ -36,7 +36,8 @@
     }
 
     /* ---------------- CONSULTAR ---------------- */
-    let state = { q: '', cat: 'all', fav: false };
+    let state = { q: '', cat: 'all', fav: false, page: 1 };
+    const PAGE = 24; /* verbetes por página: só a página visível é montada (e o KaTeX só roda nela) */
     let built = false;
     function hay(e) { return norm([e.t, e.r, plain(e.d), e.a, e.s, U.uni(e), plain(e.m)].join(' ')); }
     const H = {};
@@ -67,10 +68,15 @@
             G.forEach(e => { H[e.id] = hay(e); });
             const q = $('#glQ'); let t;
             q.value = state.q; $('#glFav').checked = state.fav;
-            q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = q.value; renderList(); }, 120); });
-            $('#glFav').addEventListener('change', e => { state.fav = e.target.checked; renderList(); });
-            $('#glCats').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; state.cat = b.dataset.cat; $$('#glCats button').forEach(x => x.classList.toggle('active', x === b)); renderList(); });
+            q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = q.value; state.page = 1; renderList(); }, 120); });
+            $('#glFav').addEventListener('change', e => { state.fav = e.target.checked; state.page = 1; renderList(); });
+            $('#glCats').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; state.cat = b.dataset.cat; state.page = 1; $$('#glCats button').forEach(x => x.classList.toggle('active', x === b)); renderList(); });
             U.wire($('#glList'), id => { location.hash = '#' + id; });
+            $('#glList').addEventListener('click', e => {
+                const b = e.target.closest('[data-page]'); if (!b || b.disabled) return;
+                state.page = +b.dataset.page; renderList();
+                const top = $('#glCount').getBoundingClientRect().top + window.scrollY - 90; window.scrollTo({ top, behavior: 'instant' });
+            });
         }
         renderList(target);
     }
@@ -85,16 +91,37 @@
                 .sort((a, b) => rank(a) - rank(b));
         }
         if (target && byId(target) && !list.includes(byId(target))) { state.cat = 'all'; state.q = ''; state.fav = false; $('#glQ').value = ''; $('#glFav').checked = false; $$('#glCats button').forEach(x => x.classList.toggle('active', x.dataset.cat === 'all')); list = G.slice(); }
-        $('#glCount').textContent = list.length + (list.length === 1 ? ' verbete' : ' verbetes') + (q ? ' para “' + raw + '”' : '');
-        const groups = CATS.filter(c => list.some(e => e.c === c.id));
-        $('#glList').innerHTML = list.length && q ? '<div class="g-grid">' + list.map(e => U.entryHtml(e)).join('') + '</div>'
-            : list.length ? groups.map(c => '<h2 class="g-cat-title"><i class="fa-solid ' + c.icon + '"></i> ' + esc(c.title) + '</h2><div class="g-grid">' +
-                list.filter(e => e.c === c.id).map(e => U.entryHtml(e)).join('') + '</div>').join('')
-            : '<div class="g-empty"><i class="fa-solid fa-magnifying-glass"></i><p>Nada encontrado. Tente outra palavra ou o nome por extenso (por exemplo, “pertence” em vez de “∈”).</p></div>';
+        if (state.cat === 'all' && !q) { const ord = {}; CATS.forEach((c, i) => { ord[c.id] = i; }); list = list.slice().sort((a, b) => ord[a.c] - ord[b.c]); }
+        const pages = Math.max(1, Math.ceil(list.length / PAGE));
+        if (target && byId(target)) state.page = Math.floor(list.indexOf(byId(target)) / PAGE) + 1;
+        state.page = Math.min(Math.max(1, state.page), pages);
+        const from = (state.page - 1) * PAGE, part = list.slice(from, from + PAGE);
+        $('#glCount').textContent = list.length + (list.length === 1 ? ' verbete' : ' verbetes') + (q ? ' para “' + raw + '”' : '') +
+            (pages > 1 ? ' · mostrando ' + (from + 1) + '–' + (from + part.length) : '');
+        const groups = CATS.filter(c => part.some(e => e.c === c.id));
+        const pager = pages > 1 ? pagerHtml(state.page, pages) : '';
+        $('#glList').innerHTML = !list.length
+            ? '<div class="g-empty"><i class="fa-solid fa-magnifying-glass"></i><p>Nada encontrado. Tente outra palavra ou o nome por extenso (por exemplo, “pertence” em vez de “∈”).</p></div>'
+            : pager + (q ? '<div class="g-grid">' + part.map(e => U.entryHtml(e)).join('') + '</div>'
+                : groups.map(c => '<h2 class="g-cat-title"><i class="fa-solid ' + c.icon + '"></i> ' + esc(c.title) + '</h2><div class="g-grid">' +
+                    part.filter(e => e.c === c.id).map(e => U.entryHtml(e)).join('') + '</div>').join('')) + pager;
         if (target) {
             const el = $('.g-entry[data-id="' + target + '"]');
             if (el) { el.classList.add('flash'); setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'instant' }), 30); setTimeout(() => el.classList.remove('flash'), 2400); }
         }
+    }
+
+    /* paginação: primeira, anterior, até 7 números (com reticências), próxima, última */
+    function pagerHtml(p, n) {
+        const nums = [], add = k => nums.push(k);
+        if (n <= 7) for (let k = 1; k <= n; k++) add(k);
+        else { add(1); if (p > 3) add(0); for (let k = Math.max(2, p - 1); k <= Math.min(n - 1, p + 1); k++) add(k); if (p < n - 2) add(0); add(n); }
+        const btn = (k, html, lab, dis, cur) => '<button type="button" data-page="' + k + '"' + (dis ? ' disabled' : '') + (cur ? ' class="active" aria-current="page"' : '') + ' aria-label="' + lab + '">' + html + '</button>';
+        return '<nav class="g-pager" aria-label="Páginas do glossário">' +
+            btn(p - 1, '<i class="fa-solid fa-chevron-left"></i>', 'Página anterior', p === 1) +
+            nums.map(k => k ? btn(k, k, 'Página ' + k, false, k === p) : '<span class="g-pager-gap">…</span>').join('') +
+            btn(p + 1, '<i class="fa-solid fa-chevron-right"></i>', 'Próxima página', p === n) +
+            '<span class="g-pager-info">página ' + p + ' de ' + n + '</span></nav>';
     }
 
     /* ---------------- MEMORIZAR ---------------- */
