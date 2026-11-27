@@ -124,6 +124,8 @@ main { flex: 1; width: 100%; }
 .pc-indigo > i { color: var(--accent); } .pc-indigo.active, .pc-indigo:hover { border-color: var(--accent); }
 .pc-emerald > i { color: var(--green); } .pc-emerald.active, .pc-emerald:hover { border-color: var(--green); }
 .pc-sky > i { color: var(--sky); } .pc-sky.active, .pc-sky:hover { border-color: var(--sky); }
+.pc-violet > i { color: var(--violet); } .pc-violet.active, .pc-violet:hover { border-color: var(--violet); }
+.pc-rose > i { color: var(--rose); } .pc-rose.active, .pc-rose:hover { border-color: var(--rose); }
 .path-card.active { background: var(--card2); box-shadow: 0 0 0 1px currentColor inset; }
 .pd-head { display: flex; justify-content: space-between; gap: 20px; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; }
 .pd-head h2 { font-family: var(--head); font-size: 1.7rem; margin: 0; } .pd-head p { margin: 4px 0 0; color: var(--muted); }

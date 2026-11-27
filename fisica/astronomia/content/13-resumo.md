@@ -88,7 +88,7 @@ Este capítulo reúne as fórmulas e os números do livro numa página de consul
 3. **O Sistema Solar** (caps. 8–9): planetas, corpos menores e formação.
 4. **Ferramentas para ir além** (caps. 10–12): luz, telescópios, distâncias e exoplanetas.
 
-> [!DICA] O próximo passo é o livro **Astrofísica e Cosmologia**: a vida e a morte das estrelas, anãs brancas, estrelas de nêutrons, pulsares e magnetares, buracos negros, quasares, galáxias e a história do universo desde o Big Bang.
+> [!DICA] O próximo passo é o livro [Astrofísica e Cosmologia](../cosmologia/): a vida e a morte das estrelas, anãs brancas, estrelas de nêutrons, pulsares e magnetares, buracos negros, quasares, galáxias e a história do universo desde o Big Bang.
 
 ## Teste rápido
 

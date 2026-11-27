@@ -63,11 +63,12 @@ MATH.catalog = [
         topics: ['Esfera celeste', 'Estações', 'Lua e eclipses', 'Kepler', 'Gravitação', 'Sistema Solar', 'Exoplanetas']
     },
     {
-        id: 'cosmologia', path: 'cosmologia/', status: 'em-breve', storage: 'fis.cosmo', chapters: 0,
-        title: 'Astrofísica e Cosmologia', short: 'Estrelas, buracos negros, galáxias e o Big Bang',
+        id: 'cosmologia', path: 'cosmologia/', status: 'disponivel', storage: 'fis.cosmo', chapters: 15,
+        title: 'Astrofísica e Cosmologia', short: 'Estrelas, pulsares, buracos negros e o Big Bang',
         icon: 'fa-hurricane', color: 'emerald', requires: ['astronomia', 'moderna'], col: 4, row: 3,
-        desc: 'Vida e morte das estrelas, anãs brancas, estrelas de nêutrons, pulsares e magnetares, buracos negros, quasares, galáxias, expansão do universo, radiação cósmica de fundo e Big Bang.',
-        topics: ['Estrelas', 'Pulsares e magnetares', 'Buracos negros', 'Quasares', 'Galáxias', 'Big Bang']
+        ext: [{ title: 'Funções', href: '../matematica/funcoes/', icon: 'fa-chart-line', color: 'emerald', short: 'Potências, exponenciais e logaritmos' }],
+        desc: 'O Sol e as estrelas, diagrama HR, nascimento e morte das estrelas, supernovas, estrelas de nêutrons, pulsares e magnetares, buracos negros, galáxias e matéria escura, quasares, expansão do universo, Big Bang e energia escura. Com cinco simuladores.',
+        topics: ['Diagrama HR', 'Supernovas', 'Pulsares e magnetares', 'Buracos negros', 'Quasares', 'Matéria escura', 'Big Bang']
     }
 ];
 
@@ -78,6 +79,9 @@ MATH.routes = [
     { icon: 'fa-star', color: 'violet', title: 'Quero entender o céu',
       text: 'Comece pela Astronomia: o planetário mostra o céu de qualquer lugar e data, e os capítulos explicam o que você está vendo. Nenhum pré-requisito além de contas básicas.',
       steps: [{ b: 'astronomia', label: 'Diagnóstico de Astronomia', href: 'astronomia/#/trilhas' }, { b: 'astronomia', label: 'Planetário', href: 'astronomia/#/lab/planetario' }, { b: 'cosmologia', label: 'Depois: Astrofísica e Cosmologia', href: 'cosmologia/' }] },
+    { icon: 'fa-circle', color: 'rose', title: 'Pulsares, buracos negros e o Big Bang',
+      text: 'Direto aos objetos extremos: a morte das estrelas, pulsares e magnetares, buracos negros, quasares e a história do universo. Os simuladores mostram cada um em movimento.',
+      steps: [{ b: 'cosmologia', label: 'Diagnóstico de Astrofísica e Cosmologia', href: 'cosmologia/#/trilhas' }, { b: 'cosmologia', label: 'Pulsar', href: 'cosmologia/#/lab/pulsar' }, { b: 'cosmologia', label: 'Buraco negro', href: 'cosmologia/#/lab/buraco' }, { b: 'cosmologia', label: 'Universo em expansão', href: 'cosmologia/#/lab/expansao' }] },
     { icon: 'fa-graduation-cap', color: 'sky', title: 'Física básica da graduação',
       text: 'Mecânica primeiro, com Cálculo I em paralelo. Depois ondas, termodinâmica e eletromagnetismo.',
       steps: [{ b: 'mecanica', label: 'Mecânica', href: 'mecanica/' }, { b: 'ondas', label: 'Oscilações e ondas', href: 'ondas/' }, { b: 'termodinamica', label: 'Termodinâmica', href: 'termodinamica/' }, { b: 'eletromagnetismo', label: 'Eletromagnetismo', href: 'eletromagnetismo/' }] }

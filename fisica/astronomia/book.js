@@ -149,6 +149,6 @@ MATH.book = {
     recommend(score, total, needs) {
         if (score <= 3) return { path: 'ceu-7', msg: 'Comece pelo céu visto daqui, sem pressa: em uma semana você reconhece o que vê e entende por quê.' };
         if (needs.length) return { path: 'completo-20', msg: 'Você tem boa intuição, mas há lacunas. O livro completo, na ordem, fecha todas elas.' };
-        return { path: 'fisica-8', msg: 'Excelente! Você já domina o essencial. Aprofunde a parte quantitativa e siga para Astrofísica e Cosmologia quando estiver disponível.' };
+        return { path: 'fisica-8', msg: 'Excelente! Você já domina o essencial. Aprofunde a parte quantitativa e siga para o livro Astrofísica e Cosmologia.' };
     }
 };
