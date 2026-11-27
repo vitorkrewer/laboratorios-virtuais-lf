@@ -11,12 +11,12 @@ MATH.area = { id: 'fisica', key: 'fis', name: 'Física', eco: 'Ecossistema de F�
 
 MATH.catalog = [
     {
-        id: 'mecanica', path: 'mecanica/', status: 'planejado', storage: 'fis.mec', chapters: 0,
-        title: 'Mecânica', short: 'Movimento, forças, energia e gravitação',
+        id: 'mecanica', path: 'mecanica/', status: 'disponivel', storage: 'fis.mec', chapters: 14,
+        title: 'Mecânica', short: 'Movimento, forças e energia, dos conceitos às contas',
         icon: 'fa-gears', color: 'orange', requires: [], col: 0, row: 1,
-        ext: [{ title: 'Cálculo I', href: '../matematica/calculo-1/', icon: 'fa-infinity', color: 'violet', short: 'Derivadas e integrais' }],
-        desc: 'Cinemática, leis de Newton, trabalho e energia, momento linear e colisões, rotação e gravitação universal.',
-        topics: ['Cinemática', 'Leis de Newton', 'Energia', 'Momento', 'Rotação']
+        ext: [{ title: 'Funções', href: '../matematica/funcoes/', icon: 'fa-chart-line', color: 'emerald', short: 'Proporção, gráficos e funções do 2º grau' }, { title: 'Cálculo I', href: '../matematica/calculo-1/', icon: 'fa-infinity', color: 'violet', short: 'Derivadas e integrais (velocidade, aceleração, trabalho)' }],
+        desc: 'Porta de entrada da física, em três voltas: primeiro ver e explicar (movimento, forças, ação e reação, energia), depois medir e prever (queda livre, segunda lei, colisões, lançamentos), por fim analisar e criar (movimento circular, torque, fluidos, mitos e projetos). Com sete simuladores.',
+        topics: ['Movimento', 'Leis de Newton', 'Atrito', 'Energia', 'Queda livre', 'Colisões', 'Lançamentos', 'Torque', 'Fluidos']
     },
     {
         id: 'ondas', path: 'ondas/', status: 'planejado', storage: 'fis.ond', chapters: 0,
@@ -77,6 +77,9 @@ MATH.statusLabel = { 'disponivel': 'Disponível', 'em-breve': 'Em breve', 'plane
 
 /* rotas por objetivo, exibidas no hub */
 MATH.routes = [
+    { icon: 'fa-seedling', color: 'emerald', title: 'Começar do zero',
+      text: 'Para quem nunca estudou física ou esqueceu tudo: o diagnóstico de conceitos, a primeira volta da Mecânica e os simuladores de movimento e forças, quase sem contas.',
+      steps: [{ b: 'mecanica', label: 'Diagnóstico de conceitos', href: 'mecanica/#/trilhas' }, { b: 'mecanica', label: 'Trilha Conceitos em 7 dias', href: 'mecanica/#/trilhas/conceitos-7' }, { b: 'mecanica', label: 'Simulador de forças', href: 'mecanica/#/lab/forcas' }, { b: 'mecanica', label: 'Gangorra e torque', href: 'mecanica/#/lab/gangorra' }] },
     { icon: 'fa-star', color: 'violet', title: 'Quero entender o céu',
       text: 'Comece pela Astronomia: o planetário mostra o céu de qualquer lugar e data, e os capítulos explicam o que você está vendo. Nenhum pré-requisito além de contas básicas.',
       steps: [{ b: 'astronomia', label: 'Diagnóstico de Astronomia', href: 'astronomia/#/trilhas' }, { b: 'astronomia', label: 'Planetário', href: 'astronomia/#/lab/planetario' }, { b: 'cosmologia', label: 'Depois: Astrofísica e Cosmologia', href: 'cosmologia/' }] },
@@ -87,6 +90,6 @@ MATH.routes = [
       text: 'Direto aos objetos extremos: a morte das estrelas, pulsares e magnetares, buracos negros, quasares e a história do universo. Os simuladores mostram cada um em movimento.',
       steps: [{ b: 'cosmologia', label: 'Diagnóstico de Astrofísica e Cosmologia', href: 'cosmologia/#/trilhas' }, { b: 'cosmologia', label: 'Pulsar', href: 'cosmologia/#/lab/pulsar' }, { b: 'cosmologia', label: 'Buraco negro', href: 'cosmologia/#/lab/buraco' }, { b: 'cosmologia', label: 'Universo em expansão', href: 'cosmologia/#/lab/expansao' }] },
     { icon: 'fa-graduation-cap', color: 'sky', title: 'Física básica da graduação',
-      text: 'Mecânica primeiro, com Cálculo I em paralelo. Depois ondas, termodinâmica e eletromagnetismo.',
+      text: 'Mecânica primeiro, com as voltas 2 e 3 e Cálculo I em paralelo. Depois ondas, termodinâmica e eletromagnetismo.',
       steps: [{ b: 'mecanica', label: 'Mecânica', href: 'mecanica/' }, { b: 'ondas', label: 'Oscilações e ondas', href: 'ondas/' }, { b: 'termodinamica', label: 'Termodinâmica', href: 'termodinamica/' }, { b: 'eletromagnetismo', label: 'Eletromagnetismo', href: 'eletromagnetismo/' }] }
 ];

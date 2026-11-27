@@ -1142,6 +1142,7 @@ MATH.labs = (function () {
                 '<div id="nu-pch" hidden>' +
                   '<div class="ctl"><label for="nu-den">Quantidade de urânio-235 <b id="nu-denv"></b></label><input id="nu-den" type="range" min="10" max="100" value="55"></div>' +
                   '<div class="ctl"><label for="nu-rod">Barras de controle inseridas <b id="nu-rodv"></b></label><input id="nu-rod" type="range" min="0" max="100" value="0"></div>' +
+                  '<div class="ctl seg" style="font-size:.84rem"><label><input type="checkbox" id="nu-src" checked> fonte fraca de nêutrons (como na partida de um reator)</label></div>' +
                   '<button class="btn small primary" id="nu-fire" type="button"><i class="fa-solid fa-circle-dot"></i> Disparar um nêutron</button>' +
                 '</div>' +
                 '<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn small" id="nu-play" type="button"><i class="fa-solid fa-pause"></i> Pausar</button><button class="btn small" id="nu-reset" type="button"><i class="fa-solid fa-rotate-left"></i> Recomeçar</button></div>' +
@@ -1149,12 +1150,12 @@ MATH.labs = (function () {
               '</div>' +
             '</div>' +
             '<div class="lab-under">' +
-              '<div class="lab-note"><strong>Leitura.</strong> <em>Decaimento:</em> cada núcleo tem a mesma chance de decair a cada instante, sem memória; o gráfico mostra quantos restam (pontos) e a curva exponencial esperada. A animação dura 4 segundos por meia-vida; o tempo real está no painel. <em>Reação em cadeia:</em> cada nêutron que atinge um núcleo de urânio-235 o parte em dois e libera 2 ou 3 nêutrons; nêutrons que saem da caixa ou batem nas barras de controle se perdem. Cada núcleo partido é reposto em outro ponto, como num reator, onde o combustível dura meses.</div>' +
-              '<div class="lab-note"><strong>Experimente.</strong> Com 100 núcleos, a curva fica irregular; com 2 500, segue a exponencial quase perfeitamente. Na reação em cadeia, com pouco urânio a reação morre (subcrítica); com muito, explode (supercrítica). Insira as barras de controle até a reação se manter estável: é assim que um reator funciona.</div>' +
+              '<div class="lab-note"><strong>Leitura.</strong> <em>Decaimento:</em> cada núcleo tem a mesma chance de decair a cada instante, sem memória; o gráfico mostra quantos restam (pontos) e a curva exponencial esperada. A animação dura 4 segundos por meia-vida; o tempo real está no painel. <em>Reação em cadeia:</em> cada nêutron que atinge um núcleo de urânio-235 o parte em dois e libera 2 ou 3 nêutrons; nêutrons que entram nas barras de controle são absorvidos; os que chegam à parede escapam ou são devolvidos pelo refletor. O fator de multiplicação k é medido ao vivo: quantos nêutrons novos, em média, cada nêutron deixa. O combustível não se gasta na simulação (num reator, ele dura meses). Embaixo, os nêutrons em escala logarítmica (crescimento exponencial vira reta) e k.</div>' +
+              '<div class="lab-note"><strong>Experimente.</strong> Com 100 núcleos, a curva fica irregular; com 2 500, segue a exponencial quase perfeitamente. Na reação em cadeia, sem barras a reação é supercrítica: os nêutrons crescem em linha reta no gráfico logarítmico. Insira as barras aos poucos até k ficar perto de 1 (com o urânio em 55%, isso acontece por volta de metade da inserção): a população para de crescer. Com as barras todas inseridas, k cai abaixo de 1 e só a fonte mantém alguns nêutrons. É assim que se controla um reator.</div>' +
             '</div>';
         const S = k => $('#nu-' + k, root), cv = S('cv');
         const st = { mode: 'dec', iso: 0, N: 400, nuc: [], t: 0, hist: [], fx: [], playing: true,
-            ch: { U: [], n: [], frag: [], flashes: [], fis: 0, t: 0, series: [], gen: [], den: 0.55, rod: 0, lost: 0 } };
+            ch: { U: [], n: [], frag: [], flashes: [], fis: 0, t: 0, series: [], den: 0.55, rod: 0, leak: 0, rodAbs: 0, kd: 0, kE: null, pE: null, capped: -9, srcAcc: 0 } };
         const HL = 4; /* segundos de animação por meia-vida */
         function resetDec() {
             const r = rng(7 + st.N), N = st.N; st.nuc = []; st.t = 0; st.hist = [[0, N]]; st.fx = [];
@@ -1203,65 +1204,119 @@ MATH.labs = (function () {
             const last = st.hist[st.hist.length - 1]; c.fillStyle = '#fff'; c.beginPath(); c.arc(X(last[0]), Y(last[1]), 4, 0, TAU); c.fill();
             label(c, 'exponencial esperada', g.x1, g.y1 + 2, '#fde047', F(600, 10), 'right');
         }
-        /* ---------- reação em cadeia ---------- */
-        function resetChain() {
-            const ch = st.ch, r = rng(11); ch.U = []; ch.n = []; ch.frag = []; ch.flashes = []; ch.fis = 0; ch.t = 0; ch.series = []; ch.lost = 0; ch.win = []; ch.k = null;
-            const n = Math.round(30 + ch.den * 260);
-            for (let i = 0; i < n; i++) ch.U.push({ x: 0.04 + r() * 0.92, y: 0.05 + r() * 0.9, alive: true });
+        /* ---------- reação em cadeia ----------
+           Física do modelo: cada nêutron anda em linha reta; ao passar perto de um núcleo de U-235 causa fissão (2 ou 3 nêutrons novos, ν médio 2,5);
+           ao entrar numa barra de controle é absorvido; ao bater na parede escapa ou é refletido (refletor, 45%).
+           O fator de multiplicação é medido diretamente: k = (nêutrons gerados) / (nêutrons que terminaram), em média móvel.
+           O combustível não se gasta (num reator ele dura meses) e os núcleos têm separação mínima, para não formar pares que se excitam entre si. */
+        const CH = { R2: 0.000033, ROD_W: 0.11, REF: 0.45, SPEED: 0.35, CAP: 600, SRC: 4, M: 300 };
+        function placeFuel() {
+            const ch = st.ch, n = Math.round(20 + ch.den * 120), a = ch.aspect || 1.6, U = [];
+            for (let tries = 0; U.length < n && tries < 20000; tries++) {
+                const x = 0.04 + Math.random() * 0.92, y = 0.05 + Math.random() * 0.9;
+                if (rodsAt().some(rx => Math.abs(x - rx) < CH.ROD_W / 2 + 0.012)) continue; /* canais das barras ficam livres de combustível */
+                if (U.every(u => { const dx = u.x - x, dy = (u.y - y) / a; return dx * dx + dy * dy > 0.0011; })) U.push({ x, y, hit: -9 });
+            }
+            ch.U = U; ch.fuelAspect = a;
         }
-        function fireNeutron() { st.ch.n.push({ x: 0.02, y: 0.5, vx: 0.35, vy: (Math.random() - 0.5) * 0.08, gen: 0 }); }
-        function rodsAt(W) { /* barras verticais, em frações da caixa */ const k = 5; return Array.from({ length: k }, (_, i) => (i + 0.5) / k); }
+        function restartK() { const ch = st.ch; ch.kd = 0; ch.kE = null; ch.pE = null; }
+        function resetChain() {
+            const ch = st.ch; ch.n = []; ch.frag = []; ch.flashes = []; ch.fis = 0; ch.t = 0; ch.series = []; ch.leak = 0; ch.rodAbs = 0; ch.capped = 0; ch.srcAcc = 0;
+            restartK(); placeFuel();
+        }
+        function fireNeutron() { st.ch.n.push({ x: 0.02, y: 0.5, vx: CH.SPEED, vy: (Math.random() - 0.5) * 0.08, p: null }); }
+        function rodsAt() { /* cinco barras verticais, em frações da largura da caixa */ return [0.1, 0.3, 0.5, 0.7, 0.9]; }
+        function finish(c) { /* um nêutron terminou deixando c filhos */
+            const ch = st.ch; ch.kd++; const m = Math.min(CH.M, ch.kd);
+            ch.kE = ch.kE === null ? c : ch.kE + (c - ch.kE) / m;
+            const f = c > 0 ? 1 : 0; ch.pE = ch.pE === null ? f : ch.pE + (f - ch.pE) / m;
+        }
         function stepChain(dt, aspect) {
-            const ch = st.ch; ch.t += dt;
-            const rodLen = st.ch.rod, rods = rodsAt();
-            const born = [];
-            ch.n.forEach(n => {
+            const ch = st.ch; ch.t += dt; ch.aspect = aspect;
+            if (!ch.U.length || Math.abs((ch.fuelAspect || aspect) - aspect) > 0.25) placeFuel();
+            if (S('src').checked) {
+                ch.srcAcc += dt * CH.SRC;
+                while (ch.srcAcc >= 1) { ch.srcAcc -= 1; const a = Math.random() * TAU; ch.n.push({ x: 0.05 + Math.random() * 0.9, y: 0.05 + Math.random() * 0.9, vx: Math.cos(a) * CH.SPEED, vy: Math.sin(a) * CH.SPEED, p: null, src: true }); }
+            }
+            const rodLen = ch.rod, rods = rodsAt(), hw = CH.ROD_W / 2, born = [];
+            for (const n of ch.n) {
                 n.x += n.vx * dt; n.y += n.vy * dt * aspect;
-                if (n.x < 0 || n.x > 1 || n.y < 0 || n.y > 1) { n.dead = true; ch.lost++; return; }
-                if (rodLen > 0 && n.y < rodLen) for (const rx of rods) if (Math.abs(n.x - rx) < 0.008) { n.dead = true; ch.lost++; return; }
+                if (n.x < 0 || n.x > 1 || n.y < 0 || n.y > 1) {
+                    if (Math.random() < CH.REF) { if (n.x < 0 || n.x > 1) { n.vx = -n.vx; n.x = clamp(n.x, 0, 1); } else { n.vy = -n.vy; n.y = clamp(n.y, 0, 1); } }
+                    else { n.dead = true; ch.leak++; finish(0); continue; }
+                }
+                if (rodLen > 0 && n.y < rodLen && rods.some(rx => Math.abs(n.x - rx) < hw)) { n.dead = true; ch.rodAbs++; finish(0); continue; }
                 for (const u of ch.U) {
-                    if (!u.alive) continue; const dx = u.x - n.x, dy = (u.y - n.y) / aspect;
-                    if (dx * dx + dy * dy < 0.00012) {
-                        u.alive = false; u.back = ch.t + 1.5 + Math.random(); n.dead = true; ch.fis++;
-                        ch.flashes.push({ x: u.x, y: u.y, t: 0 });
-                        const a = Math.random() * TAU; ch.frag.push({ x: u.x, y: u.y, vx: Math.cos(a) * 0.12, vy: Math.sin(a) * 0.12, t: 0, big: true }, { x: u.x, y: u.y, vx: -Math.cos(a) * 0.14, vy: -Math.sin(a) * 0.14, t: 0 });
-                        const k = Math.random() < 0.5 ? 2 : 3;
-                        for (let j = 0; j < k; j++) { const b = Math.random() * TAU; born.push({ x: u.x, y: u.y, vx: Math.cos(b) * 0.35, vy: Math.sin(b) * 0.35, gen: n.gen + 1 }); }
+                    if (u === n.p) continue;
+                    const dx = u.x - n.x, dy = (u.y - n.y) / aspect;
+                    if (dx * dx + dy * dy < CH.R2) {
+                        n.dead = true; ch.fis++; u.hit = ch.t;
+                        const k = Math.random() < 0.5 ? 2 : 3; finish(k);
+                        if (ch.flashes.length < 120) ch.flashes.push({ x: u.x, y: u.y, t: 0 });
+                        if (ch.frag.length < 160) { const a = Math.random() * TAU; ch.frag.push({ x: u.x, y: u.y, vx: Math.cos(a) * 0.12, vy: Math.sin(a) * 0.12, t: 0, big: true }, { x: u.x, y: u.y, vx: -Math.cos(a) * 0.14, vy: -Math.sin(a) * 0.14, t: 0 }); }
+                        for (let j = 0; j < k; j++) { const b = Math.random() * TAU; born.push({ x: u.x, y: u.y, vx: Math.cos(b) * CH.SPEED, vy: Math.sin(b) * CH.SPEED, p: u }); }
                         break;
                     }
                 }
-            });
-            ch.n = ch.n.filter(n => !n.dead).concat(born);
-            if (ch.n.length > 1500) ch.n.length = 1500;
+            }
+            ch.n = ch.n.filter(n => !n.dead);
+            /* limite de nêutrons na tela: o sorteio é feito no nascimento, antes de saber o destino de cada um, para não distorcer a medida de k */
+            const room = CH.CAP - ch.n.length, p = born.length > room ? Math.max(0, room) / born.length : 1;
+            if (p < 1) ch.capped = ch.t;
+            for (const b of born) if (p >= 1 || Math.random() < p) ch.n.push(b);
             ch.frag.forEach(f => { f.t += dt; f.x += f.vx * dt; f.y += f.vy * dt; }); ch.frag = ch.frag.filter(f => f.t < 0.6);
-            /* combustível renovado: num reator, o urânio dura meses; aqui cada núcleo partido é reposto em outro lugar */
-            ch.U.forEach(u => { if (!u.alive && u.back && ch.t > u.back) { u.alive = true; u.back = 0; u.x = 0.04 + Math.random() * 0.92; u.y = 0.05 + Math.random() * 0.9; } });
             ch.flashes.forEach(f => { f.t += dt; }); ch.flashes = ch.flashes.filter(f => f.t < 0.5);
             const last = ch.series[ch.series.length - 1];
-            if (!last || ch.t - last[0] > 0.1) ch.series.push([ch.t, ch.n.length, ch.fis]);
-            /* estimativa de k: razão entre fissões em janelas sucessivas de 0,5 s */
-            const s = ch.series; if (s.length > 12) { const a = s[s.length - 1][2] - s[s.length - 6][2], b = s[s.length - 6][2] - s[s.length - 11][2]; if (b >= 3) ch.k = a / b; else if (!ch.n.length) ch.k = 0; }
+            if (!last || ch.t - last[0] > 0.1) { ch.series.push([ch.t, ch.n.length, ch.kd >= 40 ? ch.kE : null]); if (ch.series.length > 400) ch.series.shift(); }
+        }
+        function kState() {
+            const ch = st.ch;
+            if (ch.kd < 40) return { txt: ch.n.length ? 'medindo k…' : 'dispare um nêutron ou ligue a fonte', col: '#94a3b8' };
+            const k = ch.kE;
+            if (k < 0.95) return { txt: 'subcrítica: a reação morre (sem fonte)', col: '#60a5fa' };
+            if (k > 1.05) return { txt: 'supercrítica: a reação cresce', col: '#f87171' };
+            return { txt: 'crítica: a reação se mantém', col: '#34d399' };
         }
         function drawChain(c, W, H) {
-            const ch = st.ch, gh = Math.min(140, H * 0.26), B = { x: 14, y: 30, w: W - 28, h: H - gh - 44 }, aspect = B.w / B.h;
+            const ch = st.ch, gh = Math.min(140, H * 0.26), B = { x: 14, y: 30, w: W - 28, h: H - gh - 44 };
             const X = x => B.x + x * B.w, Y = y => B.y + y * B.h;
-            c.fillStyle = 'rgba(59,130,246,.06)'; c.fillRect(B.x, B.y, B.w, B.h); c.strokeStyle = 'rgba(148,163,184,.4)'; c.strokeRect(B.x, B.y, B.w, B.h);
-            if (ch.rod > 0) rodsAt().forEach(rx => { c.fillStyle = '#475569'; c.fillRect(X(rx) - 4, B.y, 8, ch.rod * B.h); c.fillStyle = '#94a3b8'; c.fillRect(X(rx) - 4, B.y + ch.rod * B.h - 3, 8, 3); });
+            c.fillStyle = 'rgba(59,130,246,.06)'; c.fillRect(B.x, B.y, B.w, B.h);
+            c.strokeStyle = 'rgba(45,212,191,.55)'; c.lineWidth = 3; c.strokeRect(B.x, B.y, B.w, B.h); c.lineWidth = 1;
+            const rw = Math.max(4, CH.ROD_W * B.w);
+            rodsAt().forEach(rx => { c.strokeStyle = 'rgba(148,163,184,.14)'; c.setLineDash([3, 5]); c.strokeRect(X(rx) - rw / 2, B.y, rw, B.h); c.setLineDash([]); });
+            if (ch.rod > 0) rodsAt().forEach(rx => { c.fillStyle = '#475569'; c.fillRect(X(rx) - rw / 2, B.y, rw, ch.rod * B.h); c.fillStyle = '#94a3b8'; c.fillRect(X(rx) - rw / 2, B.y + ch.rod * B.h - 3, rw, 3); });
             const ur = Math.max(3, Math.min(6, B.w / 120));
-            ch.U.forEach(u => { if (!u.alive) return; const g = c.createRadialGradient(X(u.x) - 1, Y(u.y) - 1, 0, X(u.x), Y(u.y), ur); g.addColorStop(0, '#bbf7d0'); g.addColorStop(1, '#16a34a'); c.fillStyle = g; c.beginPath(); c.arc(X(u.x), Y(u.y), ur, 0, TAU); c.fill(); });
+            ch.U.forEach(u => {
+                const h = clamp(1 - (ch.t - u.hit) / 0.4, 0, 1), g = c.createRadialGradient(X(u.x) - 1, Y(u.y) - 1, 0, X(u.x), Y(u.y), ur);
+                g.addColorStop(0, h > 0 ? '#fef9c3' : '#bbf7d0'); g.addColorStop(1, h > 0 ? '#ca8a04' : '#16a34a'); c.fillStyle = g; c.beginPath(); c.arc(X(u.x), Y(u.y), ur, 0, TAU); c.fill();
+            });
             ch.frag.forEach(f => { const a = 1 - f.t / 0.6; c.fillStyle = f.big ? 'rgba(251,146,60,' + a + ')' : 'rgba(244,114,182,' + a + ')'; c.beginPath(); c.arc(X(f.x), Y(f.y), ur * (f.big ? 0.85 : 0.7), 0, TAU); c.fill(); });
             ch.flashes.forEach(f => { const u = f.t / 0.5, r = ur * (2 + u * 6), g = c.createRadialGradient(X(f.x), Y(f.y), 0, X(f.x), Y(f.y), r); g.addColorStop(0, 'rgba(255,255,255,' + (1 - u) + ')'); g.addColorStop(0.4, 'rgba(253,224,71,' + 0.7 * (1 - u) + ')'); g.addColorStop(1, 'rgba(253,224,71,0)'); c.fillStyle = g; c.beginPath(); c.arc(X(f.x), Y(f.y), r, 0, TAU); c.fill(); });
-            c.fillStyle = '#e0f2fe'; ch.n.forEach(n => { c.beginPath(); c.arc(X(n.x), Y(n.y), 1.8, 0, TAU); c.fill(); });
-            const state = ch.k === null ? (ch.fis ? 'reação em andamento' : 'dispare um nêutron') : ch.n.length === 0 ? 'a reação parou' : ch.k < 0.85 ? 'subcrítica: morrendo' : ch.k > 1.2 ? 'supercrítica: crescendo' : 'aproximadamente crítica';
-            label(c, 'Urânio-235: ' + nf(ch.U.filter(u => u.alive).length) + ' núcleos · nêutrons livres: ' + nf(ch.n.length) + ' · ' + state, 14, 16, '#e2e8f0', F(700, 12));
-            /* gráfico de nêutrons */
-            const g = { x0: 50, x1: W - 16, y0: H - 22, y1: H - gh + 4 };
+            ch.n.forEach(n => { c.fillStyle = n.src ? '#c4b5fd' : '#e0f2fe'; c.beginPath(); c.arc(X(n.x), Y(n.y), 1.8, 0, TAU); c.fill(); });
+            const ks = kState(), narrow = W < 600;
+            if (narrow) ks.txt = ks.txt.replace(' (sem fonte)', '').replace('dispare um nêutron ou ligue a fonte', 'dispare um nêutron').replace(': a reação se mantém', '').replace(': a reação cresce', '').replace(': a reação morre', '');
+            label(c, (narrow ? 'Nêutrons: ' : 'Nêutrons livres: ') + nf(ch.n.length) + (ch.t - ch.capped < 1 ? (narrow ? ' (limite)' : ' (limite da tela)') : ''), 14, 16, '#e2e8f0', F(700, 12));
+            c.font = F(800, 12); const tw = c.measureText(ks.txt).width + 18;
+            c.fillStyle = 'rgba(15,23,42,.9)'; c.strokeStyle = ks.col; c.beginPath(); c.roundRect(W - 14 - tw, 6, tw, 20, 10); c.fill(); c.stroke();
+            label(c, ks.txt, W - 14 - tw / 2, 16, ks.col, F(800, 12), 'center');
+            label(c, 'refletor', B.x + B.w - 6, B.y + B.h - 8, 'rgba(45,212,191,.8)', F(600, 9), 'right');
+            /* gráfico: nêutrons em escala log (crescimento exponencial vira reta) e k */
+            const g = { x0: 44, x1: W - 40, y0: H - 22, y1: H - gh + 10 };
             c.fillStyle = '#070b16'; c.fillRect(0, H - gh - 8, W, gh + 8);
-            const tmax = Math.max(6, ch.t), nmax = Math.max(10, ...ch.series.map(s => s[1]));
-            const X2 = t => g.x0 + t / tmax * (g.x1 - g.x0), Y2 = n => g.y0 - n / nmax * (g.y0 - g.y1);
-            c.strokeStyle = 'rgba(148,163,184,.25)'; c.beginPath(); c.moveTo(g.x0, g.y0); c.lineTo(g.x1, g.y0); c.stroke();
-            label(c, 'nêutrons livres', 8, H - gh, '#cbd5e1', F(600, 10)); label(c, nf(nmax), g.x0 - 6, g.y1 + 12, '#64748b', F(500, 9, true), 'right');
-            c.strokeStyle = '#7dd3fc'; c.lineWidth = 2; c.beginPath(); ch.series.forEach((s, i) => i ? c.lineTo(X2(s[0]), Y2(s[1])) : c.moveTo(X2(s[0]), Y2(s[1]))); c.stroke();
+            const s = ch.series, t1 = Math.max(ch.t, 20), t0 = t1 - 20;
+            const X2 = t => g.x0 + (t - t0) / (t1 - t0) * (g.x1 - g.x0), Ylog = n => g.y0 - Math.log10(n + 1) / Math.log10(1001) * (g.y0 - g.y1), Yk = k => g.y0 - clamp(k, 0, 2.5) / 2.5 * (g.y0 - g.y1);
+            [1, 10, 100, 1000].forEach(v => { c.strokeStyle = 'rgba(148,163,184,.1)'; c.beginPath(); c.moveTo(g.x0, Ylog(v)); c.lineTo(g.x1, Ylog(v)); c.stroke(); label(c, nf(v), g.x0 - 5, Ylog(v), '#7dd3fc', F(500, 9, true), 'right'); });
+            [0, 1, 2].forEach(v => label(c, String(v), g.x1 + 5, Yk(v), '#fbbf24', F(500, 9, true), 'left'));
+            c.strokeStyle = 'rgba(251,191,36,.45)'; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(g.x0, Yk(1)); c.lineTo(g.x1, Yk(1)); c.stroke(); c.setLineDash([]);
+            label(c, 'k = 1', g.x1 - 4, Yk(1) - 8, 'rgba(251,191,36,.8)', F(600, 9), 'right');
+            c.save(); c.beginPath(); c.rect(g.x0, g.y1 - 4, g.x1 - g.x0, g.y0 - g.y1 + 8); c.clip();
+            c.strokeStyle = '#7dd3fc'; c.lineWidth = 2; c.beginPath(); let on = false;
+            s.forEach(q => { if (q[0] < t0 - 1) return; const x = X2(q[0]), y = Ylog(q[1]); on ? c.lineTo(x, y) : c.moveTo(x, y); on = true; }); c.stroke();
+            c.strokeStyle = '#fbbf24'; c.lineWidth = 1.8; c.beginPath(); on = false;
+            s.forEach(q => { if (q[0] < t0 - 1 || q[2] === null) { on = false; return; } const x = X2(q[0]), y = Yk(q[2]); on ? c.lineTo(x, y) : c.moveTo(x, y); on = true; }); c.stroke();
+            c.restore();
+            label(c, 'nêutrons (escala log)', 8, H - gh, '#7dd3fc', F(600, 10)); label(c, 'k', W - 8, H - gh, '#fbbf24', F(700, 10), 'right');
+            label(c, 'últimos 20 s', (g.x0 + g.x1) / 2, H - 9, '#64748b', F(500, 9), 'center');
         }
         function draw() {
             const gg = canvas2d(cv, '#04060d'); if (!gg) return;
@@ -1278,10 +1333,12 @@ MATH.labs = (function () {
                     cell('Restam', nf(alive) + ' (' + nf(f * 100, 1) + '%)') + cell('Esperado', nf(st.N * Math.pow(0.5, hl), 0) + ' (' + nf(Math.pow(0.5, hl) * 100, 1) + '%)') +
                     cell('Idade estimada pela fração restante', f > 0 && f < 1 ? duration(Math.log2(1 / f) * iso.T) : '—', true);
             } else {
-                const ch = st.ch, MeV = ch.fis * 200;
-                h = cell('Fissões', nf(ch.fis)) + cell('Energia liberada', nf(MeV) + ' MeV') +
-                    cell('Nêutrons perdidos', nf(ch.lost)) + cell('Fator de multiplicação k', ch.k === null ? '—' : nf(ch.k, 2)) +
-                    cell('Energia por fissão', 'cerca de 200 MeV, 50 milhões de vezes uma reação química', true);
+                const ch = st.ch, ok = ch.kd >= 40;
+                h = cell('Fator de multiplicação k', ok ? nf(ch.kE, 2) : '—') + cell('Chance de um nêutron causar fissão', ok ? nf(ch.pE * 100, 0) + '%' : '—') +
+                    cell('Nêutrons por fissão (média)', '2,5') + cell('Fissões', nf(ch.fis)) +
+                    cell('Nêutrons que escaparam', nf(ch.leak)) + cell('Absorvidos pelas barras', nf(ch.rodAbs)) +
+                    cell('k = 2,5 × chance de fissão', 'k > 1 cresce, k = 1 estável, k < 1 morre', true) +
+                    cell('Energia liberada', nf(ch.fis * 200) + ' MeV (cerca de 200 MeV por fissão)', true);
             }
             $('#nu-out', root).innerHTML = h;
         }
@@ -1295,8 +1352,9 @@ MATH.labs = (function () {
         root.querySelectorAll('input[name="nu-mode"]').forEach(el => el.addEventListener('change', () => setMode(radio(root, 'nu-mode'))));
         root.querySelectorAll('input[name="nu-n"]').forEach(el => el.addEventListener('change', () => { st.N = +radio(root, 'nu-n'); resetDec(); st.playing = true; playLbl(); draw(); }));
         S('iso').addEventListener('change', () => { st.iso = +S('iso').value; resetDec(); st.playing = true; playLbl(); draw(); });
-        S('den').addEventListener('input', () => { st.ch.den = +S('den').value / 100; resetChain(); draw(); });
-        S('rod').addEventListener('input', () => { st.ch.rod = +S('rod').value / 100; draw(); });
+        S('den').addEventListener('input', () => { st.ch.den = +S('den').value / 100; placeFuel(); restartK(); draw(); });
+        S('rod').addEventListener('input', () => { st.ch.rod = +S('rod').value / 100; restartK(); draw(); });
+        S('src').addEventListener('change', () => { restartK(); });
         S('fire').addEventListener('click', () => { fireNeutron(); st.playing = true; playLbl(); });
         S('play').addEventListener('click', () => { st.playing = !st.playing; playLbl(); });
         S('reset').addEventListener('click', () => { if (st.mode === 'dec') resetDec(); else resetChain(); st.playing = true; playLbl(); draw(); });

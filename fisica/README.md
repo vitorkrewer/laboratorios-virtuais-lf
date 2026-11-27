@@ -6,10 +6,11 @@ Livros interativos de Física com trilhas, teoria em formato wiki, testes rápid
 
 | Livro | Pasta | Situação | Simuladores |
 |---|---|---|---|
+| Mecânica | `mecanica/` | Disponível (14 capítulos, em três voltas: ver e explicar, medir e prever, analisar e criar) | Movimento (gráficos e desafio), Forças (chão e rampa, atrito), Queda (com e sem ar), Energia (skatista), Colisões, Lançamentos (alvo e resistência do ar), Gangorra e torque |
 | Astronomia | `astronomia/` | Disponível (13 capítulos) | Planetário, Sistema Solar e retrógrado, Órbitas (Kepler, canhão de Newton, exoplanetas), Lua e eclipses |
 | Astrofísica e Cosmologia | `cosmologia/` | Disponível (15 capítulos) | Evolução estelar e diagrama HR, Pulsar e magnetar (com som), Buraco negro (lente gravitacional e disco de acreção calculados na métrica de Schwarzschild), Galáxia e matéria escura, Universo em expansão (lei de Hubble, linha do tempo e destino) |
 | Física Moderna | `moderna/` | Disponível (14 capítulos) | Relatividade (relógio de luz, gêmeos, diagrama de Minkowski), Efeito fotoelétrico, Átomo e espectros, Dupla fenda, Mecânica quântica (equação de Schrödinger 1D: barreira, caixa, oscilador), Física nuclear (decaimento e reação em cadeia) |
-| Mecânica, Oscilações e ondas, Termodinâmica, Eletromagnetismo, Óptica | — | Planejados | — |
+| Oscilações e ondas, Termodinâmica, Eletromagnetismo, Óptica | — | Planejados | — |
 
 O mapa de pré-requisitos do hub (`index.html`) liga os livros entre si e, pelo campo `ext` do catálogo, aos livros de Matemática que cada um usa.
 
@@ -34,10 +35,15 @@ fisica/
 │   ├── book.js
 │   ├── labs.js           # evolução estelar, pulsar, buraco negro, galáxia, expansão
 │   └── content/*.md
-└── moderna/
+├── moderna/
+│   ├── index.html
+│   ├── book.js
+│   ├── labs.js           # relatividade, fotoelétrico, espectros, dupla fenda, Schrödinger, nuclear
+│   └── content/*.md
+└── mecanica/
     ├── index.html
-    ├── book.js
-    ├── labs.js           # relatividade, fotoelétrico, espectros, dupla fenda, Schrödinger, nuclear
+    ├── book.js           # três voltas (Bloom e currículo em espiral), diagnóstico de concepções
+    ├── labs.js           # movimento, forças, queda, energia, colisões, lançamentos, gangorra
     └── content/*.md
 ```
 
@@ -51,6 +57,8 @@ fisica/
 - **Expansão:** idade e destino do universo pelas equações de Friedmann (matéria, radiação, curvatura e energia escura com equação de estado $w$), com os parâmetros do Planck 2018 como referência.
 - **Mecânica quântica** (`moderna/labs.js`): equação de Schrödinger em 1D com $\hbar = m = 1$, integrada pelo método de Visscher (partes real e imaginária defasadas meio passo) numa grade de 1 024 pontos, com bordas absorventes no modo barreira; a caixa usa a solução exata como soma de até 80 autoestados. A transmissão teórica mostrada é a de uma onda plana de energia exata.
 - **Dupla fenda:** cada ponto é sorteado da distribuição de probabilidade de duas fendas de largura finita; a geometria da tela é ampliada e os valores reais (comprimento de onda, separação, espaçamento das franjas) aparecem no painel.
+
+- **Mecânica** (`mecanica/labs.js`): queda com resistência do ar quadrática ($a = g(1 - v\lvert v\rvert/v_t^2)$, velocidades terminais típicas); lançamentos integrados em passos de 2 ms com arrasto quadrático e coeficientes aproximados para cada bola; a pista de energia integra o movimento ao longo do comprimento do trilho e corrige a pequena deriva numérica para que a energia total só mude por atrito; o atrito estático vale 1,25 vez o cinético.
 
 ## Sintaxe dos capítulos
 
